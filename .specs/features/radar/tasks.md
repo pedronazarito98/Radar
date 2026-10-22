@@ -205,7 +205,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T07 — Política de transição
 
-- **Status**: Pending.
+- **Status**: PARTIAL — BUILD/REVIEW e abertura/recolhimento CUA PASS; reversão/hit durante transição e Reduzir Movimento reais NOT-RUN; docs/evidence/T07.md.
 - **What**: Implementar estados interrompíveis de abrir/fechar e Reduzir Movimento; calibrar depois sem aguardar rede.
 - **Where**: Radar/Platform/PresentationMotionPolicy.swift
 - **Depends on**: T06 (dependências anteriores transitivas).

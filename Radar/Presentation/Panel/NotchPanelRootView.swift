@@ -2,13 +2,20 @@ import SwiftUI
 
 struct NotchPanelRootView: View {
     let isExpanded: Bool
+    let showsContent: Bool
+    let contentOpacity: CGFloat
     let cameraRect: CGRect
     let toggle: () -> Void
     let escape: () -> Void
 
     var body: some View {
+        let surface = NotchSurfaceShape(
+            cameraRect: cameraRect,
+            cornerRadius: RadarTheme.Layout.compactRadius
+                + (RadarTheme.Layout.expandedRadius - RadarTheme.Layout.compactRadius) * contentOpacity
+        )
         ZStack(alignment: .topLeading) {
-            NotchSurfaceShape(cameraRect: cameraRect, cornerRadius: isExpanded ? RadarTheme.Layout.expandedRadius : RadarTheme.Layout.compactRadius)
+            surface
                 .fill(RadarTheme.surface, style: FillStyle(eoFill: true))
                 .allowsHitTesting(false)
 
@@ -17,12 +24,16 @@ struct NotchPanelRootView: View {
             indicator(.github, label: "GitHub, conta não qualificada")
                 .position(x: cameraRect.maxX + RadarTheme.Layout.compactWingWidth / 2, y: cameraRect.height / 2)
 
-            if isExpanded {
+            if showsContent {
                 DisconnectedPanelView(close: toggle)
                     .padding(.top, cameraRect.height + RadarTheme.Layout.headerSpacing)
+                    .opacity(contentOpacity)
+                    .allowsHitTesting(isExpanded)
+                    .accessibilityHidden(!isExpanded)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .clipShape(surface, style: FillStyle(eoFill: true))
         .preferredColorScheme(.dark)
         .onExitCommand(perform: escape)
     }
