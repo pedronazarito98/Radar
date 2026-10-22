@@ -1,0 +1,54 @@
+{
+  "inspected_at": "2026-10-22",
+  "scope": "Static inspection only. No application installation or execution.",
+  "release": {
+    "url": "https://github.com/TheBoredTeam/boring.notch/releases/tag/v2.7.3",
+    "version": "2.7.3"
+  },
+  "artifact": {
+    "evidence_id": "ev_87ab2f621d937034d80dd44186534310a52992788fdab200aa25bfb95b3ed5a0",
+    "subject": {
+      "name": "boringNotch-v2.7.3.dmg",
+      "digest": {
+        "sha256": "23786382548d33c59b309db558e513a92e3f95b63d611544dcddf5d196e46698"
+      },
+      "format": "dmg",
+      "architecture": null,
+      "local_path": "/Users/pedronazarito/Documents/Codex/2026-10-22/reverse-engineer-anything-users-pedronazarito-agents/work/research/boringNotch-v2.7.3.dmg"
+    },
+    "manifest": {
+      "manifest_id": "agm_da5ad4d2dd1ae2d0e8425c555daacb6c2b4dcfd2d5ced7299541a0d60682d1ec",
+      "root_artifact_id": "art_775ab4ba18b03a8c74cbd3df649a417b5925759c05764bca4a92020447143b96",
+      "root_sha256": "23786382548d33c59b309db558e513a92e3f95b63d611544dcddf5d196e46698",
+      "root_format": "dmg",
+      "graph_sha256": "87804d8326f3523ca9da705afcc35d0628b8255740c1b93bc4df5f25d10738f7",
+      "node_count": 229,
+      "occurrence_count": 249,
+      "edge_count": 236
+    },
+    "limitations": [
+      "Inspection derives bounded static hypotheses and next probes; it does not execute the artifact or claim format-specific semantics."
+    ]
+  },
+  "plist": {
+    "evidence_id": "ev_f09d8121104d261e8f1523bc944131a8d5a6e20d0b2ef083e7c3a522022aac5a",
+    "operation": "inspect_plist",
+    "confidence": "observed",
+    "authority": "shipped-artifact",
+    "source_path": "/Users/pedronazarito/Documents/Codex/2026-10-22/reverse-engineer-anything-users-pedronazarito-agents/work/research/boringNotch-mount/boringNotch.app/Contents/Info.plist",
+    "bundle": {
+      "identifier": "theboringteam.boringnotch",
+      "executable": "boringNotch",
+      "name": "boringNotch",
+      "version": "271",
+      "short_version": "2.7.3"
+    },
+    "selected_values": {
+      "LSUIElement": true,
+      "LSMinimumSystemVersion": "14.0",
+      "DTPlatformName": "macosx"
+    },
+    "limitations": [],
+    "coverage_note": "Selected metadata only; raw Info.plist omitted from this compact derivative."
+  }
+}
