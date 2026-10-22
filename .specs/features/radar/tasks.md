@@ -163,7 +163,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T04 — Superfície do painel
 
-- **Status**: Pending.
+- **Status**: PARTIAL — BUILD/REVIEW e abrir/recolher via CUA PASS; hit-through/encerramento/modos aguardam evidência; docs/evidence/T04.md.
 - **What**: Criar uma única NSPanel com NSHostingView e área de clique limitada ao conteúdo visível, usando o conteúdo genuíno desconectado do app; qualificar política/fallback mínimo nos modos locais disponíveis de Spaces/fullscreen/Stage Manager antes de integrar contas.
 - **Where**: Radar/Platform/NotchPanelController.swift
 - **Depends on**: T03 (dependências anteriores transitivas).

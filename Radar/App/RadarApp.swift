@@ -2,8 +2,14 @@ import SwiftUI
 
 @main
 struct RadarApp: App {
+    @NSApplicationDelegateAdaptor(RadarAppDelegate.self) private var appDelegate
+
     var body: some Scene {
         MenuBarExtra("Radar", systemImage: "dot.radiowaves.left.and.right") {
+            Button("Abrir ou recolher Radar") {
+                appDelegate.panelController?.toggle()
+            }
+            Divider()
             SettingsLink {
                 Text("Configurações…")
             }
