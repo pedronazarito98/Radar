@@ -149,7 +149,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T03 — Geometria do recorte
 
-- **Status**: Pending.
+- **Status**: Complete — BUILD + REVIEW PASS; docs/evidence/T03.md.
 - **What**: Resolver tela, safe areas e áreas auxiliares usando APIs públicas, com limites para telas sem notch.
 - **Where**: Radar/Platform/ScreenGeometryResolver.swift
 - **Depends on**: T02 (dependências anteriores transitivas).

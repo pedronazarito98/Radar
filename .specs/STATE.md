@@ -109,10 +109,10 @@
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Execute local, lote1; T01/T02 Complete (BUILD/assinatura e UI-base humana PASS).
-- **Completed**: T01 commit18f1de9; target/scheme Radar único, bundle Debug local com assinatura ad-hoc/runtime e processo confirmado.
-- **In-progress**: T03 próxima; usuário confirmou abertura de configurações e encerramento normalmente.
-- **Next step**: T03 geometria pelo NSScreen; T04 painel.
-- **Blockers**: CUA getApp path/id/nome retorna timeoutReached -10005; UI-base T02 resolvida por evidência humana. Jira política/escopos e providers runtime continuam pendentes.
-- **Uncommitted files**: T02 antes do commit; consultar git status. Hash real fica no manifesto seguinte.
+- **Phase / Task**: Lote1; T01–T03 Complete. T04 próxima.
+- **Completed**: T01 18f1de9; T02 c910574 (UI-base humana PASS); T03 geometria por APIs públicas, BUILD/REVIEW PASS.
+- **In-progress**: Nenhum código de painel até T04. Contratos C1/C1.1/C1.2 preservados.
+- **Next step**: T04 painel desconectado com câmera alfa0; converter geometria global para local.
+- **Blockers**: CUA timeout impediu observação agente em T02; usuário validou. Providers/política Jira/escopos e gates posteriores continuam pendentes.
+- **Uncommitted files**: T03 antes do commit; hash real no manifesto seguinte.
 - **Branch**: feat/radar-v1-local; sem remote.
