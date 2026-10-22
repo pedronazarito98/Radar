@@ -233,7 +233,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T09 — Modelo de card Jira
 
-- **Status**: Pending.
+- **Status**: Prepared — gate local BUILD + REVIEW independente PASS; dependências manuais parciais sob AD-013; docs/evidence/T09.md.
 - **What**: Representar card e status reais, chave de apresentação, identidade e link sem misturar segredo ou transporte.
 - **Where**: Radar/Domain/JiraWorkItem.swift
 - **Depends on**: T08 (dependências anteriores transitivas).

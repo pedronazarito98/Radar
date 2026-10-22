@@ -117,10 +117,10 @@
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote2, T08 preparado com BUILD/REVIEW PASS; writer único batch_2.
-- **Completed**: Lote1 em docs/handoffs/batch-01.md. T08 identidade imutável e aliases contextuais; hash real entra no manifesto após commit.
-- **In-progress**: T09 próximo. T05 gate local ganhou confirmação humana de foco/teclado; T07 ganhou confirmação de alternância rápida sem área invisível. Relato humano “ok” delimitado em evidências, código observado 5fe9ecb.
-- **Next step**: T09–T14 sequenciais no domínio/Application; nenhum relaunch necessário. Preservar C1, C1.1/C1.2 e AD-009–AD-014.
+- **Phase / Task**: Lote2, T09 preparado com BUILD/REVIEW PASS; writer único batch_2.
+- **Completed**: Lote1 em docs/handoffs/batch-01.md. T08 eded612; T09 modelo Jira imutável, status reais e chave separada; hash real entra no manifesto após commit.
+- **In-progress**: T10 próximo. T05 gate local ganhou confirmação humana de foco/teclado; T07 ganhou confirmação de alternância rápida sem área invisível. Relato humano “ok” delimitado em evidências, código observado 5fe9ecb.
+- **Next step**: T10–T14 sequenciais no domínio/Application; nenhum relaunch necessário. Preservar C1, C1.1/C1.2 e AD-009–AD-014.
 - **Blockers**: T04 modos específicos e T07 Reduzir Movimento NOT-RUN; lote1/aceite não concluídos. Providers/escopos/política Jira pendentes; domínio é preparação independente sob AD-013.
-- **Uncommitted files**: Entrega T08 e atualização documental do relato humano em preparação de commit atômico; nenhum dado corporativo.
+- **Uncommitted files**: Entrega T09 e evidência própria em preparação de commit atômico; nenhum dado corporativo.
 - **Branch**: feat/radar-v1-local; sem remote.
