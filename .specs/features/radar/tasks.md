@@ -163,7 +163,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T04 — Superfície do painel
 
-- **Status**: PARTIAL — BUILD/REVIEW e abrir/recolher via CUA PASS; hit-through/encerramento/modos aguardam evidência; docs/evidence/T04.md.
+- **Status**: PARTIAL — BUILD/REVIEW e abrir/recolher via CUA PASS; hit-through/encerramento confirmados pós-commit; modos ainda NOT-RUN; docs/evidence/T04.md.
 - **What**: Criar uma única NSPanel com NSHostingView e área de clique limitada ao conteúdo visível, usando o conteúdo genuíno desconectado do app; qualificar política/fallback mínimo nos modos locais disponíveis de Spaces/fullscreen/Stage Manager antes de integrar contas.
 - **Where**: Radar/Platform/NotchPanelController.swift
 - **Depends on**: T03 (dependências anteriores transitivas).
@@ -191,7 +191,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T06 — Tokens da identidade V3
 
-- **Status**: Pending.
+- **Status**: Prepared — gate local BUILD + revisão visual PASS; dependências T04/T05 PARTIAL, lote não concluído; docs/evidence/T06.md.
 - **What**: Centralizar os tokens necessários de superfície, tipografia, espaçamento, seleção neutra e cores de origem/status.
 - **Where**: Radar/Presentation/RadarTheme.swift
 - **Depends on**: T05 (dependências anteriores transitivas).

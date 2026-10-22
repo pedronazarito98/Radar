@@ -8,18 +8,18 @@ struct NotchPanelRootView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            NotchSurfaceShape(cameraRect: cameraRect, cornerRadius: isExpanded ? 24 : 12)
-                .fill(Color(red: 0.055, green: 0.075, blue: 0.09), style: FillStyle(eoFill: true))
+            NotchSurfaceShape(cameraRect: cameraRect, cornerRadius: isExpanded ? RadarTheme.Layout.expandedRadius : RadarTheme.Layout.compactRadius)
+                .fill(RadarTheme.surface, style: FillStyle(eoFill: true))
                 .allowsHitTesting(false)
 
-            indicator("diamond.fill", color: .blue, label: "Jira, conta não conectada")
-                .position(x: cameraRect.minX - 36, y: cameraRect.height / 2)
-            indicator("chevron.left.forwardslash.chevron.right", color: .purple, label: "GitHub, conta não qualificada")
-                .position(x: cameraRect.maxX + 36, y: cameraRect.height / 2)
+            indicator(.jira, label: "Jira, conta não conectada")
+                .position(x: cameraRect.minX - RadarTheme.Layout.compactWingWidth / 2, y: cameraRect.height / 2)
+            indicator(.github, label: "GitHub, conta não qualificada")
+                .position(x: cameraRect.maxX + RadarTheme.Layout.compactWingWidth / 2, y: cameraRect.height / 2)
 
             if isExpanded {
                 DisconnectedPanelView(close: toggle)
-                    .padding(.top, cameraRect.height + 16)
+                    .padding(.top, cameraRect.height + RadarTheme.Layout.headerSpacing)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -27,14 +27,16 @@ struct NotchPanelRootView: View {
         .onExitCommand(perform: escape)
     }
 
-    private func indicator(_ symbol: String, color: Color, label: String) -> some View {
+    private func indicator(_ brand: SourceBrandMark.Brand, label: String) -> some View {
         Button(action: toggle) {
             HStack(spacing: 8) {
-                Image(systemName: symbol).foregroundStyle(color)
-                Text("—").foregroundStyle(.white)
+                SourceBrandMark(brand: brand)
+                    .frame(width: RadarTheme.Layout.compactSymbolSize, height: RadarTheme.Layout.compactSymbolSize)
+                    .accessibilityHidden(true)
+                Text("—").foregroundStyle(brand == .github ? RadarTheme.githubAccent : RadarTheme.primaryText)
             }
-            .font(.system(size: 14, weight: .semibold))
-            .frame(width: 72, height: cameraRect.height)
+            .font(RadarTheme.Typography.indicator)
+            .frame(width: RadarTheme.Layout.compactWingWidth, height: cameraRect.height)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

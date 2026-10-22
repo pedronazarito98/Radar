@@ -106,13 +106,21 @@
 - **Date**: 2026-10-22
 - **Status**: active
 
+### AD-014
+- **Decision**: Usar o Invertocat oficial branco sem recolorir/distorcer, com identificação violeta em texto/acentos separados. Preservar superfície preta, seleção cinza, contadores, duas colunas e faixa V3.
+- **Reason**: Refinamento estreito publicado pelo orquestrador após leitura do guia oficial atual de marca GitHub (Color/Usage/Show integration).
+- **Trade-off**: O glifo violeta ilustrado na V3 é substituído pelo branco oficial; não é uma nova identidade nem reprodução de UI de terceiro. Procedência/hashes em docs/assets/README.md.
+- **Scope**: Recurso e tokens T06; demais decisões visuais intactas.
+- **Date**: 2026-10-22
+- **Status**: active
+
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote1; T01–T03 Complete; T04/T05 PARTIAL.
-- **Completed**: T01 18f1de9, T02 c910574, T03 99e3318; T04 eab3dab parcial; T05 BUILD/REVIEW e Esc local PASS.
-- **In-progress**: T04 hit-through/cleanup/modos e T05 foco externo/teclado fechado aguardam observação humana; não concluir lote.
-- **Next step**: T06 tokens/recursos V3 independente dos gestos pendentes; registrar refinamento visual AD-014 publicado pelo root.
-- **Blockers**: Gates manuais acima; sem mudança global de modos/display. Provider/escopos Jira pendentes.
-- **Uncommitted files**: T05 antes do commit; hash real no manifesto seguinte.
+- **Phase / Task**: Lote1; T01–T03 Complete; T04/T05 PARTIAL; T06 Prepared com gate local PASS.
+- **Completed**: T01 18f1de9, T02 c910574, T03 99e3318; T04 eab3dab, T05 7861676 parciais; tokens/marca T06 BUILD/REVIEW visual PASS.
+- **In-progress**: T04 modos individuais, T05 foco externo/teclado fechado aguardam observação. Recorte/hit-through T04 humano e cleanup CUA/processo agora PASS.
+- **Next step**: T07 transições interrompíveis e preferência real Reduzir Movimento, sem mudar configuração global pelo agente.
+- **Blockers**: Gates manuais acima; providers/escopos Jira pendentes. Lote não concluído.
+- **Uncommitted files**: T06 antes do commit; hash real no manifesto seguinte.
 - **Branch**: feat/radar-v1-local; sem remote.

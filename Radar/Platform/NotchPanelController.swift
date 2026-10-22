@@ -47,7 +47,7 @@ final class NotchPanelController {
 
     func showCompact() {
         isExpanded = false
-        guard let frame = geometry.compactFrame(wingWidth: 72, height: geometry.safeTopHeight) else {
+        guard let frame = geometry.compactFrame(wingWidth: RadarTheme.Layout.compactWingWidth, height: geometry.safeTopHeight) else {
             panel.orderOut(nil)
             return
         }
@@ -56,7 +56,7 @@ final class NotchPanelController {
 
     func showExpanded() {
         isExpanded = true
-        present(frame: geometry.expandedFrame(preferredSize: NSSize(width: 760, height: 410)))
+        present(frame: geometry.expandedFrame(preferredSize: RadarTheme.Layout.expandedSize))
         interaction.beginExplicitInteraction()
     }
 
