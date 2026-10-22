@@ -5,6 +5,7 @@ import SwiftUI
 final class NotchPanelController {
     let panel: RadarPanel
     private(set) var isExpanded = false
+    private let interaction: PanelInteractionController
     private let geometry: ScreenGeometry
     private let hostingView: NSHostingView<NotchPanelRootView>
 
@@ -16,8 +17,9 @@ final class NotchPanelController {
             backing: .buffered,
             defer: false
         )
+        interaction = PanelInteractionController(panel: panel)
         hostingView = NSHostingView(rootView: NotchPanelRootView(
-            isExpanded: false, cameraRect: .zero, toggle: {}
+            isExpanded: false, cameraRect: .zero, toggle: {}, escape: {}
         ))
         panel.title = "Radar — Meu trabalho"
         panel.isReleasedWhenClosed = false
@@ -31,11 +33,13 @@ final class NotchPanelController {
         hostingView.sizingOptions = []
         hostingView.autoresizingMask = [.width, .height]
         panel.contentView = hostingView
+        panel.onEscape = { [weak self] in self?.dismiss(reason: .escape) }
+        interaction.onDismiss = { [weak self] reason in self?.dismiss(reason: reason) }
     }
 
     func toggle() {
         if isExpanded {
-            showCompact()
+            dismiss(reason: .explicitToggle)
         } else {
             showExpanded()
         }
@@ -53,9 +57,18 @@ final class NotchPanelController {
     func showExpanded() {
         isExpanded = true
         present(frame: geometry.expandedFrame(preferredSize: NSSize(width: 760, height: 410)))
+        interaction.beginExplicitInteraction()
+    }
+
+    func dismiss(reason: PanelDismissalReason) {
+        interaction.endInteraction(reason: reason)
+        showCompact()
     }
 
     func invalidate() {
+        interaction.endInteraction(reason: .termination)
+        panel.onEscape = nil
+        interaction.onDismiss = nil
         panel.orderOut(nil)
         panel.contentView = nil
         panel.close()
@@ -66,7 +79,10 @@ final class NotchPanelController {
             NSRect(x: $0.minX - frame.minX, y: frame.maxY - $0.maxY, width: $0.width, height: $0.height)
         } ?? NSRect(x: frame.width / 2, y: 0, width: 0, height: 32)
         hostingView.rootView = NotchPanelRootView(
-            isExpanded: isExpanded, cameraRect: camera, toggle: { [weak self] in self?.toggle() }
+            isExpanded: isExpanded,
+            cameraRect: camera,
+            toggle: { [weak self] in self?.toggle() },
+            escape: { [weak self] in self?.dismiss(reason: .escape) }
         )
         panel.setFrame(frame, display: true)
         panel.orderFrontRegardless()

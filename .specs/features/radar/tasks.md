@@ -177,7 +177,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T05 — Foco e causas de fechamento
 
-- **Status**: Pending.
+- **Status**: PARTIAL — BUILD/REVIEW e Esc local CUA PASS; foco externo/teclado fechado aguardam observação; docs/evidence/T05.md.
 - **What**: Implementar foco após clique explícito, Esc e clique fora com causa de fechamento; fechar por link preservará o destino informado pelo coordenador.
 - **Where**: Radar/Platform/PanelInteractionController.swift
 - **Depends on**: T04 (dependências anteriores transitivas).

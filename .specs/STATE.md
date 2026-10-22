@@ -109,10 +109,10 @@
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote1; T01–T03 Complete; T04 PARTIAL com painel real.
-- **Completed**: T01 18f1de9, T02 c910574, T03 99e3318; T04 BUILD/REVIEW e abrir/recolher CUA PASS.
-- **In-progress**: T04 hit-through/cleanup observado e modos locais aguardando interação; pedido humano feito pelo orquestrador.
-- **Next step**: Consolidar evidência T04; T05 foco pode ser preparado sequencialmente sob AD-013, sem concluir lote.
-- **Blockers**: Passagem de clique e modos não observados; não alterar configurações globais. Provider/escopos Jira ainda pendentes.
-- **Uncommitted files**: T04 antes do commit; hash real no manifesto seguinte.
+- **Phase / Task**: Lote1; T01–T03 Complete; T04/T05 PARTIAL.
+- **Completed**: T01 18f1de9, T02 c910574, T03 99e3318; T04 eab3dab parcial; T05 BUILD/REVIEW e Esc local PASS.
+- **In-progress**: T04 hit-through/cleanup/modos e T05 foco externo/teclado fechado aguardam observação humana; não concluir lote.
+- **Next step**: T06 tokens/recursos V3 independente dos gestos pendentes; registrar refinamento visual AD-014 publicado pelo root.
+- **Blockers**: Gates manuais acima; sem mudança global de modos/display. Provider/escopos Jira pendentes.
+- **Uncommitted files**: T05 antes do commit; hash real no manifesto seguinte.
 - **Branch**: feat/radar-v1-local; sem remote.

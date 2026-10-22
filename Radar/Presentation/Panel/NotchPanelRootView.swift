@@ -4,6 +4,7 @@ struct NotchPanelRootView: View {
     let isExpanded: Bool
     let cameraRect: CGRect
     let toggle: () -> Void
+    let escape: () -> Void
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -23,6 +24,7 @@ struct NotchPanelRootView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .preferredColorScheme(.dark)
+        .onExitCommand(perform: escape)
     }
 
     private func indicator(_ symbol: String, color: Color, label: String) -> some View {
