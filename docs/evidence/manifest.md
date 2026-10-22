@@ -10,3 +10,4 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 | T04 | eab3dab56e81fc1219080c0e574505b470f8aaba | PARTIAL; BUILD/REVIEW/abre-recolhe/recorte/hit-through/cleanup PASS; modos NOT-RUN | T04.md |
 | T05 | 7861676556bbc80aacec7d0f1a198e8de5d7289d | PARTIAL; BUILD/REVIEW/Esc PASS; foco externo NOT-RUN | T05.md |
 | T06 | ce3c7d016925ed3ea9a999189e17abc4e46de979 | Prepared; BUILD/REVIEW visual PASS, dependências parciais | T06.md |
+| T07 | 5fe9ecb6e64aecc435d017e82e603bbf9d12826a | PARTIAL; BUILD/REVIEW/abre-recolhe CUA PASS; reversão/reduzido NOT-RUN | T07.md |
