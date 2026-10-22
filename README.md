@@ -1,6 +1,6 @@
 # Radar — V1 pessoal local
 
-**22/10/2026 · Implementação local autorizada · T01 concluída**
+**22/10/2026 · Implementação local autorizada · T01–T02 concluídas**
 
 A V1 será pessoal: um app nativo para macOS 27 que reúne seus cards do Jira Cloud e PRs do GitHub.com usando o gh existente. O notch fica fechado com indicadores; um clique abre as duas colunas e a faixa inferior conecta tarefa e código.
 
@@ -70,7 +70,9 @@ A regra do usuário impede criar testes, arquivos de teste ou mocks. O plano usa
 
 Os gates de uso real incluem recorte/foco, Jira e GitHub, relação bidirecional, teclado/VoiceOver/Reduzir Movimento, 30 ciclos de interação e lançamento pelo Finder. Condições externas não reproduzidas são registradas separadamente; revisão estática não comprova fluidez ou funcionamento no hardware.
 
-T01 qualificou ambiente e migrou a documentação. **Build do app, lint, testes e execução funcional ainda não realizados.** O repositório é local, sem remote; nenhum app existe antes de T02.
+T01 qualificou o ambiente. T02 criou o target nativo e passou build, assinatura local e início de processo. O usuário confirmou abertura das configurações e encerramento normalmente; a UI-base T02 está validada nessa maturidade, sem painel ou contas. Lint e testes não rodaram. O repositório permanece sem remote.
+
+Para abrir o bundle local: `./script/build_and_run.sh`. Detalhes e limites em docs/readiness.md.
 
 ## Execução local
 

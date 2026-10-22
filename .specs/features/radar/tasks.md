@@ -1,6 +1,6 @@
 # Radar — plano de tarefas
 
-**Status**: Execute local autorizado por AD-009. T01 concluída; demais tarefas Pending.  
+**Status**: Execute local autorizado por AD-009. T01/T02 concluídas; demais conforme registro por tarefa.  
 **Referências**: [spec](spec.md), [design](design.md), [coordenação](coordination.md), [verificação](verification-plan.md), [STATE](../../STATE.md).
 
 ## Como executar este plano
@@ -14,6 +14,10 @@ Caminhos são propostos no futuro repositório. Antes de editar, conferir a estr
 T02 cria um ponto mínimo de composição real. Cada tarefa de integração inclui a ligação mínima de sua ação à UI de produção já existente, necessária para seu gate real. T23 habilita conectar Jira; T24 a consulta Jira; T25–T27 a qualificação/consulta gh. Não criar executável de teste, seed de negócio ou mock para essa prova. T36 consolida a composição completa, sem refazer os componentes.
 
 Antes de um commit: gate da tarefa, evidência sanitizada e revisão do diff. Registrar o hash depois do commit no handoff/manifesto do lote; não inventar um hash antes de existir. Código pode ser escrito pelo worker, mas interação sensível e entrada de token pertencem ao usuário diretamente no app.
+
+## Exceção de execução autorizada — AD-013
+
+O pedido atual autoriza continuar trabalho independente diante de impedimento de acesso/interação. Ordem de implementação e um escritor continuam; tarefa com gate obrigatório NOT-RUN permanece PARTIAL e não conclui lote/aceite. Só partes independentes podem ser preparadas, compiladas/revisadas e commitadas com limite explícito. O timeout CUA de T02 foi resolvido por evidência manual do usuário antes do commit; AD-013 permanece para futuros bloqueios.
 
 ## Fases e lotes
 
@@ -131,7 +135,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T02 — Target macOS e ciclo básico
 
-- **Status**: Pending.
+- **Status**: Complete — BUILD/REVIEW PASS; UI-base MANUAL PASS confirmado pelo usuário. Evidência docs/evidence/T02.md.
 - **What**: Criar um target Xcode do app pessoal, sem target de testes, com acesso ao menu/configurações e encerramento; registrar scheme real e gate de build.
 - **Where**: Radar.xcodeproj; Radar/App/RadarApp.swift; Radar/Resources/
 - **Depends on**: T01 (dependências anteriores transitivas).

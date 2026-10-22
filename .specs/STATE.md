@@ -98,13 +98,21 @@
 - **Date**: 2026-10-22
 - **Status**: active
 
+### AD-013
+- **Decision**: Ordem de implementação e escritor permanecem sequenciais. Bloqueio de interação não conclui tarefa/lote nem libera aceite; entregas independentes desse gate podem ser preparadas com build/review e commits explicitamente parciais, com dependência e limite registrados.
+- **Reason**: Publicação do orquestrador aplicando a instrução atual do usuário: quando depender de acesso/interação, registrar impedimento e continuar trabalho independente possível.
+- **Trade-off**: Nenhum requisito ou gate é dispensado. O timeout CUA de T02 foi resolvido pela observação direta do usuário antes do commit. Gates futuros bloqueados continuam NOT-RUN.
+- **Scope**: Execução local com impedimento externo de interação; handoff e manifesto preservam PARTIAL.
+- **Date**: 2026-10-22
+- **Status**: active
+
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Execute local; T01 concluída documentalmente, T02 próxima.
-- **Completed**: Migração do plano/referências; regras locais; ambiente público e contrato C1.1 registrados em docs/readiness.md.
-- **In-progress**: Nenhum código até T02; manifesto guarda hashes somente depois de cada commit real.
-- **Next step**: T02, target Xcode e UI-base inicial.
-- **Blockers**: Política/site/projetos Jira e repos GitHub pendentes; Finder/auth/runtime dos providers NOT-RUN. Não bloqueiam a base nativa.
-- **Uncommitted files**: Entrega T01 antes do commit; consultar git status.
+- **Phase / Task**: Execute local, lote1; T01/T02 Complete (BUILD/assinatura e UI-base humana PASS).
+- **Completed**: T01 commit18f1de9; target/scheme Radar único, bundle Debug local com assinatura ad-hoc/runtime e processo confirmado.
+- **In-progress**: T03 próxima; usuário confirmou abertura de configurações e encerramento normalmente.
+- **Next step**: T03 geometria pelo NSScreen; T04 painel.
+- **Blockers**: CUA getApp path/id/nome retorna timeoutReached -10005; UI-base T02 resolvida por evidência humana. Jira política/escopos e providers runtime continuam pendentes.
+- **Uncommitted files**: T02 antes do commit; consultar git status. Hash real fica no manifesto seguinte.
 - **Branch**: feat/radar-v1-local; sem remote.

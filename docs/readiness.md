@@ -30,3 +30,11 @@ T01 DOC: fonte canônica, decisões, 42 tarefas/56 critérios, dependências e l
 Sem lint externo instalado. Testes/mocks/sensor: NOT-RUN por política, não criados. Runtime/Finder/contas/performance/VoiceOver/Reduzir Movimento permanecem NOT-RUN até suas tarefas. Sem remotes, publicação, instalação ou configuração global.
 
 C1.2 publicado pelo root antes dos consumidores: versão GitHub 2026-03-10 e DTO mínimo; token/gateway Jira explícito e paginação/completude qualificada, com fontes em design.md. Nenhuma chamada autenticada executada.
+
+## T02 — comandos e bundle reais
+
+`xcodebuild -list -project Radar.xcodeproj`: exit 0, único target/scheme Radar, Debug/Release, sem targets de teste. Entrada local: `./script/build_and_run.sh [run|--verify|--build-only]`. O script só encerra processo cujo caminho exato coincide com o próprio bundle.
+
+Build: `xcodebuild -quiet -project Radar.xcodeproj -scheme Radar -configuration Debug -destination 'platform=macOS,arch=arm64' -derivedDataPath .build/DerivedData build` (exit 0). Bundle: `.build/DerivedData/Build/Products/Debug/Radar.app`, aberto por caminho completo com `/usr/bin/open -n` e processo confirmado. CUA retornou timeout; UI-base foi confirmada pelo usuário: abriu configurações e encerrou normalmente.
+
+`codesign --verify --deep --strict` exit 0. Assinatura observada `adhoc,runtime`, Runtime27.0, arm64, SDK macOS27.0/Xcode27.1. O target usa `OTHER_CODE_SIGN_FLAGS=--options runtime`, porque `ENABLE_HARDENED_RUNTIME=YES` isolado não produziu flag runtime no primeiro Debug. `ENABLE_DEBUG_DYLIB=NO` remove as bibliotecas de preview/debug; sem essa opção o processo não permanecia ativo após aplicar runtime. Causa específica não diagnosticada por logs; não foram lidos. Depois do ajuste, launch/processo passou. [Opt-out oficial de debug.dylib](https://developer.apple.com/documentation/xcode/understanding-build-product-layout-changes). Previews indisponíveis nesse target; nenhuma exceção de library validation foi adicionada.

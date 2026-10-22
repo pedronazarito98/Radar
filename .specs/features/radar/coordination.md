@@ -70,6 +70,8 @@ Não colocar tokens, cookies, auth, payloads corporativos, títulos internos, lo
 7. Após o commit T42, iniciar automaticamente verificador fresco, sem pedir uma confirmação intermediária só para a revisão.
 8. Se houver falha, converter achado em tarefa atômica com gate; corrigir por um worker e reverificar independentemente. Até três rodadas automáticas de correção/revisão; persistindo falha, entregar evidência e impedimento sem declarar conclusão.
 
+AD-013 permite preparação sequencial de trabalho independente de interação bloqueada, sem concluir a tarefa/lote anterior nem dispensar gate obrigatório. Commits parciais são explicitamente rotulados.
+
 Não executar fases em paralelo. Handoff só avança com gate da tarefa concluído e commit conhecido. Read-only review pode ocorrer junto do trabalho do autor, mas a evidência final deve apontar para o commit exato conferido; se o código mudar, rever a parte afetada.
 
 ## Handoff mínimo de lote

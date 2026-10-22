@@ -4,3 +4,4 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 
 | Tarefa | Commit real | Gate | Evidência |
 |---|---|---|---|
+| T01 | 18f1de9140ad462a92346d07845242ebe9477d6b | DOC PASS | T01.md |
