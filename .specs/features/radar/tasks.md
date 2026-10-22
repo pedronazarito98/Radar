@@ -177,7 +177,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T05 — Foco e causas de fechamento
 
-- **Status**: PARTIAL — BUILD/REVIEW e Esc local CUA PASS; foco externo/teclado fechado aguardam observação; docs/evidence/T05.md.
+- **Status**: Prepared — gate local BUILD/REVIEW + MANUAL humano PASS; dependência T04 PARTIAL, lote não concluído; complemento em docs/evidence/T05.md.
 - **What**: Implementar foco após clique explícito, Esc e clique fora com causa de fechamento; fechar por link preservará o destino informado pelo coordenador.
 - **Where**: Radar/Platform/PanelInteractionController.swift
 - **Depends on**: T04 (dependências anteriores transitivas).
@@ -205,7 +205,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T07 — Política de transição
 
-- **Status**: PARTIAL — BUILD/REVIEW e abertura/recolhimento CUA PASS; reversão/hit durante transição e Reduzir Movimento reais NOT-RUN; docs/evidence/T07.md.
+- **Status**: PARTIAL — BUILD/REVIEW/CUA e alternância rápida sem área invisível confirmada pelo usuário; Reduzir Movimento NOT-RUN; complemento em docs/evidence/T07.md.
 - **What**: Implementar estados interrompíveis de abrir/fechar e Reduzir Movimento; calibrar depois sem aguardar rede.
 - **Where**: Radar/Platform/PresentationMotionPolicy.swift
 - **Depends on**: T06 (dependências anteriores transitivas).
@@ -219,7 +219,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T08 — Identidade remota
 
-- **Status**: Pending.
+- **Status**: Prepared — gate local BUILD + REVIEW independente PASS; dependências manuais parciais sob AD-013; docs/evidence/T08.md.
 - **What**: Definir IDs de contexto, conexão, Jira e PR com hash/equality explícitos e tipagem segura.
 - **Where**: Radar/Domain/RemoteIdentity.swift
 - **Depends on**: T07 (dependências anteriores transitivas).

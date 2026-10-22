@@ -3,6 +3,8 @@
 **Status**: implementação local autorizada; defaults adotados qualificáveis em AD-010. **Spec**: [spec.md](spec.md).  
 **Decisões lidas**: AD-001 a AD-012 de [STATE](../../STATE.md).
 
+As descrições de diretório inexistente e caminhos futuros abaixo registram a baseline histórica do planejamento. A árvore implementada, tarefas e gates atuais estão em [STATE](../../STATE.md), [tasks](tasks.md) e no [manifesto](../../../docs/evidence/manifest.md); não são resultados inferidos deste design.
+
 ## Abordagens consideradas
 
 | Abordagem, mesmo escopo | Benefício | Custo | Proposta |

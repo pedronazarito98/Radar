@@ -117,10 +117,10 @@
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote1 preparado; T01–T03 Complete; T04/T05/T07 PARTIAL; T06 Prepared com gate local PASS.
-- **Completed**: T01 18f1de9, T02 c910574, T03 99e3318; T04 eab3dab, T05 7861676 parciais; tokens/marca T06 ce3c7d0 BUILD/REVIEW visual PASS; T07 5fe9ecb BUILD/REVIEW e abertura/recolhimento CUA PASS.
-- **In-progress**: T04 modos individuais, T05 foco externo/teclado fechado, T07 reversão/hit durante transição e Reduzir Movimento aguardam observação. Recorte/hit-through T04 humano e cleanup CUA/processo PASS.
-- **Next step**: Handoff preparatório docs/handoffs/batch-01.md sob AD-013; batch_1 libera ownership ao root. Orquestrador pode entregar T08–T14 independentes e consolidar roteiro manual pendente. Sem mudança global pelo agente.
-- **Blockers**: Gates manuais acima; providers/escopos Jira pendentes. Lote não concluído.
-- **Uncommitted files**: Nenhum código pendente; handoff documental segue T07. Hash documental final é informado ao root depois de existir.
+- **Phase / Task**: Lote2, T08 preparado com BUILD/REVIEW PASS; writer único batch_2.
+- **Completed**: Lote1 em docs/handoffs/batch-01.md. T08 identidade imutável e aliases contextuais; hash real entra no manifesto após commit.
+- **In-progress**: T09 próximo. T05 gate local ganhou confirmação humana de foco/teclado; T07 ganhou confirmação de alternância rápida sem área invisível. Relato humano “ok” delimitado em evidências, código observado 5fe9ecb.
+- **Next step**: T09–T14 sequenciais no domínio/Application; nenhum relaunch necessário. Preservar C1, C1.1/C1.2 e AD-009–AD-014.
+- **Blockers**: T04 modos específicos e T07 Reduzir Movimento NOT-RUN; lote1/aceite não concluídos. Providers/escopos/política Jira pendentes; domínio é preparação independente sob AD-013.
+- **Uncommitted files**: Entrega T08 e atualização documental do relato humano em preparação de commit atômico; nenhum dado corporativo.
 - **Branch**: feat/radar-v1-local; sem remote.

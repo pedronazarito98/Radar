@@ -1,6 +1,6 @@
 # Radar — plano de verificação
 
-**Status**: planejamento. Nenhum caso do app foi executado.  
+**Status**: roteiro da baseline de planejamento, preservado para execução. Os resultados atuais ficam em [STATE](../../STATE.md) e no [manifesto](../../../docs/evidence/manifest.md); referências abaixo a nenhum caso executado descrevem a baseline, não a árvore atual.
 **Cobertura**: 28 casos, cada um com dois subcritérios da spec (56 critérios). Uma linha abaixo não representa um único clique nem um resultado concluído.
 
 ## Política e evidência
