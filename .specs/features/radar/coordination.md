@@ -1,7 +1,7 @@
 # Radar — execução com Codex e subagentes
 
-**Status**: execução local ativa; lote3 preparado parcialmente. Após limite de uso de batch_2_resume/domain_review, root assumiu escritor único; revisão independente de T13/T14 pendente. Nenhum agente é simulado.
-**Fonte canônica**: [STATE](../../STATE.md), [spec](spec.md), [context](context.md), [design](design.md), [tasks](tasks.md). Contratos C1 e refinamentos C1.1–C1.4 publicados pelo orquestrador. Handoffs em docs/handoffs/batch-02.md e batch-03.md.
+**Status**: execução local ativa; lote4 em preparação. providers_writer é o único escritor de código em T27–T28; root publica contratos e coordena os gates. A revisão independente de T13/T14 foi retomada: T13 sem achado adicional; T14 corrigido em C04, conforme evidências. integration_review revisa as integrações; especialistas de relações e plataforma atuam somente em leitura. Gates de contas reais continuam NOT-RUN por ausência de qualificação; o usuário autorizou continuar todo trabalho independente em 23/10/2026.
+**Fonte canônica**: [STATE](../../STATE.md), [spec](spec.md), [context](context.md), [design](design.md), [tasks](tasks.md). Contratos C1 e refinamentos publicados em design.md pelo orquestrador antes dos consumidores. Handoffs em docs/handoffs/batch-02.md e batch-03.md.
 
 
 ## O que a documentação do Codex sustenta
