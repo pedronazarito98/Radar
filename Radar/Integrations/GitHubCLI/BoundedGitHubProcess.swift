@@ -18,6 +18,7 @@ final class BoundedGitHubProcess: @unchecked Sendable {
     private var stdoutEnded = false
     private var stderrEnded = false
     private var exited = false
+    private var terminationUnconfirmed = false
     private var started = false
     private var finished = false
     private var stopping = false
@@ -25,16 +26,18 @@ final class BoundedGitHubProcess: @unchecked Sendable {
 
     init(limit: Int = 5 * 1_024 * 1_024) { self.limit = limit }
 
-    func run(executable: URL, arguments: [String]) async throws -> GitHubProcessResult {
-        try await withTaskCancellationHandler {
+    func run(executable: URL, arguments: [String], timeoutSeconds: TimeInterval = 15) async throws -> GitHubProcessResult {
+        guard !GitHubProcessSafety.isUnavailable else { throw GitHubCLIError.source(.transportUnavailable) }
+        return try await withTaskCancellationHandler {
             try await withCheckedThrowingContinuation { continuation in
-                queue.async { self.start(executable: executable, arguments: arguments, continuation: continuation) }
+                queue.async { self.start(executable: executable, arguments: arguments, timeoutSeconds: timeoutSeconds, continuation: continuation) }
             }
         } onCancel: { self.queue.async { self.stop(with: .cancelled) } }
     }
 
-    private func start(executable: URL, arguments: [String], continuation: CheckedContinuation<GitHubProcessResult, Error>) {
+    private func start(executable: URL, arguments: [String], timeoutSeconds: TimeInterval, continuation: CheckedContinuation<GitHubProcessResult, Error>) {
         self.continuation = continuation
+        if GitHubProcessSafety.isUnavailable { failure = .transportUnavailable }
         guard failure == nil else {
             exited = true; stdoutEnded = true; stderrEnded = true
             completeIfReady()
@@ -63,7 +66,7 @@ final class BoundedGitHubProcess: @unchecked Sendable {
             try? stderr.fileHandleForWriting.close()
             let work = DispatchWorkItem { [weak self] in self?.stop(with: .timeout) }
             timeout = work
-            queue.asyncAfter(deadline: .now() + 15, execute: work)
+            queue.asyncAfter(deadline: .now() + max(0, min(15, timeoutSeconds)), execute: work)
         } catch {
             failure = .transportUnavailable
             exited = true; stdoutEnded = true; stderrEnded = true
@@ -129,10 +132,14 @@ final class BoundedGitHubProcess: @unchecked Sendable {
             if !finished, process.isRunning { _ = Darwin.kill(process.processIdentifier, SIGKILL) }
         }
         queue.asyncAfter(deadline: .now() + 2) { [self] in
-            guard !finished, !process.isRunning else { return }
+            guard !finished else { return }
+            if process.isRunning {
+                terminationUnconfirmed = true
+                failure = .transportUnavailable
+                GitHubProcessSafety.markUnavailable()
+            } else { exited = true }
             // A descendant retaining a pipe cannot hold a failed request indefinitely.
             // Forced closure is failure-only; successful results always require observed EOF.
-            exited = true
             stdoutSource?.cancel()
             stderrSource?.cancel()
             stdoutEnded = true; stderrEnded = true
@@ -141,7 +148,7 @@ final class BoundedGitHubProcess: @unchecked Sendable {
     }
 
     private func completeIfReady() {
-        guard !finished, exited, stdoutEnded, stderrEnded, let continuation else { return }
+        guard !finished, (exited || terminationUnconfirmed), stdoutEnded, stderrEnded, let continuation else { return }
         finished = true
         self.continuation = nil
         timeout?.cancel(); timeout = nil

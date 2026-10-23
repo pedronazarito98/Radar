@@ -4,6 +4,7 @@ import AppKit
 final class RadarAppDelegate: NSObject, NSApplicationDelegate {
     let store = RadarStore()
     let jiraConnection = JiraCloudConnection()
+    lazy var githubConnection = GitHubConnectionController(store: store)
     lazy var jiraWork = JiraWorkController(store: store, connection: jiraConnection)
     private(set) var panelController: NotchPanelController?
 

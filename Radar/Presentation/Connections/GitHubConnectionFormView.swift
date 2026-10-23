@@ -3,6 +3,7 @@ import UniformTypeIdentifiers
 
 struct GitHubConnectionFormView: View {
     let status: SourceStatus
+    let connection: GitHubConnectionController
     @State private var executablePath = "/opt/homebrew/bin/gh"
     @State private var repositories = ""
     @State private var showsPicker = false
@@ -20,23 +21,42 @@ struct GitHubConnectionFormView: View {
             }
             Section("GitHub CLI") {
                 TextField("Caminho absoluto", text: $executablePath).autocorrectionDisabled()
-                Button("Escolher gh…") { showsPicker = true }
+                    .disabled(operation != nil || status.connection == .connected)
+                Button("Escolher gh…") { showsPicker = true }.disabled(operation != nil || status.connection == .connected)
                 if let selectionProblem { Text(selectionProblem).foregroundStyle(.secondary) }
-                Button("Validar gh", action: qualify).disabled(operation != nil)
-                if let qualification { Text("gh \(qualification.version) validado. A autenticação ainda não foi consultada.").font(.caption) }
+                Button("Validar gh", action: qualify).disabled(operation != nil || status.connection == .connected)
+                if let qualification {
+                    Text(status.connection == .connected
+                         ? "gh \(qualification.version) · identidade qualificada"
+                         : "gh \(qualification.version) validado. A autenticação ainda não foi consultada.").font(.caption)
+                }
             }
             Section("Escopo pessoal") {
                 TextField("Repositórios", text: $repositories, prompt: Text("owner/repo, owner/outro"))
-                    .autocorrectionDisabled()
+                    .autocorrectionDisabled().disabled(operation != nil || status.connection == .connected)
                 Text("A consulta inclui autoria, atribuição e revisão solicitada somente nos repositórios escolhidos.")
                     .font(.caption).foregroundStyle(.secondary)
-                Button("Conectar GitHub") {}.disabled(true)
+                Text("Escolha de 1 a 10 repositórios; excesso será recusado.").font(.caption)
+                Button("Conectar GitHub", action: connect).disabled(qualification == nil || operation != nil || status.connection == .connected)
+                if status.connection == .connected { Button("Desconectar GitHub") { connection.disconnect() } }
             }
-            Text("A validação executa somente --version, sem consultar sua conta. O Radar não instala o gh. As permissões existentes do CLI podem ser mais amplas que as consultas do app.")
+            Text("Validar gh executa somente --version. Conectar GitHub consulta sua identidade por GET /user. O Radar não instala o gh. As permissões existentes do CLI podem ser mais amplas que as consultas do app.")
                 .font(.caption).foregroundStyle(.secondary)
         }
         .formStyle(.grouped)
-        .onChange(of: executablePath) { _, _ in cancel(); qualification = nil }
+        .onChange(of: executablePath) { _, _ in
+            guard status.connection != .connected else { return }
+            cancel(); qualification = nil
+        }
+        .task {
+            if let executable = connection.executable {
+                executablePath = executable.url.path
+                qualification = executable
+            }
+            if case let .github(repos) = connection.store.github.scope?.resources {
+                repositories = repos.map(\.fullName).sorted().joined(separator: ", ")
+            }
+        }
         .onDisappear(perform: cancel)
         .background(ConnectionWindowCloseObserver(onClose: cancel).frame(width: 0, height: 0))
         .fileImporter(isPresented: $showsPicker, allowedContentTypes: [.item]) { result in
@@ -64,6 +84,28 @@ struct GitHubConnectionFormView: View {
                 guard generation == current, !Task.isCancelled else { return }
                 if case let GitHubCLIError.source(problem) = error { selectionProblem = SourceStatusText.message(for: problem) }
                 else { selectionProblem = "A validação foi interrompida." }
+            }
+            guard generation == current else { return }
+            operation = nil
+        }
+    }
+
+    private func connect() {
+        guard let qualification else { return }
+        let current = UUID(); generation = current
+        selectionProblem = "Qualificando identidade…"
+        operation = Task {
+            do {
+                try await connection.connect(executable: qualification, repositories: repositories)
+                guard generation == current, !Task.isCancelled else { return }
+                selectionProblem = "Identidade qualificada. A lista de PRs ainda não foi consultada."
+            } catch {
+                guard generation == current, !Task.isCancelled else { return }
+                if case let GitHubCLIError.source(problem) = error { selectionProblem = SourceStatusText.message(for: problem) }
+                else if case GitHubCLIError.identityChanged = error {
+                    connection.requireRequalification()
+                    selectionProblem = "A conta ativa mudou durante a consulta. Qualifique novamente."
+                } else { selectionProblem = "A consulta foi interrompida." }
             }
             guard generation == current else { return }
             operation = nil

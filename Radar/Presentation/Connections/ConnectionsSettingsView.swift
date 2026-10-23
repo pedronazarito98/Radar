@@ -4,6 +4,7 @@ struct ConnectionsSettingsView: View {
     let store: RadarStore
     let jiraConnection: JiraCloudConnection
     let jiraWork: JiraWorkController
+    let githubConnection: GitHubConnectionController
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -12,7 +13,7 @@ struct ConnectionsSettingsView: View {
             TabView {
                 JiraConnectionFormView(store: store, connection: jiraConnection, work: jiraWork)
                     .tabItem { Label("Jira Cloud", systemImage: "square.stack") }
-                GitHubConnectionFormView(status: store.github.status)
+                GitHubConnectionFormView(status: store.github.status, connection: githubConnection)
                     .tabItem { Label("GitHub.com", systemImage: "chevron.left.forwardslash.chevron.right") }
             }
         }
