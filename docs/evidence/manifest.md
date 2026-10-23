@@ -35,3 +35,4 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 | C05 | 2eed4b3 | BUILD/REVIEW independente PASS; runtime NOT-RUN | C05.md |
 | T24 | 330d241 | Prepared/PARTIAL; BUILD/REVIEW independente PASS; LIVE-Jira NOT-RUN | T24.md |
 | T25 | 10871d4 | BUILD/REVIEW independente/UI-gh versão PASS; auth/Finder final NOT-RUN | T25.md |
+| T26 | 272ba61 | BUILD/REVIEW independente PASS; LIVE-GitHub NOT-RUN | T26.md |

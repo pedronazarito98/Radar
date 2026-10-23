@@ -485,7 +485,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T27 — PRs pessoais deduplicados
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL — BUILD/REVIEW independente PASS; LIVE-GitHub NOT-RUN. docs/evidence/T27.md.
 - **What**: Qualificar identidade estável via GET /user antes e imediatamente ao publicar o lote; reunir três buscas paginadas de PRs abertos com papéis distintos e união por ID; divergência descarta o lote e falha na qualificação final impede publicar.
 - **Where**: Radar/Integrations/GitHub/GitHubPersonalPRProvider.swift
 - **Depends on**: T26 (dependências anteriores transitivas).

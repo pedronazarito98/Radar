@@ -5,11 +5,12 @@ import Foundation
 final class JiraWorkController {
     private let store: RadarStore
     private let client: JiraCloudSearchClient
-    private let scheduler = RefreshScheduler()
+    private let scheduler: RefreshScheduler
     private var configuredKey: RefreshScheduleKey?
 
-    init(store: RadarStore, connection: JiraCloudConnection) {
+    init(store: RadarStore, connection: JiraCloudConnection, scheduler: RefreshScheduler) {
         self.store = store
+        self.scheduler = scheduler
         client = JiraCloudSearchClient(connection: connection)
     }
 
@@ -17,7 +18,7 @@ final class JiraWorkController {
         guard let scope = store.jira.scope, store.jira.status.connection == .connected else { return }
         let key = RefreshScheduleKey(contextID: store.contextID, scope: scope, kind: .personalList)
         if configuredKey != key {
-            scheduler.removeAll()
+            stop()
             configuredKey = key
             scheduler.configure(key, eligible: true) { [weak self] in
                 guard let self else { return RefreshOutcome(problems: []) }
@@ -26,7 +27,10 @@ final class JiraWorkController {
         } else { scheduler.request(key) }
     }
 
-    func stop() { scheduler.removeAll(); configuredKey = nil }
+    func stop() {
+        if let configuredKey { scheduler.remove(configuredKey) }
+        configuredKey = nil
+    }
 
     private func refresh() async -> RefreshOutcome {
         guard let token = store.beginRefresh(for: .jira) else { return RefreshOutcome(problems: []) }

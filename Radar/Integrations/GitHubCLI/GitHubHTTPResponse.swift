@@ -41,6 +41,13 @@ struct GitHubHTTPResponse: Sendable {
             let sso = headers["x-github-sso"]?.lowercased().hasPrefix("required") == true
             throw GitHubCLIError.source(sso ? .singleSignOnRequired : .permissionDenied)
         }
+        if (200...299).contains(status), let sso = headers["x-github-sso"], !sso.isEmpty {
+            let classification = sso.lowercased().split(separator: ";").first?.trimmingCharacters(in: .whitespaces)
+            if classification == "partial-results" || classification == "required" {
+                throw GitHubCLIError.source(.singleSignOnRequired)
+            }
+            throw GitHubCLIError.source(.invalidResponse)
+        }
         if status == 503 || ((500...599).contains(status) && headers["retry-after"] != nil) {
             throw GitHubCLIError.source(.serviceUnavailable(retryAfter: retry))
         }
