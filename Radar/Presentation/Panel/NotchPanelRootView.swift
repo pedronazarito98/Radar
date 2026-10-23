@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct NotchPanelRootView: View {
+    let store: RadarStore
     let isExpanded: Bool
     let showsContent: Bool
     let contentOpacity: CGFloat
@@ -19,9 +20,15 @@ struct NotchPanelRootView: View {
                 .fill(RadarTheme.surface, style: FillStyle(eoFill: true))
                 .allowsHitTesting(false)
 
-            indicator(.jira, label: "Jira, conta não conectada")
+            CompactNotchView(
+                brand: .jira, count: store.jira.count, status: store.jira.status,
+                height: cameraRect.height, isExpanded: isExpanded, toggle: toggle
+            )
                 .position(x: cameraRect.minX - RadarTheme.Layout.compactWingWidth / 2, y: cameraRect.height / 2)
-            indicator(.github, label: "GitHub, conta não qualificada")
+            CompactNotchView(
+                brand: .github, count: store.github.count, status: store.github.status,
+                height: cameraRect.height, isExpanded: isExpanded, toggle: toggle
+            )
                 .position(x: cameraRect.maxX + RadarTheme.Layout.compactWingWidth / 2, y: cameraRect.height / 2)
 
             if showsContent {
@@ -38,22 +45,6 @@ struct NotchPanelRootView: View {
         .onExitCommand(perform: escape)
     }
 
-    private func indicator(_ brand: SourceBrandMark.Brand, label: String) -> some View {
-        Button(action: toggle) {
-            HStack(spacing: 8) {
-                SourceBrandMark(brand: brand)
-                    .frame(width: RadarTheme.Layout.compactSymbolSize, height: RadarTheme.Layout.compactSymbolSize)
-                    .accessibilityHidden(true)
-                Text("—").foregroundStyle(brand == .github ? RadarTheme.githubAccent : RadarTheme.primaryText)
-            }
-            .font(RadarTheme.Typography.indicator)
-            .frame(width: RadarTheme.Layout.compactWingWidth, height: cameraRect.height)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(label)
-        .accessibilityHint(isExpanded ? "Recolher Radar" : "Abrir Radar")
-    }
 }
 
 private struct NotchSurfaceShape: Shape {

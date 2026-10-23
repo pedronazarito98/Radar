@@ -317,7 +317,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T15 — Indicadores compactos
 
-- **Status**: Pending.
+- **Status**: Prepared — BUILD + UI-base CUA/AX PASS desconectado; dados reais e VoiceOver posteriores; docs/evidence/T15.md.
 - **What**: Criar a vista fechada com símbolos, totais e rótulos acessíveis por origem, incluindo unknown/parcial.
 - **Where**: Radar/Presentation/Notch/CompactNotchView.swift
 - **Depends on**: T14 (dependências anteriores transitivas).

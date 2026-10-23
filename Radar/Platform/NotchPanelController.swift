@@ -13,11 +13,13 @@ final class NotchPanelController {
     private let interaction: PanelInteractionController
     private let animator = NotchFrameAnimator()
     private let geometry: ScreenGeometry
+    private let store: RadarStore
     private let hostingView: NSHostingView<NotchPanelRootView>
     private var contentOpacity: CGFloat = 0
 
-    init(geometry: ScreenGeometry) {
+    init(geometry: ScreenGeometry, store: RadarStore) {
         self.geometry = geometry
+        self.store = store
         panel = RadarPanel(
             contentRect: .zero,
             styleMask: [.borderless, .nonactivatingPanel],
@@ -26,6 +28,7 @@ final class NotchPanelController {
         )
         interaction = PanelInteractionController(panel: panel)
         hostingView = NSHostingView(rootView: NotchPanelRootView(
+            store: store,
             isExpanded: false, showsContent: false, contentOpacity: 0,
             cameraRect: .zero, toggle: {}, escape: {}
         ))
@@ -54,6 +57,7 @@ final class NotchPanelController {
     }
 
     func showCompact() {
+        store.setPanelOpen(false)
         animator.cancel()
         interaction.endInteraction(reason: .outsideClick)
         phase = .compact
@@ -68,17 +72,20 @@ final class NotchPanelController {
 
     func showExpanded() {
         guard !isExpanded else { return }
+        store.setPanelOpen(true)
         transition(expanding: true)
         interaction.beginExplicitInteraction()
     }
 
     func dismiss(reason: PanelDismissalReason) {
+        store.setPanelOpen(false)
         interaction.endInteraction(reason: reason)
         guard phase != .compact, phase != .closing else { return }
         transition(expanding: false)
     }
 
     func invalidate() {
+        store.setPanelOpen(false)
         animator.cancel()
         interaction.endInteraction(reason: .termination)
         panel.onEscape = nil
@@ -135,6 +142,7 @@ final class NotchPanelController {
             NSRect(x: $0.minX - frame.minX, y: frame.maxY - $0.maxY, width: $0.width, height: $0.height)
         } ?? NSRect(x: frame.width / 2, y: 0, width: 0, height: 32)
         hostingView.rootView = NotchPanelRootView(
+            store: store,
             isExpanded: isExpanded,
             showsContent: phase != .compact,
             contentOpacity: contentOpacity,
