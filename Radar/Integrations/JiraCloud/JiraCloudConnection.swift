@@ -72,8 +72,13 @@ actor JiraCloudConnection {
 
     func hasSavedReference() -> Bool { reference != nil }
 
-    func read(path: String, query: [URLQueryItem] = []) async throws -> Data {
-        guard let token, let qualified else { throw JiraConnectionError.source(.authenticationRequired) }
+    func currentConnection() throws -> JiraQualifiedConnection {
+        guard let qualified, token != nil else { throw JiraConnectionError.source(.authenticationRequired) }
+        return qualified
+    }
+
+    func read(expectedConnectionID: ConnectionID, path: String, query: [URLQueryItem] = []) async throws -> Data {
+        guard let token, let qualified, qualified.connectionID == expectedConnectionID else { throw JiraConnectionError.source(.authenticationRequired) }
         let operation = operationID
         let request = try authenticatedRequest(configuration: qualified.configuration, cloudID: qualified.cloudID,
             token: token, path: path, query: query)

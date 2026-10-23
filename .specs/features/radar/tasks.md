@@ -443,7 +443,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T24 — Busca de cards Jira
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL — BUILD/REVIEW independente PASS; LIVE-Jira NOT-RUN. docs/evidence/T24.md.
 - **What**: Buscar campos mínimos por enhanced search GET e seguir nextPageToken com orçamento, escopo de projetos e completude.
 - **Where**: Radar/Integrations/JiraCloud/JiraCloudSearchClient.swift
 - **Depends on**: T23 (dependências anteriores transitivas).

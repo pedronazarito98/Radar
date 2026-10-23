@@ -30,6 +30,7 @@ struct SourceSnapshot<Item: SourceSnapshotItem>: Equatable, Sendable {
     let scope: SourceScope
     let items: [Item]
     let queryCoverage: [PersonalWorkQuery: QueryCoverage]
+    let observedProblems: [SourceProblem]
     let lastSuccessfulAt: Date
 
     init?(
@@ -37,7 +38,8 @@ struct SourceSnapshot<Item: SourceSnapshotItem>: Equatable, Sendable {
         scope: SourceScope,
         items: [Item],
         queryCoverage: [PersonalWorkQuery: QueryCoverage],
-        lastSuccessfulAt: Date
+        lastSuccessfulAt: Date,
+        observedProblems: [SourceProblem] = []
     ) {
         guard scope.source == Item.source,
               Set(items.map(\.id)).count == items.count,
@@ -49,10 +51,11 @@ struct SourceSnapshot<Item: SourceSnapshotItem>: Equatable, Sendable {
         self.items = items
         self.queryCoverage = queryCoverage
         self.lastSuccessfulAt = lastSuccessfulAt
+        self.observedProblems = observedProblems
     }
 
     var isComplete: Bool {
-        scope.requiredQueries.allSatisfy { queryCoverage[$0] == .complete }
+        observedProblems.isEmpty && scope.requiredQueries.allSatisfy { queryCoverage[$0] == .complete }
     }
 
     var missingQueries: Set<PersonalWorkQuery> {
@@ -61,11 +64,13 @@ struct SourceSnapshot<Item: SourceSnapshotItem>: Equatable, Sendable {
 
     var count: Count { Count(snapshot: self) }
 
-    /// Stable query order prevents dictionary iteration from choosing the displayed problem.
-    var firstProblem: SourceProblem? {
-        for query in PersonalWorkQuery.allCases {
+    /// Stable query order also feeds every backoff problem to the scheduler.
+    var allProblems: [SourceProblem] {
+        PersonalWorkQuery.allCases.compactMap { query in
             if case let .failed(problem) = queryCoverage[query] { return problem }
-        }
-        return nil
+            return nil
+        } + observedProblems
     }
+
+    var firstProblem: SourceProblem? { allProblems.first }
 }

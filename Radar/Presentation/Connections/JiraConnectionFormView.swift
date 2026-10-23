@@ -4,6 +4,7 @@ import SwiftUI
 struct JiraConnectionFormView: View {
     let store: RadarStore
     let connection: JiraCloudConnection
+    let work: JiraWorkController
     @State private var operation: Task<Void, Never>?
     @State private var generation = UUID()
     @State private var message: String?
@@ -42,6 +43,10 @@ struct JiraConnectionFormView: View {
                     .font(.caption).foregroundStyle(.secondary)
                 Button("Conectar Jira", action: connect)
                     .disabled(!policyAllowsToken || token.isEmpty || operation != nil || hasSavedReference || store.jira.status.connection == .connected)
+                if store.jira.status.connection == .connected {
+                    Button("Consultar / atualizar cards") { work.requestAfterUserAction() }
+                        .disabled(operation != nil || store.jira.status.isRefreshing)
+                }
                 if hasSavedReference || store.jira.status.connection == .connected {
                     Button("Desconectar e remover token", action: disconnect).disabled(operation != nil)
                 }
@@ -89,6 +94,7 @@ struct JiraConnectionFormView: View {
 
     private func disconnect() {
         let current = UUID(); generation = current
+        work.stop()
         store.invalidate(.jira)
         token = ""
         operation = Task {

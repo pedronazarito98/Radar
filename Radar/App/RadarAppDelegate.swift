@@ -4,6 +4,7 @@ import AppKit
 final class RadarAppDelegate: NSObject, NSApplicationDelegate {
     let store = RadarStore()
     let jiraConnection = JiraCloudConnection()
+    lazy var jiraWork = JiraWorkController(store: store, connection: jiraConnection)
     private(set) var panelController: NotchPanelController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -13,6 +14,7 @@ final class RadarAppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        jiraWork.stop()
         panelController?.invalidate()
         panelController = nil
     }
