@@ -850,3 +850,11 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 - **Depends on / sequência**: C02; correção T18 antes de T22.
 - **Requirement / Gate**: R13; BUILD + revisão independente. Sem testes/mocks.
 - **Commit**: Atômico em pt-BR.
+
+### C04 — Backoff por origem sobrevive à seleção
+
+- **Status**: Prepared — BUILD/REVIEW independente PASS; runtime NOT-RUN. docs/evidence/C04.md.
+- **What / Where**: Cooldown separado por WorkSource em RefreshScheduler; preservação em remove/reconfigure e término tardio.
+- **Depends on / sequência**: T23; antes T24; contrato C1.6 publicado.
+- **Requirement / Gate**: R15/R27; BUILD + revisão independente. Sem testes/mocks.
+- **Commit**: Atômico em pt-BR.

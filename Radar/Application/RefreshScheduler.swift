@@ -9,7 +9,6 @@ final class RefreshScheduler {
         var operation: Operation
         var eligible: Bool
         var nextRun: Date
-        var retryUntil: Date?
         var generation = UUID()
         var runningID: UUID?
         var running: Task<Void, Never>?
@@ -19,6 +18,7 @@ final class RefreshScheduler {
 
     private var entries: [RefreshScheduleKey: Entry] = [:]
     private var sleeping = false
+    private var cooldowns: [WorkSource: Date] = [:]
 
     func configure(_ key: RefreshScheduleKey, eligible: Bool, operation: @escaping Operation) {
         if case let .detail(selection) = key.kind, selection.contextID != key.contextID { return }
@@ -82,7 +82,8 @@ final class RefreshScheduler {
         entry.wakeup = nil
         entries[key] = entry
         guard !sleeping, entry.eligible, !entry.removalRequested, entry.runningID == nil else { return }
-        let deadline = max(entry.nextRun, entry.retryUntil ?? .distantPast)
+        purgeExpiredCooldowns()
+        let deadline = max(entry.nextRun, cooldowns[key.scope.source] ?? .distantPast)
         let delay = deadline.timeIntervalSinceNow
         if delay <= 0 {
             start(key)
@@ -100,6 +101,11 @@ final class RefreshScheduler {
     private func start(_ key: RefreshScheduleKey) {
         guard let entry = entries[key], entry.runningID == nil, entry.eligible,
               !entry.removalRequested, !sleeping else { return }
+        purgeExpiredCooldowns()
+        if let deadline = cooldowns[key.scope.source], deadline > Date() {
+            schedule(key)
+            return
+        }
         let runID = UUID()
         entries[key]?.runningID = runID
         entries[key]?.running = Task { [weak self, operation = entry.operation] in
@@ -114,18 +120,29 @@ final class RefreshScheduler {
 
     private func finish(_ key: RefreshScheduleKey, runID: UUID, outcome: RefreshOutcome) {
         guard var entry = entries[key], entry.runningID == runID else { return }
+        let now = Date()
+        purgeExpiredCooldowns()
+        if let deadline = outcome.retryDeadline(at: now) {
+            cooldowns[key.scope.source] = max(cooldowns[key.scope.source] ?? .distantPast, deadline)
+        }
         entry.runningID = nil
         entry.running = nil
         guard !entry.removalRequested else {
             entries[key] = nil
+            reschedule(source: key.scope.source)
             return
         }
-        let now = Date()
         entry.nextRun = now.addingTimeInterval(key.interval)
-        if let deadline = outcome.retryDeadline(at: now) {
-            entry.retryUntil = max(entry.retryUntil ?? .distantPast, deadline)
-        }
         entries[key] = entry
-        schedule(key)
+        reschedule(source: key.scope.source)
+    }
+
+    private func purgeExpiredCooldowns() {
+        let now = Date()
+        cooldowns = cooldowns.filter { $0.value > now }
+    }
+
+    private func reschedule(source: WorkSource) {
+        for key in Array(entries.keys) where key.scope.source == source { schedule(key) }
     }
 }

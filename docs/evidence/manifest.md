@@ -30,3 +30,4 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 | C03 | ef973f2 | BUILD/REVIEW independente PASS; runtime relações NOT-RUN | C03.md |
 
 | T22 | 671efae | Prepared; BUILD/REVIEW independente PASS; cofre runtime NOT-RUN | T22.md |
+| T23 | cb9c140 | Prepared/PARTIAL; BUILD/REVIEW independente PASS; LIVE-Jira NOT-RUN | T23.md |
