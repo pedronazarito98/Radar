@@ -555,7 +555,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T32 — Coordenação de refresh
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL; BUILD e revisão independente PASS; LIVE-Origens/sleep-wake NOT-RUN. Evidência docs/evidence/T32.md.
 - **What**: Ligar providers e scheduler ao store; publicar snapshots por origem mantendo conteúdo anterior e ordem apresentada até aplicar atualização.
 - **Where**: Radar/Application/SourceRefreshCoordinator.swift
 - **Depends on**: T31 (dependências anteriores transitivas).

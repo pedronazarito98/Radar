@@ -1,68 +1,77 @@
 import Foundation
 
-/// Owns scheduling only. Providers perform nonblocking I/O and guard publication separately.
+/// Schedules whole operations and reserves all their scopes until their real completion.
 @MainActor
 final class RefreshScheduler {
     typealias Operation = @MainActor () async -> RefreshOutcome
 
     private struct Entry {
         var operation: Operation
+        var scopes: Set<SourceScope>
         var eligible: Bool
-        var nextRun: Date
-        var generation = UUID()
+        var nextRun: Date?
+        var configurationID = UUID()
+        var runningConfigurationID: UUID?
+        var runningScopes: Set<SourceScope> = []
         var runningID: UUID?
         var running: Task<Void, Never>?
         var wakeup: Task<Void, Never>?
         var removalRequested = false
+        var resumeAfterSleep = false
     }
 
     private var entries: [RefreshScheduleKey: Entry] = [:]
+    private var occupiedScopes: [SourceScope: UUID] = [:]
     private var sleeping = false
     private var cooldowns: [WorkSource: Date] = [:]
 
-    func configure(_ key: RefreshScheduleKey, eligible: Bool, operation: @escaping Operation) {
-        if case let .detail(selection) = key.kind, selection.contextID != key.contextID { return }
+    func configure(_ key: RefreshScheduleKey, eligible: Bool, scopes: Set<SourceScope>? = nil,
+                   operation: @escaping Operation) {
+        switch key.kind {
+        case let .detail(selection), let .relations(selection):
+            guard selection.contextID == key.contextID else { return }
+        case .personalList: break
+        }
+        let dependencies = scopes ?? [key.scope]
+        guard !dependencies.isEmpty, dependencies.contains(key.scope) else { return }
         if var entry = entries[key] {
-            entry.operation = operation
-            entry.eligible = eligible
-            entry.removalRequested = false
+            entry.operation = operation; entry.scopes = dependencies
+            entry.eligible = eligible; entry.removalRequested = false
+            entry.configurationID = UUID(); entry.nextRun = Date()
             entries[key] = entry
         } else {
-            entries[key] = Entry(operation: operation, eligible: eligible, nextRun: Date())
+            entries[key] = Entry(operation: operation, scopes: dependencies, eligible: eligible, nextRun: Date())
         }
         if !eligible { entries[key]?.running?.cancel() }
         schedule(key)
     }
 
-    /// Repeated requests coalesce into the operation already in flight.
+    /// Repeated intent coalesces into the operation already running or waiting for its scopes.
     func request(_ key: RefreshScheduleKey) {
         guard var entry = entries[key], entry.eligible, !entry.removalRequested,
               entry.runningID == nil else { return }
-        entry.nextRun = Date()
-        entries[key] = entry
+        entry.nextRun = Date(); entries[key] = entry
         schedule(key)
     }
 
     func remove(_ key: RefreshScheduleKey) {
         guard var entry = entries[key] else { return }
-        entry.eligible = false
-        entry.removalRequested = true
-        entry.wakeup?.cancel()
-        entry.wakeup = nil
+        entry.eligible = false; entry.removalRequested = true
+        entry.wakeup?.cancel(); entry.wakeup = nil
         entry.running?.cancel()
-        // Keep the occupied slot until cancellation actually completes.
         entries[key] = entry.runningID == nil ? nil : entry
     }
 
-    func removeAll() {
-        for key in Array(entries.keys) { remove(key) }
-    }
+    func removeAll() { for key in Array(entries.keys) { remove(key) } }
 
     func suspendForSleep() {
         sleeping = true
         for key in Array(entries.keys) {
-            entries[key]?.wakeup?.cancel()
-            entries[key]?.wakeup = nil
+            if entries[key]?.eligible == true, entries[key]?.removalRequested == false,
+               entries[key]?.runningID != nil || entries[key]?.nextRun != nil {
+                entries[key]?.resumeAfterSleep = true
+            }
+            entries[key]?.wakeup?.cancel(); entries[key]?.wakeup = nil
             entries[key]?.running?.cancel()
         }
     }
@@ -71,29 +80,26 @@ final class RefreshScheduler {
         guard sleeping else { return }
         sleeping = false
         for key in Array(entries.keys) {
-            entries[key]?.nextRun = Date()
-            schedule(key)
+            guard key.interval != nil || entries[key]?.resumeAfterSleep == true else { continue }
+            entries[key]?.resumeAfterSleep = false
+            entries[key]?.nextRun = Date(); entries[key]?.configurationID = UUID()
         }
+        scheduleAll()
     }
 
     private func schedule(_ key: RefreshScheduleKey) {
         guard var entry = entries[key] else { return }
-        entry.wakeup?.cancel()
-        entry.wakeup = nil
-        entries[key] = entry
-        guard !sleeping, entry.eligible, !entry.removalRequested, entry.runningID == nil else { return }
+        entry.wakeup?.cancel(); entry.wakeup = nil; entries[key] = entry
+        guard !sleeping, entry.eligible, !entry.removalRequested, entry.runningID == nil,
+              let next = entry.nextRun else { return }
         purgeExpiredCooldowns()
-        let deadline = max(entry.nextRun, cooldowns[key.scope.source] ?? .distantPast)
+        let deadline = max(next, cooldown(for: entry.scopes))
         let delay = deadline.timeIntervalSinceNow
-        if delay <= 0 {
-            start(key)
-            return
-        }
-        let generation = entry.generation
+        if delay <= 0 { start(key); return }
+        let generation = entry.configurationID
         entries[key]?.wakeup = Task { [weak self] in
-            do { try await Task.sleep(for: .seconds(min(delay, 3_600))) }
-            catch { return }
-            guard let self, !Task.isCancelled, self.entries[key]?.generation == generation else { return }
+            do { try await Task.sleep(for: .seconds(min(delay, 3_600))) } catch { return }
+            guard let self, !Task.isCancelled, self.entries[key]?.configurationID == generation else { return }
             self.schedule(key)
         }
     }
@@ -102,19 +108,19 @@ final class RefreshScheduler {
         guard let entry = entries[key], entry.runningID == nil, entry.eligible,
               !entry.removalRequested, !sleeping else { return }
         purgeExpiredCooldowns()
-        if let deadline = cooldowns[key.scope.source], deadline > Date() {
-            schedule(key)
-            return
-        }
+        if cooldown(for: entry.scopes) > Date() { schedule(key); return }
+        // No immediate timer when occupied: completion will reschedule waiters.
+        guard entry.scopes.allSatisfy({ occupiedScopes[$0] == nil }) else { return }
         let runID = UUID()
+        for scope in entry.scopes { occupiedScopes[scope] = runID }
         entries[key]?.runningID = runID
+        entries[key]?.runningScopes = entry.scopes
+        entries[key]?.runningConfigurationID = entry.configurationID
         entries[key]?.running = Task { [weak self, operation = entry.operation] in
             guard !Task.isCancelled else {
-                self?.finish(key, runID: runID, outcome: RefreshOutcome(problems: [.cancelled]))
-                return
+                self?.finish(key, runID: runID, outcome: RefreshOutcome(problems: [.cancelled])); return
             }
-            let outcome = await operation()
-            self?.finish(key, runID: runID, outcome: outcome)
+            self?.finish(key, runID: runID, outcome: await operation())
         }
     }
 
@@ -122,27 +128,29 @@ final class RefreshScheduler {
         guard var entry = entries[key], entry.runningID == runID else { return }
         let now = Date()
         purgeExpiredCooldowns()
-        if let deadline = outcome.retryDeadline(at: now) {
-            cooldowns[key.scope.source] = max(cooldowns[key.scope.source] ?? .distantPast, deadline)
+        for value in outcome.byOrigin(default: key.scope.source) {
+            if let deadline = RefreshOutcome(problems: [value.problem]).retryDeadline(at: now) {
+                cooldowns[value.source] = max(cooldowns[value.source] ?? .distantPast, deadline)
+            }
         }
-        entry.runningID = nil
-        entry.running = nil
-        guard !entry.removalRequested else {
-            entries[key] = nil
-            reschedule(source: key.scope.source)
-            return
+        for scope in entry.runningScopes where occupiedScopes[scope] == runID { occupiedScopes[scope] = nil }
+        let sameConfiguration = entry.runningConfigurationID == entry.configurationID
+        entry.runningID = nil; entry.running = nil; entry.runningScopes = []; entry.runningConfigurationID = nil
+        if entry.removalRequested { entries[key] = nil }
+        else {
+            if sameConfiguration { entry.nextRun = key.interval.map { now.addingTimeInterval($0) } }
+            entries[key] = entry
         }
-        entry.nextRun = now.addingTimeInterval(key.interval)
-        entries[key] = entry
-        reschedule(source: key.scope.source)
+        scheduleAll()
+    }
+
+    private func cooldown(for scopes: Set<SourceScope>) -> Date {
+        scopes.compactMap { cooldowns[$0.source] }.max() ?? .distantPast
     }
 
     private func purgeExpiredCooldowns() {
-        let now = Date()
-        cooldowns = cooldowns.filter { $0.value > now }
+        let now = Date(); cooldowns = cooldowns.filter { $0.value > now }
     }
 
-    private func reschedule(source: WorkSource) {
-        for key in Array(entries.keys) where key.scope.source == source { schedule(key) }
-    }
+    private func scheduleAll() { for key in Array(entries.keys) { schedule(key) } }
 }

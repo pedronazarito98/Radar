@@ -102,7 +102,7 @@ struct GitHubConnectionFormView: View {
             do {
                 try await connection.connect(executable: qualification, repositories: repositories)
                 guard generation == current, !Task.isCancelled else { return }
-                selectionProblem = "Identidade qualificada. A lista de PRs ainda não foi consultada."
+                selectionProblem = "Identidade qualificada. A lista de PRs será atualizada."
             } catch {
                 guard generation == current, !Task.isCancelled else { return }
                 if case let GitHubCLIError.source(problem) = error { selectionProblem = SourceStatusText.message(for: problem) }

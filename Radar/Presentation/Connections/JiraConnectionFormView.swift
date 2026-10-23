@@ -39,7 +39,7 @@ struct JiraConnectionFormView: View {
                 SecureField("Token", text: $token)
                     .textContentType(.password)
                     .disabled(!policyAllowsToken || operation != nil || hasSavedReference || store.jira.status.connection == .connected)
-                Text("Informe o token somente aqui. A identidade será validada antes de salvar; consulta de cards exige uma ação separada.")
+                Text("Informe o token somente aqui. A identidade será validada antes de salvar; a lista será consultada após conectar.")
                     .font(.caption).foregroundStyle(.secondary)
                 Button("Conectar Jira", action: connect)
                     .disabled(!policyAllowsToken || token.isEmpty || operation != nil || hasSavedReference || store.jira.status.connection == .connected)
@@ -80,7 +80,7 @@ struct JiraConnectionFormView: View {
                 guard generation == current, !Task.isCancelled else { return }
                 store.configureSource(qualified.scope, connection: .connected)
                 hasSavedReference = true
-                message = "Identidade validada e token salvo. Os cards ainda não foram consultados."
+                message = "Identidade validada e token salvo. A lista de cards será atualizada."
             } catch {
                 let saved = await connection.hasSavedReference()
                 guard generation == current, !Task.isCancelled else { return }
