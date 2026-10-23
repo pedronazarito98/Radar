@@ -359,7 +359,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T18 — Faixa de detalhes
 
-- **Status**: Pending.
+- **Status**: Prepared — BUILD + visual CUA sem seleção PASS; relações/status reais posteriores; docs/evidence/T18.md.
 - **What**: Criar uma faixa única de detalhes card/PR com estados consultando/vazio/falha/parcial e altura limitada; definir entradas de apresentação tipadas no próprio componente até a ligação ao resolver real, sem depender de tipo ainda não criado ou simular conteúdo de negócio.
 - **Where**: Radar/Presentation/Details/DetailsStripView.swift
 - **Depends on**: T17 (dependências anteriores transitivas).

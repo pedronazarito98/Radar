@@ -21,3 +21,4 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 | T14 | 7d962b1bfb5a1b768da039bcabbf32fe517ff876 | Prepared; BUILD/REVIEW autor PASS; independente pendente | T14.md |
 | T15 | 3706fcb | Prepared; BUILD + UI-base CUA/AX desconectada PASS | T15.md |
 | T16 | 49a0425 | Prepared; BUILD + visual CUA desconectado PASS | T16.md |
+| T17 | d96c7d0 | Prepared; BUILD + visual CUA desconectado PASS | T17.md |

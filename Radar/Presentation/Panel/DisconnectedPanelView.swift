@@ -24,12 +24,7 @@ struct DisconnectedPanelView: View {
             .frame(maxHeight: .infinity)
 
             Rectangle().fill(RadarTheme.separator).frame(height: 1)
-            HStack(spacing: 8) {
-                Image(systemName: "link")
-                Text("Conecte as origens para consultar card e PR no mesmo contexto.")
-            }
-            .font(RadarTheme.Typography.body)
-            .foregroundStyle(RadarTheme.secondaryText)
+            DetailsStripView(presentation: .current(in: store), close: store.selection.dismissDetails)
         }
         .padding(.horizontal, RadarTheme.Layout.contentPadding)
         .padding(.bottom, RadarTheme.Layout.contentPadding)
