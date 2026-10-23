@@ -312,3 +312,9 @@ Acordo root/integration_review para T32: “consulta em voo” de R15.1 signific
 ### Publicação do detalhe de PR com observação parcial
 
 Acordo root/providers_writer antes de T28: o GET PR captura headSHA e instante observado dentro do lote. Após a fronteira final /user válida, um callback MainActor dentro da lease verifica PRDetailRequestToken, contexto e connectionID, observa o head e publica o detalhe. Nenhum head intermediário de lote não qualificado é divulgado. PRDetailStore.publish recebe problema sanitizado opcional, ortogonal ao detalhe parcial; todos os problemas observados seguem para o scheduler. Isso liga o campo de problema já existente, preservando C1.8/R13 e a independência CI/revisão/fase. A busca pessoal continua sem head.
+
+## Refinamento publicado C1.11 — autoridade de referências textuais
+
+Acordo root/relations_review, antes da correção C07 de T29: chaves textuais fora de URLs são interpretadas no site/projeto autorizado do contexto. Candidatos dentro de URLs reconhecidas são ignorados, inclusive URLs do próprio Jira; a V1 não resolve autoridade de links presentes em título/branch. Isso evita associar uma URL explicitamente pertencente a outro site ao site configurado. Não remover uma URL e concatenar fragmentos, pois isso pode fabricar uma chave inexistente: excluir candidatos pelo intervalo original. Preservar as fronteiras Unicode, a comparação integral da chave e a união de proveniências de ocorrências textuais restantes.
+
+Limite conservador documentado: uma referência existente apenas em URL não é descoberta pela V1; uma chave textual fora da URL continua elegível. O rótulo de escopo das relações deve informar “chaves textuais em título/branch, fora de URLs”, sem alegar descoberta universal de vínculos. C07 será uma correção atômica, com build e revisão, após T30 preparado e antes de ligar o consumidor em T31. Nenhuma conta ou API será usada para fabricar cenário.
