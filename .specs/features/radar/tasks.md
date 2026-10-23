@@ -94,7 +94,7 @@ flowchart LR
         T01 --> T02 --> T03 --> T04 --> T05 --> T06 --> T07
     end
     subgraph P2["Lote 2: Domínio e estado"]
-        T08 --> T09 --> T10 --> T11 --> T12 --> T13 --> T14
+        T08 --> T09 --> T10 --> T11 --> T12 --> C01 --> T13 --> T14
     end
     subgraph P3["Lote 3: Apresentação Radar"]
         T15 --> T16 --> T17 --> T18 --> T19 --> T20 --> T21
@@ -292,7 +292,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 - **Status**: Pending.
 - **What**: Criar seleção por contexto+identidade, geração monotônica e restauração de foco por linha.
 - **Where**: Radar/Application/SelectionStore.swift
-- **Depends on**: T12 (dependências anteriores transitivas).
+- **Depends on**: C01 após T12 (dependências anteriores transitivas).
 - **Reuses**: T08 e T12.
 - **Requirement**: R04, R06, R14, R26.
 - **Tools**: Ferramentas de arquivo/build e UI; referências canônicas; sem dependência nova por padrão.
@@ -821,4 +821,16 @@ A exceção é intencional e explícita, não ausência acidental de planejament
 ## Fechamento do último lote
 
 Depois do commit T42, o orquestrador inicia automaticamente um verificador fresco da implementação com spec/STATE/design/contratos/evidências e source tree real, sem histórico do autor. É uma função de revisão separada do worker T36–T42. Resultado qualificado: conformidade de código + evidência manual/build e limites; automação/sensor NOT-RUN por política. Falha volta a tarefas atômicas e nova verificação, conforme coordination.md. Nenhum status de execução foi alterado por redigir este plano.
+
+## Correções atômicas da execução
+
+### C01 — Modalidade de revisão solicitada
+
+- **Status**: Prepared — BUILD + REVIEW independente PASS; docs/evidence/C01.md; dependências parciais sob AD-013.
+- **What / Where**: Acrescentar PersonalPRRole.reviewRequestedUnclassified em Radar/Domain/PullRequestItem.swift, sem inferir responsabilidade direta/equipe a partir da busca ampla.
+- **Depends on / sequência**: T12; correção de T10 executada antes de T13 após publicação C1.4/AD-016.
+- **Requirement / contrato**: R11.2, R07; C1.4.
+- **Done when / Gate**: Papel incerto representado sem alterar identidade/contagem; BUILD + revisão independente.
+- **Tests**: Nenhum teste/mock/fixture/sensor; runtime do provider permanece NOT-RUN.
+- **Commit**: Um commit próprio em pt-BR, após o gate. A baseline continua com 42 tarefas planejadas; C01 acrescenta um nó e uma aresta de correção ao grafo de execução.
 

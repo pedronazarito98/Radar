@@ -26,6 +26,8 @@ struct GitHubAuthor: Equatable, Sendable {
 enum PersonalPRRole: Hashable, Sendable {
     case author
     case assignee
+    /// Search can match a direct or team request; it does not qualify the modality.
+    case reviewRequestedUnclassified
     case directlyRequestedReviewer
     /// The provider may add this only when team membership was actually qualified.
     case confirmedTeamReviewer

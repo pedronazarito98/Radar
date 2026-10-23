@@ -15,3 +15,4 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 | T09 | 2ee8cdebe0fd1390144e6f3e63d3acb6ec36bb41 | Prepared; BUILD + REVIEW independente PASS; dependências parciais | T09.md |
 | T10 | 1fb9d4ea48ecbe58a0c36b070c4b7fdf933ed844 | Prepared; BUILD + REVIEW independente PASS; C1.3 aplicado; dependências parciais | T10.md |
 | T11 | 64ea58177bf5966a76dc163ab36dcba87ad95fef | Prepared; BUILD + REVIEW independente PASS; dependências parciais | T11.md |
+| T12 | b66305a5714ae986aebabcf6f9a08ab1afcfa232 | Prepared; BUILD + REVIEW independente PASS; dependências parciais | T12.md |

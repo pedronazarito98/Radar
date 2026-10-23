@@ -133,10 +133,10 @@
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote2, T12 preparado com BUILD/REVIEW PASS; writer único batch_2_resume, revisão independente domain_review.
-- **Completed**: Lote1 em docs/handoffs/batch-01.md. T08 eded612; T09 2ee8cde; T10 1fb9d4e; T11 64ea581; T12 store MainActor com guardas de conteúdo/status; hash entra no manifesto após commit.
-- **In-progress**: C01 de T10 próximo, conforme AD-016/C1.4 publicado em 88fdab9. T05/T07 conservam confirmação humana delimitada em evidências.
-- **Next step**: C01 atômico e T13/T14 sequenciais; nenhum relaunch necessário. Preservar C1 e refinamentos C1.1–C1.4, AD-009–AD-016. Backoff deve considerar todas as consultas, não somente firstProblem.
+- **Phase / Task**: Lote2, C01 preparado com BUILD/REVIEW PASS; writer único batch_2_resume, revisão independente domain_review.
+- **Completed**: Lote1 em docs/handoffs/batch-01.md. T08 eded612; T09 2ee8cde; T10 1fb9d4e; T11 64ea581; T12 b66305a; C01 adiciona papel sem modalidade qualificada; hash entra no manifesto após commit.
+- **In-progress**: T13 próximo. C01 segue AD-016/C1.4 publicado em 88fdab9. T05/T07 conservam confirmação humana delimitada em evidências.
+- **Next step**: T13/T14 sequenciais; nenhum relaunch necessário. Preservar C1 e refinamentos C1.1–C1.4, AD-009–AD-016. Backoff deve considerar todas as consultas, não somente firstProblem.
 - **Blockers**: T04 modos específicos e T07 Reduzir Movimento NOT-RUN; lote1/aceite não concluídos. Providers/escopos/política Jira pendentes; domínio é preparação independente sob AD-013.
-- **Uncommitted files**: Entrega T12 e evidência própria em preparação de commit atômico; nenhum dado corporativo.
+- **Uncommitted files**: Entrega C01 e evidência própria em preparação de commit atômico; nenhum dado corporativo.
 - **Branch**: feat/radar-v1-local; sem remote.
