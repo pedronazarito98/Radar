@@ -1,7 +1,8 @@
 # Radar — execução com Codex e subagentes
 
-**Status**: execução local ativa; lote1 preparado sob AD-013, ownership batch_1 liberado ao root no commit de docs/handoffs/batch-01.md; consultores native_readiness/providers_readiness somente leitura.  
-**Fonte canônica**: [STATE](../../STATE.md), [spec](spec.md), [context](context.md), [design](design.md), [tasks](tasks.md). Contratos de design: **C1** de domínio e refinamentos **C1.1/C1.2** do transporte gh publicado pelo orquestrador.
+**Status**: execução local ativa; lote2 preparado. Após limite de uso de batch_2_resume/domain_review, root assumiu escritor único; revisão independente de T13/T14 pendente. Nenhum agente é simulado.
+**Fonte canônica**: [STATE](../../STATE.md), [spec](spec.md), [context](context.md), [design](design.md), [tasks](tasks.md). Contratos C1 e refinamentos C1.1–C1.4 publicados pelo orquestrador. Handoff em docs/handoffs/batch-02.md.
+
 
 ## O que a documentação do Codex sustenta
 
