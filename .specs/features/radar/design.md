@@ -276,3 +276,9 @@ A revisão de T13 identificou separadamente uma questão futura de autoridade de
 ## Refinamento publicado C1.7 — espera de indisponibilidade
 
 Acordo root/providers_writer antes do consumidor: SourceProblem.serviceUnavailable(retryAfter: Date?) representa 503, inclusive sem header, e demais 5xx com Retry-After. O transporte preserva a espera em segundos ou HTTP-date; o scheduler a aplica por origem, com fallback60s quando ausente/inválida, e a UI distingue indisponibilidade de limite de requisições. X-RateLimit-Reset Jira aceita ISO8601 com ou sem frações de segundo. Não há retry interno imediato ou ampliação de escopo. Isto complementa C1.6; a implementação será C05 separada de C04 para manter revisão/commit atômicos. Fonte: [Atlassian rate limiting, response headers](https://developer.atlassian.com/cloud/jira/platform/rate-limiting/), consultada23/10/2026, documenta Retry-After também em respostas transitórias5xx.
+
+## Refinamento publicado C1.8 — conteúdo parcial e problema de consulta
+
+Acordo root/providers_writer/integration_review antes de T24: SourceSnapshot acrescenta observedProblems:[SourceProblem] com default vazio. allProblems agrega falhas de query na ordem PersonalWorkQuery e depois observedProblems; firstProblem deriva desse conjunto apenas para apresentação. isComplete exige todas queries completas e observedProblems vazio. O scheduler recebe todos os problemas, nunca somente firstProblem.
+
+Depois de página validada, uma interrupção pode produzir itens observados com QueryCoverage.partial(interrupted) e o erro técnico sanitizado separado; zero observado nessa condição continua parcial, não vazio completo. Receber bytes não prova observação válida. Sem página/observação útil, terminar refresh com falha e preservar snapshot anterior. Cancelamento ou geração/contexto inválido não publica. A extensão não permite armazenar payload, mensagem remota ou segredo em SourceProblem e não dispensa as guardas de identidade/autenticação.
