@@ -1,5 +1,10 @@
 import Foundation
 
+struct RepositoryIdentityResolution: Equatable, Sendable {
+    let name: GitHubRepositoryName
+    let id: GitHubRepositoryID
+}
+
 /// A value owned by one work context. Register only provider-confirmed repo pairs.
 /// Reconciliation returns new values; an ID already stored in a Set never changes hash.
 struct RepositoryIdentityAliases: Sendable {
@@ -37,5 +42,14 @@ struct RepositoryIdentityAliases: Sendable {
         guard selection.contextID == contextID else { return nil }
         guard case let .pullRequest(identity) = selection.itemID else { return selection }
         return SelectionKey(contextID: contextID, itemID: .pullRequest(canonical(identity)))
+    }
+
+    func isCanonical(_ item: PullRequestItem) -> Bool {
+        guard let byName = PullRequestIdentity(
+            host: item.id.host, repository: .fallback(item.repositoryName), number: item.id.number
+        ) else { return false }
+        let resolvedName = canonical(byName)
+        if case .stable = resolvedName.repository { return resolvedName == item.id }
+        return canonical(item.id) == item.id
     }
 }

@@ -289,7 +289,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T13 — Seleção e geração
 
-- **Status**: Pending.
+- **Status**: Prepared — BUILD + REVIEW do autor PASS; revisão independente interrompida por limite de uso dos subagentes; dependências parciais sob AD-013; docs/evidence/T13.md.
 - **What**: Criar seleção por contexto+identidade, geração monotônica e restauração de foco por linha.
 - **Where**: Radar/Application/SelectionStore.swift
 - **Depends on**: C01 após T12 (dependências anteriores transitivas).

@@ -133,10 +133,10 @@
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote2, C01 preparado com BUILD/REVIEW PASS; writer único batch_2_resume, revisão independente domain_review.
-- **Completed**: Lote1 em docs/handoffs/batch-01.md. T08 eded612; T09 2ee8cde; T10 1fb9d4e; T11 64ea581; T12 b66305a; C01 adiciona papel sem modalidade qualificada; hash entra no manifesto após commit.
-- **In-progress**: T13 próximo. C01 segue AD-016/C1.4 publicado em 88fdab9. T05/T07 conservam confirmação humana delimitada em evidências.
-- **Next step**: T13/T14 sequenciais; nenhum relaunch necessário. Preservar C1 e refinamentos C1.1–C1.4, AD-009–AD-016. Backoff deve considerar todas as consultas, não somente firstProblem.
-- **Blockers**: T04 modos específicos e T07 Reduzir Movimento NOT-RUN; lote1/aceite não concluídos. Providers/escopos/política Jira pendentes; domínio é preparação independente sob AD-013.
-- **Uncommitted files**: Entrega C01 e evidência própria em preparação de commit atômico; nenhum dado corporativo.
+- **Phase / Task**: Lote2, T13 preparado; root assumiu como único escritor após limite de uso de batch_2_resume.
+- **Completed**: Lote1 em docs/handoffs/batch-01.md. T08 eded612; T09 2ee8cde; T10 1fb9d4e; T11 64ea581; T12 b66305a; C01 e00a903; T13 seleção/gerações/aliases com build e revisão do autor.
+- **In-progress**: T14 próximo. Contratos C1 e C1.1–C1.4, AD-009–AD-016 preservados.
+- **Next step**: T14 e handoff batch-02; continuar preparação independente. Backoff considera todas consultas, não só firstProblem.
+- **Blockers**: domain_review também atingiu limite de uso antes de emitir parecer T13; revisão independente T13 NOT-RUN. Não simular agentes/revisão. T04 modos específicos e T07 Reduzir Movimento NOT-RUN; política/escopos/providers reais pendentes.
+- **Uncommitted files**: Entrega T13 preparada para commit atômico, sem dados corporativos; hash será registrado depois de existir.
 - **Branch**: feat/radar-v1-local; sem remote.
