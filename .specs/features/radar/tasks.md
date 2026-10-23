@@ -373,7 +373,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T19 — Configurações de conexão
 
-- **Status**: Pending.
+- **Status**: PARTIAL — BUILD e UI de abas/campos vazios PASS; seleção completa do caminho aguarda confirmação humana; providers desabilitados; docs/evidence/T19.md.
 - **What**: Criar UI de conexão por origem: entrada Jira segura e temporária, caminho do gh e validação; sem executar autenticação automaticamente.
 - **Where**: Radar/Presentation/Connections/ConnectionsSettingsView.swift
 - **Depends on**: T18 (dependências anteriores transitivas).

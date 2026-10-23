@@ -21,7 +21,7 @@ struct RadarApp: App {
         }
 
         Settings {
-            ConnectionOverviewView()
+            ConnectionsSettingsView(store: appDelegate.store)
         }
     }
 }
