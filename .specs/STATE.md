@@ -133,10 +133,10 @@
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote3, T20 PARTIAL; root assumiu como único escritor após limite de uso de batch_2_resume.
-- **Completed**: Lote1 em docs/handoffs/batch-01.md. T08 eded612; T09 2ee8cde; T10 1fb9d4e; T11 64ea581; T12 b66305a; C01 e00a903; T13 a4d500c; T14 agendamento e orçamento com build/revisão do autor.
-- **In-progress**: Handoff batch-02 documentado; T21 próximo. Contratos C1 e C1.1–C1.4, AD-009–AD-016 preservados.
-- **Next step**: T15–T21 após handoff batch-02; root continua único escritor pela limitação de subagentes. Backoff considera todas consultas, não só firstProblem.
-- **Blockers**: domain_review também atingiu limite de uso antes de emitir parecer T13; revisão independente T13/T14 NOT-RUN. T19 aguarda confirmação do seletor gh; não reiniciar o app durante essa interação. Não simular agentes/revisão. T04 modos específicos e T07 Reduzir Movimento NOT-RUN; política/escopos/providers reais pendentes.
-- **Uncommitted files**: T20 preparado para commit parcial; sem dados de exemplo ou corporativos.
+- **Phase / Task**: Lote3 T21 PARTIAL; root único escritor.
+- **Completed**: Handoffs batch-01/batch-02 preservados. T15–T20 preparados; seleção gh confirmada pelo usuário; T21 BUILD/UI-base desconectada PASS.
+- **In-progress**: Commit T21 e handoff batch-03; revisão estática solicitada a presentation_review. Contratos C1/C1.1–C1.4 preservados.
+- **Next step**: T22–T28 sequenciais, começando pelo cofre próprio sem consulta de Keychain pelo agente.
+- **Blockers**: Revisão independente T13/T14 indisponível por limite anterior de subagentes. T21 com dados reais, política/escopos/providers, VoiceOver, Reduzir Movimento, modos específicos, desempenho e Release pendentes. Nenhum gate dispensado.
+- **Uncommitted files**: Entrega T21 e evidências anteriores atualizadas.
 - **Branch**: feat/radar-v1-local; sem remote.

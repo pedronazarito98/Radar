@@ -2,6 +2,8 @@ import SwiftUI
 
 struct JiraRowView: View {
     let item: JiraWorkItem
+    let key: SelectionKey
+    let focused: FocusState<RadarFocusTarget?>.Binding
     let isSelected: Bool
     let select: () -> Void
 
@@ -29,6 +31,8 @@ struct JiraRowView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .focusable().focused(focused, equals: .row(key)).focusEffectDisabled()
+        .modifier(RadarFocusOutline(isFocused: focused.wrappedValue == .row(key)))
         .accessibilityLabel("\(item.key.rawValue). \(item.summary). Status: \(item.status.name)")
         .accessibilityValue(isSelected ? "Selecionado" : "")
         .accessibilityHint("Mostrar conexões deste card")

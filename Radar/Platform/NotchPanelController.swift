@@ -14,12 +14,14 @@ final class NotchPanelController {
     private let animator = NotchFrameAnimator()
     private let geometry: ScreenGeometry
     private let store: RadarStore
+    private let focus: RadarFocusCoordinator
     private let hostingView: NSHostingView<NotchPanelRootView>
     private var contentOpacity: CGFloat = 0
 
     init(geometry: ScreenGeometry, store: RadarStore) {
         self.geometry = geometry
         self.store = store
+        focus = RadarFocusCoordinator(store: store)
         panel = RadarPanel(
             contentRect: .zero,
             styleMask: [.borderless, .nonactivatingPanel],
@@ -28,7 +30,7 @@ final class NotchPanelController {
         )
         interaction = PanelInteractionController(panel: panel)
         hostingView = NSHostingView(rootView: NotchPanelRootView(
-            store: store,
+            store: store, focus: focus,
             isExpanded: false, showsContent: false, contentOpacity: 0,
             cameraRect: .zero, toggle: {}, escape: {}
         ))
@@ -44,7 +46,7 @@ final class NotchPanelController {
         hostingView.sizingOptions = []
         hostingView.autoresizingMask = [.width, .height]
         panel.contentView = hostingView
-        panel.onEscape = { [weak self] in self?.dismiss(reason: .escape) }
+        panel.onEscape = { [weak self] in self?.handleEscape() }
         interaction.onDismiss = { [weak self] reason in self?.dismiss(reason: reason) }
     }
 
@@ -57,6 +59,7 @@ final class NotchPanelController {
     }
 
     func showCompact() {
+        focus.clear()
         store.setPanelOpen(false)
         animator.cancel()
         interaction.endInteraction(reason: .outsideClick)
@@ -75,9 +78,11 @@ final class NotchPanelController {
         store.setPanelOpen(true)
         transition(expanding: true)
         interaction.beginExplicitInteraction()
+        focus.open()
     }
 
     func dismiss(reason: PanelDismissalReason) {
+        focus.clear()
         store.setPanelOpen(false)
         interaction.endInteraction(reason: reason)
         guard phase != .compact, phase != .closing else { return }
@@ -85,6 +90,7 @@ final class NotchPanelController {
     }
 
     func invalidate() {
+        focus.clear()
         store.setPanelOpen(false)
         animator.cancel()
         interaction.endInteraction(reason: .termination)
@@ -100,6 +106,15 @@ final class NotchPanelController {
             wingWidth: RadarTheme.Layout.compactWingWidth,
             height: geometry.safeTopHeight
         )
+    }
+
+    private func handleEscape() {
+        guard isExpanded else { return }
+        if store.selection.selectedKey != nil {
+            focus.closeDetails()
+        } else {
+            dismiss(reason: .escape)
+        }
     }
 
     private func transition(expanding: Bool) {
@@ -142,13 +157,13 @@ final class NotchPanelController {
             NSRect(x: $0.minX - frame.minX, y: frame.maxY - $0.maxY, width: $0.width, height: $0.height)
         } ?? NSRect(x: frame.width / 2, y: 0, width: 0, height: 32)
         hostingView.rootView = NotchPanelRootView(
-            store: store,
+            store: store, focus: focus,
             isExpanded: isExpanded,
             showsContent: phase != .compact,
             contentOpacity: contentOpacity,
             cameraRect: camera,
             toggle: { [weak self] in self?.toggle() },
-            escape: { [weak self] in self?.dismiss(reason: .escape) }
+            escape: { [weak self] in self?.handleEscape() }
         )
         panel.setFrame(frame, display: true)
     }

@@ -3,6 +3,7 @@ import SwiftUI
 struct DetailsStripView: View {
     let presentation: DetailsStripPresentation?
     let close: () -> Void
+    let focused: FocusState<RadarFocusTarget?>.Binding
     var selectRelated: ((SelectionKey) -> Void)?
     var open: ((SelectionKey) -> Void)?
 
@@ -18,6 +19,9 @@ struct DetailsStripView: View {
                             .disabled(open == nil)
                         Button(action: close) { Image(systemName: "xmark") }
                             .buttonStyle(.plain).accessibilityLabel("Fechar detalhes e voltar à linha")
+                            .padding(6)
+                            .focusable().focused(focused, equals: .closeDetails).focusEffectDisabled()
+                            .modifier(RadarFocusOutline(isFocused: focused.wrappedValue == .closeDetails))
                     }
                     ScrollView {
                         VStack(alignment: .leading, spacing: 8) {

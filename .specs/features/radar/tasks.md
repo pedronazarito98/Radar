@@ -373,7 +373,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T19 — Configurações de conexão
 
-- **Status**: PARTIAL — BUILD e UI de abas/campos vazios PASS; seleção completa do caminho aguarda confirmação humana; providers desabilitados; docs/evidence/T19.md.
+- **Status**: Prepared — BUILD, UI de abas/campos e seleção humana gh PASS; providers desabilitados; docs/evidence/T19.md.
 - **What**: Criar UI de conexão por origem: entrada Jira segura e temporária, caminho do gh e validação; sem executar autenticação automaticamente.
 - **Where**: Radar/Presentation/Connections/ConnectionsSettingsView.swift
 - **Depends on**: T18 (dependências anteriores transitivas).
@@ -387,7 +387,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T20 — Composição agrupada
 
-- **Status**: PARTIAL — BUILD + REVIEW autor PASS; UI do novo tamanho aguarda relaunch após interação T19; docs/evidence/T20.md.
+- **Status**: Prepared — BUILD + REVIEW autor e UI-base CUA no novo tamanho PASS; dados reais NOT-RUN; docs/evidence/T20.md.
 - **What**: Compor indicadores, duas colunas e faixa usando stores existentes e preservando tamanho/ordem de apresentação.
 - **Where**: Radar/Presentation/RadarContentView.swift
 - **Depends on**: T19 (dependências anteriores transitivas).
@@ -401,7 +401,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T21 — Teclado e foco da apresentação
 
-- **Status**: Pending.
+- **Status**: PARTIAL — BUILD/REVIEW autor e UI-base desconectada PASS; navegação com dados reais e acessibilidade pendentes; docs/evidence/T21.md.
 - **What**: Ligar Tab/setas/Enter/Esc e retorno de foco às linhas estáveis; rotular estados para VoiceOver.
 - **Where**: Radar/Presentation/RadarFocusCoordinator.swift
 - **Depends on**: T20 (dependências anteriores transitivas).

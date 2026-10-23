@@ -2,6 +2,8 @@ import SwiftUI
 
 struct GitHubRowView: View {
     let item: PullRequestItem
+    let key: SelectionKey
+    let focused: FocusState<RadarFocusTarget?>.Binding
     let isSelected: Bool
     let details: PRDetails?
     let select: () -> Void
@@ -39,6 +41,8 @@ struct GitHubRowView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .focusable().focused(focused, equals: .row(key)).focusEffectDisabled()
+        .modifier(RadarFocusOutline(isFocused: focused.wrappedValue == .row(key)))
         .accessibilityElement(children: .combine)
         .accessibilityValue(isSelected ? "Selecionado" : "")
         .accessibilityHint("Mostrar conexões, CI e decisões de revisão deste PR")
