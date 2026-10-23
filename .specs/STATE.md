@@ -114,13 +114,21 @@
 - **Date**: 2026-10-22
 - **Status**: active
 
+### AD-015
+- **Decision**: Publicar C1.3 para revisão de PR antes de corrigir T10: selecionar a última decisão formal por autor dentro do SHA atual; DISMISSED suprime somente decisões anteriores desse SHA. Histórico contém todos os registros únicos submetidos com SHA conhecido diferente, inclusive COMMENTED. Resumo conclusivo exige cobertura completa de decisões e solicitações; contagens observadas permanecem separadas.
+- **Reason**: Revisão independente com contexto fresco encontrou ambiguidade na interpretação de C1 e uma omissão na contagem histórica. O orquestrador qualificou a redação antes da mudança do consumidor.
+- **Trade-off**: O resumo é conservador quando alguma dimensão está parcial. São registros vinculados ao commit observado, sem avaliação de branch protection, quorum ou prontidão de merge.
+- **Scope**: T10, consumidores T18/T28 e revisão semântica R07.2; demais contratos C1/C1.1/C1.2 preservados.
+- **Date**: 2026-10-23
+- **Status**: active
+
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote2, T09 preparado com BUILD/REVIEW PASS; writer único batch_2.
-- **Completed**: Lote1 em docs/handoffs/batch-01.md. T08 eded612; T09 modelo Jira imutável, status reais e chave separada; hash real entra no manifesto após commit.
-- **In-progress**: T10 próximo. T05 gate local ganhou confirmação humana de foco/teclado; T07 ganhou confirmação de alternância rápida sem área invisível. Relato humano “ok” delimitado em evidências, código observado 5fe9ecb.
-- **Next step**: T10–T14 sequenciais no domínio/Application; nenhum relaunch necessário. Preservar C1, C1.1/C1.2 e AD-009–AD-014.
+- **Phase / Task**: Lote2 retomado após interrupção; T10 em revisão; writer único batch_2_resume, revisão independente domain_review.
+- **Completed**: Lote1 em docs/handoffs/batch-01.md. T08 eded612; T09 2ee8cde com modelo Jira imutável, status reais e chave separada.
+- **In-progress**: T10 preservada sem commit, BUILD PASS nesta retomada; correções semânticas aguardam aplicação de C1.3 publicado em AD-015. T05/T07 conservaram confirmação humana delimitada em evidências, código observado 5fe9ecb.
+- **Next step**: Corrigir/revisar T10 e seguir T11–T14 sequenciais no domínio/Application; nenhum relaunch necessário. Preservar C1 e refinamentos C1.1–C1.3, AD-009–AD-015.
 - **Blockers**: T04 modos específicos e T07 Reduzir Movimento NOT-RUN; lote1/aceite não concluídos. Providers/escopos/política Jira pendentes; domínio é preparação independente sob AD-013.
-- **Uncommitted files**: Entrega T09 e evidência própria em preparação de commit atômico; nenhum dado corporativo.
+- **Uncommitted files**: Quatro modelos T10 em Radar/Domain e publicação documental C1.3; nenhum dado corporativo.
 - **Branch**: feat/radar-v1-local; sem remote.
