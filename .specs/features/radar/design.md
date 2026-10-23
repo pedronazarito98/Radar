@@ -262,3 +262,7 @@ Não reabrir/reanalisar o mesmo pacote sem pergunta nova. Para código fonte pr�
 
 Manter a UI dependente do contrato GitHubProvider, não de Process. Uma feature futura poderá substituí-lo por GitHub App/device flow. Jira distribuído terá desenho de 3LO/serviço confidencial próprio. Enterprise, assinatura Developer ID/notarização, atualizador e instalação limpa exigem novas tarefas; não ficam prometidos pela V1 pessoal.
 
+
+## Refinamento publicado C1.5 — cofre pessoal
+
+Keychain clássico do bundle local ad-hoc, sem sincronização/grupo compartilhado, com service fixo e referência UUID própria. Não usar kSecAttrAccessible como garantia neste modo; a documentação macOS condiciona esse atributo a Data Protection/sync. Nenhum acesso no init/onAppear/refresh: leitura/gravação/remoção somente após intenção explícita na UI. Conexão ativa retém token apenas em memória privada do adapter. Remoção com falha invalida uso em memória, mas conserva referência para retry e informa pendência. Consentimento/negação e comportamento após rebuild dependem de validação humana; agentes nunca executam o cofre. Publicado antes dos consumidores T23/T35, discutido com integration_review e presentation_review.

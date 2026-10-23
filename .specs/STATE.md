@@ -130,13 +130,21 @@
 - **Date**: 2026-10-23
 - **Status**: active
 
+### AD-017
+- **Decision**: Publicar C1.5: cofre clássico próprio delimitado, sem acesso automático, somente ações explícitas do usuário; segredo em memória privada do adapter durante conexão ativa. Remoção negada preserva referência para retry e invalida uso em memória.
+- **Reason**: Qualificação de Security para bundle ad-hoc, revisão independente de proposta e diálogo com apresentação.
+- **Trade-off**: Não prometer atributos Data Protection não qualificados; retomada após reinício é explícita e prompts são observados só pelo usuário.
+- **Scope**: T22/T23/T35; sem mudança global/entitlement ou acesso por agentes.
+- **Date**: 2026-10-23
+- **Status**: active
+
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote3 T21 PARTIAL; root único escritor.
+- **Phase / Task**: Lote4 T22 preparado; root único escritor.
 - **Completed**: Handoffs batch-01/batch-02 preservados. T15–T20 preparados; seleção gh confirmada pelo usuário; T21 BUILD/UI-base desconectada PASS.
-- **In-progress**: Commit T21 e handoff batch-03; revisão estática solicitada a presentation_review. Contratos C1/C1.1–C1.4 preservados.
-- **Next step**: T22–T28 sequenciais, começando pelo cofre próprio sem consulta de Keychain pelo agente.
+- **In-progress**: T21 09450fd, handoff3c94228, C02 b5b957b/C03 ef973f2 com revisão independente PASS. T22 build PASS; review em andamento.
+- **Next step**: T23–T28 sequenciais após commit T22; C1.5 publicado.
 - **Blockers**: Revisão independente T13/T14 indisponível por limite anterior de subagentes. T21 com dados reais, política/escopos/providers, VoiceOver, Reduzir Movimento, modos específicos, desempenho e Release pendentes. Nenhum gate dispensado.
-- **Uncommitted files**: Entrega T21 e evidências anteriores atualizadas.
+- **Uncommitted files**: T22 e documentação de contrato.
 - **Branch**: feat/radar-v1-local; sem remote.

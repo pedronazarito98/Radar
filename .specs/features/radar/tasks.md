@@ -415,7 +415,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T22 — Cofre próprio Jira
 
-- **Status**: Pending.
+- **Status**: Prepared — BUILD/REVIEW independente PASS; runtime Keychain NOT-RUN. docs/evidence/T22.md.
 - **What**: Criar acesso limitado ao item Keychain do Radar com gravação, leitura no app e remoção própria; mapear erro sem valor secreto.
 - **Where**: Radar/Persistence/CredentialVault.swift
 - **Depends on**: T21 (dependências anteriores transitivas).
