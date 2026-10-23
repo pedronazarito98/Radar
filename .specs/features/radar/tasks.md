@@ -331,7 +331,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T16 — Lista Jira
 
-- **Status**: Pending.
+- **Status**: Prepared — BUILD + revisão visual CUA desconectada PASS; linhas reais/seleção posteriores; docs/evidence/T16.md.
 - **What**: Criar lista selecionável com status real, seleção cinza e ações locais de foco.
 - **Where**: Radar/Presentation/Jira/JiraListView.swift
 - **Depends on**: T15 (dependências anteriores transitivas).

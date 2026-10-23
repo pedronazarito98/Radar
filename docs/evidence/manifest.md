@@ -19,3 +19,4 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 | C01 | e00a903 | Prepared; BUILD + REVIEW independente PASS; C1.4 | C01.md |
 | T13 | a4d500cebfdebf0f9473295f1bd60bbcbbb89ffd | Prepared; BUILD/REVIEW autor PASS; independente interrompida | T13.md |
 | T14 | 7d962b1bfb5a1b768da039bcabbf32fe517ff876 | Prepared; BUILD/REVIEW autor PASS; independente pendente | T14.md |
+| T15 | 3706fcb | Prepared; BUILD + UI-base CUA/AX desconectada PASS | T15.md |

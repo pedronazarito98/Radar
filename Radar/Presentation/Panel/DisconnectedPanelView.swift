@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct DisconnectedPanelView: View {
+    let store: RadarStore
     let close: () -> Void
 
     var body: some View {
@@ -16,10 +17,7 @@ struct DisconnectedPanelView: View {
             }
 
             HStack(alignment: .top, spacing: RadarTheme.Layout.contentPadding) {
-                disconnectedSource(
-                    title: "Jira", brand: .jira, color: RadarTheme.jiraAccent,
-                    subtitle: "Conta não conectada", message: "Conecte o Jira Cloud para ver seus cards."
-                )
+                JiraListView(store: store)
                 Rectangle().fill(RadarTheme.separator).frame(width: 1)
                 disconnectedSource(
                     title: "GitHub", brand: .github, color: RadarTheme.githubAccent,

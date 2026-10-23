@@ -133,10 +133,10 @@
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote3, T15 preparado; root assumiu como único escritor após limite de uso de batch_2_resume.
+- **Phase / Task**: Lote3, T16 preparado; root assumiu como único escritor após limite de uso de batch_2_resume.
 - **Completed**: Lote1 em docs/handoffs/batch-01.md. T08 eded612; T09 2ee8cde; T10 1fb9d4e; T11 64ea581; T12 b66305a; C01 e00a903; T13 a4d500c; T14 agendamento e orçamento com build/revisão do autor.
-- **In-progress**: Handoff batch-02 documentado; T16 próximo. Contratos C1 e C1.1–C1.4, AD-009–AD-016 preservados.
+- **In-progress**: Handoff batch-02 documentado; T17 próximo. Contratos C1 e C1.1–C1.4, AD-009–AD-016 preservados.
 - **Next step**: T15–T21 após handoff batch-02; root continua único escritor pela limitação de subagentes. Backoff considera todas consultas, não só firstProblem.
 - **Blockers**: domain_review também atingiu limite de uso antes de emitir parecer T13; revisão independente T13/T14 NOT-RUN. Não simular agentes/revisão. T04 modos específicos e T07 Reduzir Movimento NOT-RUN; política/escopos/providers reais pendentes.
-- **Uncommitted files**: T15 preparado para commit; sem dados de exemplo ou corporativos.
+- **Uncommitted files**: T16 preparado para commit; sem dados de exemplo ou corporativos.
 - **Branch**: feat/radar-v1-local; sem remote.
