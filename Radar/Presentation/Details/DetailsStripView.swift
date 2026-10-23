@@ -101,6 +101,8 @@ struct DetailsStripView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .buttonStyle(.plain).disabled(selectRelated == nil)
+                    .focusable().focused(focused, equals: .related(item.id)).focusEffectDisabled()
+                    .modifier(RadarFocusOutline(isFocused: focused.wrappedValue == .related(item.id)))
                     Button("Abrir", systemImage: "arrow.up.right.square") { open?(item.id) }
                         .disabled(open == nil)
                 }

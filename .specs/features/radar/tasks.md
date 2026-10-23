@@ -541,7 +541,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T31 — Coordenação de detalhes
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL; BUILD e revisão independente PASS; LIVE-Relações/foco preenchido NOT-RUN. Evidência docs/evidence/T31.md.
 - **What**: Ligar seleção, detalhe de PR e relações com cancelamento e guarda contexto+ID+geração.
 - **Where**: Radar/Application/RelatedItemsCoordinator.swift
 - **Depends on**: T30 (dependências anteriores transitivas).

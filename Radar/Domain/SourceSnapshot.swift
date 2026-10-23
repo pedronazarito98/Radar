@@ -39,14 +39,15 @@ struct SourceSnapshot<Item: SourceSnapshotItem>: Equatable, Sendable {
         items: [Item],
         queryCoverage: [PersonalWorkQuery: QueryCoverage],
         lastSuccessfulAt: Date,
-        observedProblems: [SourceProblem] = []
+        observedProblems: [SourceProblem] = [],
+        revision: SnapshotRevision = SnapshotRevision()
     ) {
         guard scope.source == Item.source,
               Set(items.map(\.id)).count == items.count,
               items.allSatisfy({ $0.belongs(to: scope) }),
               Set(queryCoverage.keys).isSubset(of: scope.requiredQueries) else { return nil }
         self.contextID = contextID
-        revision = SnapshotRevision()
+        self.revision = revision
         self.scope = scope
         self.items = items
         self.queryCoverage = queryCoverage

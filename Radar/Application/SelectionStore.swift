@@ -35,6 +35,10 @@ final class SelectionStore {
         return token
     }
 
+    func selectRelated(_ key: SelectionKey) -> SelectionToken? {
+        select(key, origin: originKey ?? selectedKey)
+    }
+
     func dismissDetails() {
         let returnKey = originKey
         clear()

@@ -13,16 +13,16 @@ final class NotchPanelController {
     private let interaction: PanelInteractionController
     private let animator = NotchFrameAnimator()
     private let geometry: ScreenGeometry
-    private let details: GitHubDetailController
+    private let related: RelatedItemsCoordinator
     private let store: RadarStore
     private let focus: RadarFocusCoordinator
     private let hostingView: NSHostingView<NotchPanelRootView>
     private var contentOpacity: CGFloat = 0
 
-    init(geometry: ScreenGeometry, store: RadarStore, details: GitHubDetailController) {
+    init(geometry: ScreenGeometry, store: RadarStore, related: RelatedItemsCoordinator) {
         self.geometry = geometry
         self.store = store
-        self.details = details
+        self.related = related
         focus = RadarFocusCoordinator(store: store)
         panel = RadarPanel(
             contentRect: .zero,
@@ -32,7 +32,7 @@ final class NotchPanelController {
         )
         interaction = PanelInteractionController(panel: panel)
         hostingView = NSHostingView(rootView: NotchPanelRootView(
-            store: store, focus: focus, details: details,
+            store: store, focus: focus, related: related,
             isExpanded: false, showsContent: false, contentOpacity: 0,
             cameraRect: .zero, toggle: {}, escape: {}
         ))
@@ -159,7 +159,7 @@ final class NotchPanelController {
             NSRect(x: $0.minX - frame.minX, y: frame.maxY - $0.maxY, width: $0.width, height: $0.height)
         } ?? NSRect(x: frame.width / 2, y: 0, width: 0, height: 32)
         hostingView.rootView = NotchPanelRootView(
-            store: store, focus: focus, details: details,
+            store: store, focus: focus, related: related,
             isExpanded: isExpanded,
             showsContent: phase != .compact,
             contentOpacity: contentOpacity,

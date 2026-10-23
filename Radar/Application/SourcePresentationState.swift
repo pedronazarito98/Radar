@@ -77,3 +77,22 @@ struct SourcePresentationState<Item: SourceSnapshotItem> {
         return true
     }
 }
+
+
+extension SourcePresentationState where Item == PullRequestItem {
+    func reconciling(using aliases: RepositoryIdentityAliases) -> Self? {
+        func map(_ snapshot: SourceSnapshot<PullRequestItem>) -> SourceSnapshot<PullRequestItem>? {
+            let items = snapshot.items.compactMap { $0.reconciling(using: aliases) }
+            guard items.count == snapshot.items.count else { return nil }
+            return SourceSnapshot(contextID: snapshot.contextID, scope: snapshot.scope, items: items,
+                queryCoverage: snapshot.queryCoverage, lastSuccessfulAt: snapshot.lastSuccessfulAt,
+                observedProblems: snapshot.observedProblems, revision: snapshot.revision)
+        }
+        let presented = presentedSnapshot.flatMap(map)
+        let pending = pendingSnapshot.flatMap(map)
+        guard presentedSnapshot == nil || presented != nil, pendingSnapshot == nil || pending != nil else { return nil }
+        var copy = self
+        copy.presentedSnapshot = presented; copy.pendingSnapshot = pending
+        return copy
+    }
+}

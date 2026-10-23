@@ -9,6 +9,7 @@ final class RadarStore {
     private(set) var github = SourcePresentationState<PullRequestItem>()
     private(set) var isPanelOpen = false
     let selection: SelectionStore
+    let relations = RelatedItemsStore()
     private(set) var repositoryAliases: RepositoryIdentityAliases
     private var pendingRepositoryAliases: RepositoryIdentityAliases?
     private var requestGeneration: UInt64 = 0
@@ -34,6 +35,7 @@ final class RadarStore {
         jira = SourcePresentationState()
         github = SourcePresentationState()
         selection.activateContext(contextID)
+        relations.clear()
         repositoryAliases = RepositoryIdentityAliases(contextID: contextID)
         pendingRepositoryAliases = nil
         // requestGeneration intentionally survives A → B → A context changes.
@@ -41,6 +43,7 @@ final class RadarStore {
 
     func invalidate(_ source: WorkSource, connection: SourceConnectionState = .disconnected) {
         selection.invalidate(source)
+        relations.clear()
         switch source {
         case .jira: jira = SourcePresentationState(connection: connection)
         case .github:
@@ -60,10 +63,12 @@ final class RadarStore {
 
     func applyPendingUpdates() {
         jira.applyPendingSnapshot()
-        if github.applyPendingSnapshot(), let pendingRepositoryAliases {
+        if pendingRepositoryAliases.map({ relations.canReconcile(using: $0) }) != false,
+           github.applyPendingSnapshot(), let pendingRepositoryAliases {
             repositoryAliases = pendingRepositoryAliases
             self.pendingRepositoryAliases = nil
             selection.reconcile(using: repositoryAliases)
+            _ = relations.reconcile(using: repositoryAliases)
         }
         updateSelectionMembership()
     }
@@ -125,6 +130,10 @@ final class RadarStore {
             finishRefresh(with: .invalidResponse, for: token)
             return false
         }
+        guard relations.canReconcile(using: aliases) else {
+            finishRefresh(with: .invalidResponse, for: token)
+            return false
+        }
         guard github.publish(snapshot, for: token, holdPresentation: isPanelOpen) else { return false }
         if github.hasPendingUpdate {
             pendingRepositoryAliases = aliases
@@ -132,6 +141,7 @@ final class RadarStore {
             repositoryAliases = aliases
             pendingRepositoryAliases = nil
             selection.reconcile(using: aliases)
+            _ = relations.reconcile(using: aliases)
         }
         updateSelectionMembership()
         return true
@@ -154,6 +164,55 @@ final class RadarStore {
         let token = selection.select(key, origin: canonicalOrigin)
         updateSelectionMembership()
         return token
+    }
+
+    func jiraItem(_ id: JiraIdentity) -> JiraWorkItem? {
+        jira.items.first { $0.id == id } ?? relations.jiraItems[id]
+    }
+
+    func pullRequest(_ id: PullRequestIdentity) -> PullRequestItem? {
+        let canonical = repositoryAliases.canonical(id)
+        return github.items.first { $0.id == canonical } ?? relations.pullRequests[canonical]
+    }
+
+    func selectRelated(_ key: SelectionKey) -> SelectionToken? {
+        guard let canonical = repositoryAliases.canonical(key), relations.selection == selection.token,
+              let observation = relations.observation,
+              observation.edges.contains(where: { edge in
+                  switch (selection.selectedKey?.itemID, canonical.itemID) {
+                  case let (.jira(id)?, .pullRequest(pr)): id == edge.jiraID && pr == edge.pullRequestID
+                  case let (.pullRequest(pr)?, .jira(id)): id == edge.jiraID && pr == edge.pullRequestID
+                  default: false
+                  }
+              }) else { return nil }
+        let result = selection.selectRelated(canonical)
+        updateSelectionMembership()
+        return result
+    }
+
+    func publishRelations(_ result: RelationObservation, queryID: UUID, selection token: SelectionToken) -> Bool {
+        guard selection.isCurrent(token), relations.queryID == queryID else { return false }
+        var aliases = repositoryAliases
+        var pending = pendingRepositoryAliases
+        for value in result.repositoryResolutions {
+            guard aliases.register(name: value.name, id: value.id) != .conflict else { return false }
+            if pending != nil, pending?.register(name: value.name, id: value.id) == .conflict { return false }
+        }
+        guard let reconciled = github.reconciling(using: aliases) else { return false }
+        var observation = result
+        observation.pullRequests = result.pullRequests.compactMap { $0.reconciling(using: aliases) }
+        guard observation.pullRequests.count == result.pullRequests.count,
+              Set(observation.pullRequests.map(\.id)).count == observation.pullRequests.count,
+              Set(observation.jiraItems.map(\.id)).count == observation.jiraItems.count else { return false }
+        observation.edges = result.edges.map { WorkRelation(jiraID: $0.jiraID,
+            pullRequestID: aliases.canonical($0.pullRequestID), provenance: $0.provenance) }
+        guard relations.reconcile(using: aliases) else { return false }
+        github = reconciled; repositoryAliases = aliases; pendingRepositoryAliases = pending
+        selection.reconcile(using: aliases)
+        updateSelectionMembership()
+        guard let current = selection.token else { return false }
+        relations.begin(selection: current, queryID: queryID)
+        return relations.publish(observation, selection: current, queryID: queryID)
     }
 
     func consumeFocusReturnKey() -> SelectionKey? {

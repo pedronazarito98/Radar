@@ -3,7 +3,7 @@ import SwiftUI
 struct RadarContentView: View {
     let store: RadarStore
     let focus: RadarFocusCoordinator
-    let details: GitHubDetailController
+    let related: RelatedItemsCoordinator
     let close: () -> Void
     @FocusState private var focused: RadarFocusTarget?
 
@@ -37,14 +37,20 @@ struct RadarContentView: View {
             .frame(maxHeight: .infinity)
 
             Rectangle().fill(RadarTheme.separator).frame(height: 1)
-            DetailsStripView(presentation: .current(in: store), close: focus.closeDetails, focused: $focused, focus: focus)
+            DetailsStripView(presentation: .current(in: store), close: focus.closeDetails, focused: $focused,
+                             focus: focus, selectRelated: focus.selectRelated)
         }
         .padding(.horizontal, RadarTheme.Layout.contentPadding)
         .padding(.bottom, RadarTheme.Layout.contentPadding)
         .foregroundStyle(RadarTheme.primaryText)
         .onAppear { focused = focus.requestedTarget }
-        .task(id: store.selection.token) { details.selectionChanged() }
-        .onDisappear { details.stop() }
+        .task(id: RelatedItemsTrigger(selection: store.selection.token, invalidation: store.relations.invalidation,
+                                     jiraScope: store.jira.scope, githubScope: store.github.scope)) {
+            focus.reconcileAliases()
+            related.selectionChanged()
+        }
+        .onChange(of: store.github.items.map(\.id)) { _, _ in focus.reconcileAliases() }
+        .onDisappear { related.stop() }
         .onChange(of: focused) { _, value in focus.focusedTarget = value }
         .onChange(of: focus.requestGeneration) { _, generation in
             Task { @MainActor in

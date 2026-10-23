@@ -7,6 +7,7 @@ enum RadarFocusTarget: Hashable {
     case collapse
     case closeDetails
     case detailsContent
+    case related(SelectionKey)
 }
 
 @MainActor
@@ -40,6 +41,23 @@ final class RadarFocusCoordinator {
         request(.closeDetails)
     }
 
+    func selectRelated(_ key: SelectionKey) {
+        guard store.selectRelated(key) != nil else { return }
+        request(.closeDetails)
+    }
+
+    func reconcileAliases() {
+        func canonical(_ target: RadarFocusTarget?) -> RadarFocusTarget? {
+            switch target {
+            case let .row(key): store.repositoryAliases.canonical(key).map(RadarFocusTarget.row)
+            case let .related(key): store.repositoryAliases.canonical(key).map(RadarFocusTarget.related)
+            default: target
+            }
+        }
+        focusedTarget = canonical(focusedTarget)
+        if let next = canonical(requestedTarget), next != requestedTarget { request(next) }
+    }
+
     func closeDetails() {
         store.selection.dismissDetails()
         request(store.consumeFocusReturnKey().map(RadarFocusTarget.row) ?? .collapse)
@@ -60,7 +78,12 @@ final class RadarFocusCoordinator {
         if store.jira.hasPendingUpdate || store.github.hasPendingUpdate { targets.append(.applyUpdates) }
         targets.append(.collapse)
         targets += rows.map(RadarFocusTarget.row)
-        if store.selection.selectedKey != nil { targets += [.closeDetails, .detailsContent] }
+        if store.selection.selectedKey != nil {
+            targets += [.closeDetails, .detailsContent]
+            if case let .observed(items, _, _, _, _) = DetailsStripPresentation.current(in: store)?.relations {
+                targets += items.map { .related($0.id) }
+            }
+        }
         let current = focusedTarget ?? requestedTarget
         let index = current.flatMap { targets.firstIndex(of: $0) }
         let next = index.map { ($0 + (backwards ? targets.count - 1 : 1)) % targets.count }
@@ -100,6 +123,7 @@ final class RadarFocusCoordinator {
         case .applyUpdates: applyUpdates()
         case .collapse: close()
         case .closeDetails: closeDetails()
+        case let .related(key): selectRelated(key)
         case .detailsContent, nil: return false
         }
         return true
