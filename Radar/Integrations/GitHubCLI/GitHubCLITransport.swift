@@ -5,43 +5,69 @@ import Foundation
 actor GitHubCLITransport {
     private var leaseID: UUID?
     private var cooldown: (deadline: Date, problem: SourceProblem)?
-    private var waiters: [(UUID, CheckedContinuation<Void, Error>)] = []
+    private struct Waiter {
+        let id: UUID
+        let continuation: CheckedContinuation<Void, Error>
+        let expiration: Task<Void, Never>
+    }
+    private var waiters: [Waiter] = []
 
     func withBatch<Result: Sendable>(executable: QualifiedGitHubExecutable, maximumCalls: Int, duration: Duration,
                                     operation: @Sendable (GitHubReadSession) async throws -> Result) async throws -> Result {
+        let budget = RequestBudget(maximumCalls: maximumCalls, duration: duration)
+        return try await withBatch(executable: executable, budget: budget, operation: operation)
+    }
+
+    /// The same budget can cover Jira reads while this GitHub lease remains occupied.
+    func withBatch<Result: Sendable>(executable: QualifiedGitHubExecutable, budget: RequestBudget,
+                                    operation: @Sendable (GitHubReadSession) async throws -> Result) async throws -> Result {
         let id = UUID()
-        try await acquire(id)
+        try await acquire(id, budget: budget)
         defer { release(id) }
         try Task.checkCancellation()
+        guard await budget.timeRemaining > .zero else { throw GitHubCLIError.source(.timeout) }
         guard !GitHubProcessSafety.isUnavailable else { throw GitHubCLIError.source(.transportUnavailable) }
         if let cooldown, cooldown.deadline > Date() { throw GitHubCLIError.source(cooldown.problem) }
         cooldown = nil
-        let session = GitHubReadSession(transport: self, leaseID: id, executable: executable,
-            budget: RequestBudget(maximumCalls: maximumCalls, duration: duration))
+        let session = GitHubReadSession(transport: self, leaseID: id, executable: executable, budget: budget)
         return try await operation(session)
     }
 
-    private func acquire(_ id: UUID) async throws {
+    private func acquire(_ id: UUID, budget: RequestBudget) async throws {
         try Task.checkCancellation()
+        let deadline = budget.deadline
+        guard ContinuousClock.now < deadline else { throw GitHubCLIError.source(.timeout) }
         try await withTaskCancellationHandler {
             try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
                 if Task.isCancelled { continuation.resume(throwing: CancellationError()); return }
                 if leaseID == nil { leaseID = id; continuation.resume() }
-                else { waiters.append((id, continuation)) }
+                else {
+                    let expiration = Task { [weak self] in
+                        do { try await Task.sleep(until: deadline, clock: .continuous) } catch { return }
+                        await self?.removeWaiter(id, problem: .timeout)
+                    }
+                    waiters.append(Waiter(id: id, continuation: continuation, expiration: expiration))
+                }
             }
-        } onCancel: { Task { await self.cancelWaiter(id) } }
+        } onCancel: { Task { await self.removeWaiter(id, problem: .cancelled) } }
     }
 
-    private func cancelWaiter(_ id: UUID) {
-        guard let index = waiters.firstIndex(where: { $0.0 == id }) else { return }
+    private func removeWaiter(_ id: UUID, problem: SourceProblem) {
+        guard let index = waiters.firstIndex(where: { $0.id == id }) else { return }
         let waiter = waiters.remove(at: index)
-        waiter.1.resume(throwing: CancellationError())
+        waiter.expiration.cancel()
+        waiter.continuation.resume(throwing: GitHubCLIError.source(problem))
     }
 
     private func release(_ id: UUID) {
         guard leaseID == id else { return }
         if waiters.isEmpty { leaseID = nil }
-        else { let next = waiters.removeFirst(); leaseID = next.0; next.1.resume() }
+        else {
+            let next = waiters.removeFirst()
+            next.expiration.cancel()
+            leaseID = next.id
+            next.continuation.resume()
+        }
     }
 
     fileprivate func request(_ endpoint: GitHubEndpoint, lease: UUID, executable: QualifiedGitHubExecutable,
