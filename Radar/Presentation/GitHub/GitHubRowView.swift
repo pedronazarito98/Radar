@@ -6,6 +6,7 @@ struct GitHubRowView: View {
     let focused: FocusState<RadarFocusTarget?>.Binding
     let isSelected: Bool
     let details: PRDetails?
+    let category: RepositoryCategory?
     let select: () -> Void
 
     var body: some View {
@@ -19,6 +20,7 @@ struct GitHubRowView: View {
                 HStack(spacing: 5) {
                     Image(systemName: "shippingbox").accessibilityHidden(true)
                     Text(item.repositoryName.fullName).lineLimit(1).truncationMode(.middle)
+                    if let category { Text(category.rawValue).fontWeight(.medium) }
                     Spacer(minLength: 0)
                     Text(PRStatusText.lifecycle(details?.lifecycle ?? item.lifecycle))
                 }

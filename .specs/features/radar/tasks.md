@@ -583,7 +583,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T34 — Preferências não secretas
 
-- **Status**: Pending.
+- **Status**: BUILD e revisão independente de persistência PASS; implementação preparada. Reinício/cofre/consentimento MANUAL NOT-RUN; aplicação da tela depende T38. Evidência docs/evidence/T34.md.
 - **What**: Persistir somente caminho validado do gh, tela, projetos/repos e categorias visuais explícitas com esquema simples.
 - **Where**: Radar/Persistence/PreferencesStore.swift
 - **Depends on**: T33 (dependências anteriores transitivas).

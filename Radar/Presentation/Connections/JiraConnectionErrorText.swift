@@ -6,6 +6,7 @@ enum JiraConnectionErrorText {
         switch error {
         case .source(let problem):
             return SourceStatusText.message(for: problem) + ". " + ConnectionRecoveryController.guidance(source: .jira, problem: problem)
+        case .preferences(let problem): return problem.message
         case .removalPending: return "Remova a conexão anterior antes de conectar novamente."
         case .vault(let problem):
             switch problem {

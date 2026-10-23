@@ -35,6 +35,7 @@ struct JiraConnectionFormView: View {
                     Text("Sem escopos (legado)").tag(false)
                 }
             }
+            .disabled(operation != nil || hasSavedReference || store.jira.status.connection == .connected)
             Section("Token pessoal") {
                 Toggle("A política da minha organização permite esse método", isOn: $policyAllowsToken)
                 SecureField("Token", text: $token)
@@ -44,6 +45,10 @@ struct JiraConnectionFormView: View {
                     .font(.caption).foregroundStyle(.secondary)
                 Button("Conectar Jira", action: connect)
                     .disabled(!policyAllowsToken || token.isEmpty || operation != nil || hasSavedReference || store.jira.status.connection == .connected)
+                if hasSavedReference {
+                    Button("Retomar / requalificar token salvo", action: resume)
+                        .disabled(!policyAllowsToken || operation != nil)
+                }
                 if store.jira.status.connection == .connected {
                     Button("Consultar / atualizar cards") { work.requestAfterUserAction() }
                         .disabled(operation != nil || store.jira.status.isRefreshing)
@@ -59,9 +64,18 @@ struct JiraConnectionFormView: View {
         .background(ConnectionWindowCloseObserver(onClose: cancelPending).frame(width: 0, height: 0))
         .task {
             let current = generation
-            let saved = await connection.hasSavedReference()
-            guard generation == current, !Task.isCancelled else { return }
-            hasSavedReference = saved
+            do {
+                let saved = try await connection.savedMetadata()
+                guard generation == current, !Task.isCancelled else { return }
+                if let saved {
+                    site = saved.site; email = saved.email; projects = saved.projects.joined(separator: ", ")
+                    usesScopedToken = saved.tokenKind == JiraTokenKind.scoped.rawValue
+                    hasSavedReference = saved.reference != nil
+                }
+            } catch {
+                guard generation == current, !Task.isCancelled else { return }
+                message = JiraConnectionErrorText.message(error)
+            }
         }
     }
 
@@ -86,6 +100,26 @@ struct JiraConnectionFormView: View {
                 let saved = await connection.hasSavedReference()
                 guard generation == current, !Task.isCancelled else { return }
                 hasSavedReference = saved
+                message = JiraConnectionErrorText.message(error)
+            }
+            guard generation == current else { return }
+            operation = nil
+        }
+    }
+
+    private func resume() {
+        guard policyAllowsToken, hasSavedReference, operation == nil else { return }
+        let current = UUID(); generation = current
+        work.stop(); store.invalidate(.jira); token = ""
+        message = "Qualificando o token salvo após sua ação…"
+        operation = Task {
+            do {
+                let qualified = try await connection.resumeAfterUserAction(policyAllowed: policyAllowsToken, attemptID: current)
+                guard generation == current, !Task.isCancelled else { return }
+                store.configureSource(qualified.scope, connection: .connected)
+                message = "Identidade qualificada. A lista será atualizada."
+            } catch {
+                guard generation == current, !Task.isCancelled else { return }
                 message = JiraConnectionErrorText.message(error)
             }
             guard generation == current else { return }

@@ -19,7 +19,8 @@ struct GitHubListView: View {
                                 let details = store.selection.prDetails.details
                                 GitHubRowView(
                                     item: item, key: key, focused: focused, isSelected: store.selection.selectedKey == key,
-                                    details: details?.version.pullRequestID == item.id ? details : nil
+                                    details: details?.version.pullRequestID == item.id ? details : nil,
+                                    category: store.repositoryCategories[item.repositoryName]
                                 ) { focus.select(key) }
                                     .id(key)
                             }

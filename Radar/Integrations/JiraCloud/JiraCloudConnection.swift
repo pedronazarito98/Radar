@@ -4,62 +4,106 @@ import Foundation
 actor JiraCloudConnection {
     private let vault = CredentialVault()
     private let transport = JiraHTTPTransport()
+    private let preferences: PreferencesStore
     private var token: String?
     private var qualified: JiraQualifiedConnection?
     private var reference: JiraCredentialReference?
+    private var savedConfiguration: JiraConnectionConfiguration?
+    private var metadataLoaded = false
     private var operationID = UUID()
     private var busy = false
 
+    init(preferences: PreferencesStore) { self.preferences = preferences }
+
+    func savedMetadata() async throws -> JiraSavedConfiguration? {
+        try await restoreMetadata()
+        guard let savedConfiguration else { return nil }
+        return JiraSavedConfiguration(configuration: savedConfiguration, reference: reference)
+    }
+
+    private func restoreMetadata() async throws {
+        guard !metadataLoaded else { return }
+        let saved: JiraSavedConfiguration?
+        do { saved = try await preferences.snapshot().jira }
+        catch let error as PreferencesError { throw JiraConnectionError.preferences(error) }
+        guard !metadataLoaded else { return }
+        reference = saved?.reference
+        savedConfiguration = saved?.configuration(policyAllowed: true)
+        metadataLoaded = true
+    }
+
     func connectAfterUserAction(configuration: JiraConnectionConfiguration, token: String, attemptID: UUID) async throws -> JiraQualifiedConnection {
+        try await restoreMetadata()
         guard !busy, qualified == nil, reference == nil else { throw JiraConnectionError.removalPending }
         guard !token.isEmpty, token.utf8.count <= 16_384 else { throw JiraConnectionError.vault(.invalidSecret) }
-        busy = true
-        let operation = attemptID; operationID = operation
+        busy = true; operationID = attemptID
         defer { busy = false }
         do {
-            var tenantRequest = URLRequest(url: configuration.siteURL.appendingPathComponent("_edge/tenant_info"))
-            tenantRequest.httpMethod = "GET"
-            tenantRequest.setValue("application/json", forHTTPHeaderField: "Accept")
-            let tenantData = try await transport.get(tenantRequest)
-            try ensureCurrent(operation)
-            struct Tenant: Decodable { let cloudId: String }
-            guard let tenant = try? JSONDecoder().decode(Tenant.self, from: tenantData),
-                  let cloudID = UUID(uuidString: tenant.cloudId),
-                  let identity = JiraSiteIdentity(cloudID: cloudID.uuidString.lowercased()),
-                  let scope = SourceScope(jiraSite: identity, projectKeys: configuration.projectKeys) else {
-                throw JiraConnectionError.source(.invalidResponse)
-            }
-            let request = try authenticatedRequest(configuration: configuration, cloudID: cloudID, token: token, path: "myself")
-            let data = try await transport.get(request)
-            try ensureCurrent(operation)
-            struct Myself: Decodable { let accountId: String; let active: Bool }
-            guard let myself = try? JSONDecoder().decode(Myself.self, from: data),
-                  !myself.accountId.isEmpty, myself.active else { throw JiraConnectionError.source(.invalidResponse) }
+            let result = try await qualify(configuration: configuration, token: token, operation: attemptID)
             let reference = JiraCredentialReference()
-            // Retain reference before the awaited write: cancellation must never orphan a saved item.
-            self.reference = reference
+            // Keep the pending reference in memory even if the atomic preference write fails.
+            self.reference = reference; savedConfiguration = configuration
+            do { try await preferences.saveJira(configuration: configuration, reference: reference) }
+            catch let error as PreferencesError { throw JiraConnectionError.preferences(error) }
+            try ensureCurrent(attemptID)
             do { try await vault.saveJiraToken(token, for: reference) }
             catch let error as CredentialVaultError { throw JiraConnectionError.vault(error) }
-            try ensureCurrent(operation)
-            let result = JiraQualifiedConnection(configuration: configuration, cloudID: cloudID,
-                accountID: myself.accountId, connectionID: ConnectionID(), scope: scope)
-            self.token = token
-            qualified = result
+            try ensureCurrent(attemptID)
+            self.token = token; qualified = result
             return result
-        } catch {
-            self.token = nil; qualified = nil
-            throw error
+        } catch { self.token = nil; qualified = nil; throw error }
+    }
+
+    func resumeAfterUserAction(policyAllowed: Bool, attemptID: UUID) async throws -> JiraQualifiedConnection {
+        guard policyAllowed else { throw JiraConnectionError.source(.permissionDenied) }
+        try await restoreMetadata()
+        guard !busy else { throw JiraConnectionError.source(.cancelled) }
+        guard let reference, let configuration = savedConfiguration else { throw JiraConnectionError.vault(.missing) }
+        busy = true; operationID = attemptID; token = nil; qualified = nil
+        defer { busy = false }
+        do {
+            let secret: String
+            do { secret = try await vault.readJiraTokenAfterUserAction(for: reference) }
+            catch let error as CredentialVaultError { throw JiraConnectionError.vault(error) }
+            try ensureCurrent(attemptID)
+            let result = try await qualify(configuration: configuration, token: secret, operation: attemptID)
+            token = secret; qualified = result
+            return result
+        } catch { token = nil; qualified = nil; throw error }
+    }
+
+    private func qualify(configuration: JiraConnectionConfiguration, token: String, operation: UUID) async throws -> JiraQualifiedConnection {
+        try ensureCurrent(operation)
+        var tenantRequest = URLRequest(url: configuration.siteURL.appendingPathComponent("_edge/tenant_info"))
+        tenantRequest.httpMethod = "GET"
+        tenantRequest.setValue("application/json", forHTTPHeaderField: "Accept")
+        let tenantData = try await transport.get(tenantRequest)
+        try ensureCurrent(operation)
+        struct Tenant: Decodable { let cloudId: String }
+        guard let tenant = try? JSONDecoder().decode(Tenant.self, from: tenantData),
+              let cloudID = UUID(uuidString: tenant.cloudId),
+              let identity = JiraSiteIdentity(cloudID: cloudID.uuidString.lowercased()),
+              let scope = SourceScope(jiraSite: identity, projectKeys: configuration.projectKeys) else {
+            throw JiraConnectionError.source(.invalidResponse)
         }
+        let request = try authenticatedRequest(configuration: configuration, cloudID: cloudID, token: token, path: "myself")
+        let data = try await transport.get(request)
+        try ensureCurrent(operation)
+        struct Myself: Decodable { let accountId: String; let active: Bool }
+        guard let myself = try? JSONDecoder().decode(Myself.self, from: data),
+              !myself.accountId.isEmpty, myself.active else { throw JiraConnectionError.source(.invalidResponse) }
+        return JiraQualifiedConnection(configuration: configuration, cloudID: cloudID,
+            accountID: myself.accountId, connectionID: ConnectionID(), scope: scope)
     }
 
     /// Cancellation only invalidates memory. It never silently invokes Keychain removal.
     func cancelConnection(attemptID: UUID) {
         guard operationID == attemptID else { return }
-        operationID = UUID()
-        token = nil; qualified = nil
+        operationID = UUID(); token = nil; qualified = nil
     }
 
     func removeAfterUserAction() async throws {
+        try await restoreMetadata()
         guard !busy else { throw JiraConnectionError.source(.cancelled) }
         operationID = UUID(); token = nil; qualified = nil
         guard let reference else { return }
@@ -67,10 +111,16 @@ actor JiraCloudConnection {
         defer { busy = false }
         do { try await vault.removeJiraTokenAfterUserAction(for: reference) }
         catch let error as CredentialVaultError { throw JiraConnectionError.vault(error) }
+        do { try await preferences.clearJiraReference(expected: reference) }
+        catch let error as PreferencesError { throw JiraConnectionError.preferences(error) }
         self.reference = nil
     }
 
-    func hasSavedReference() -> Bool { reference != nil }
+    func hasSavedReference() async -> Bool {
+        // Metadata only. The form separately displays a sanitized load error.
+        try? await restoreMetadata()
+        return reference != nil
+    }
 
     func currentConnection() throws -> JiraQualifiedConnection {
         guard let qualified, token != nil else { throw JiraConnectionError.source(.authenticationRequired) }

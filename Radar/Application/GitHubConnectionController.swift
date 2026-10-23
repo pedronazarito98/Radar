@@ -6,12 +6,13 @@ import Observation
 final class GitHubConnectionController {
     let transport = GitHubCLITransport()
     let store: RadarStore
+    private let preferences: PreferencesStore
     private(set) var executable: QualifiedGitHubExecutable?
     private(set) var identity: GitHubAuthor?
     private(set) var connectionID: ConnectionID?
     private var generation = UUID()
 
-    init(store: RadarStore) { self.store = store }
+    init(store: RadarStore, preferences: PreferencesStore) { self.store = store; self.preferences = preferences }
 
     func connect(executable: QualifiedGitHubExecutable, repositories: String) async throws {
         let names = repositories.split(separator: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
@@ -26,6 +27,8 @@ final class GitHubConnectionController {
         }
         guard let scope = SourceScope(githubRepositories: repos) else { throw GitHubCLIError.source(.invalidResponse) }
         let attempt = UUID(); generation = attempt
+        try await preferences.saveGitHub(executable: executable, repositories: repos)
+        guard generation == attempt, !Task.isCancelled else { throw GitHubCLIError.source(.cancelled) }
         try await transport.withBatch(executable: executable, maximumCalls: 2, duration: .seconds(30)) { session in
             let initial = try GitHubUserDTO.decode(try await session.get(.user).body)
             let final = try GitHubUserDTO.decode(try await session.get(.user, finalIdentity: true).body)

@@ -52,7 +52,7 @@ enum ConnectionRecoveryController {
 
     private static func reconnect(_ source: WorkSource) -> ConnectionRecoveryPlan {
         ConnectionRecoveryPlan(action: .reconnect, message: source == .jira
-            ? "Se houver conexão ativa ou token salvo, remova-o pelo formulário. Informe outro token somente aqui, conforme a política da organização."
+            ? "Se houver token salvo, use Retomar / requalificar após confirmar a política da organização. Sem token salvo, informe-o somente neste formulário; para substituí-lo, remova antes a conexão."
             : "Confira a autenticação do gh fora do Radar; se esta origem estiver conectada, desconecte-a e conecte novamente aqui. O Radar não executa comandos de autenticação.")
     }
 }

@@ -5,6 +5,7 @@ struct GitHubConnectionFormView: View {
     let status: SourceStatus
     let connection: GitHubConnectionController
     let work: GitHubWorkController
+    let preferences: PreferencesController
     @State private var executablePath = "/opt/homebrew/bin/gh"
     @State private var repositories = ""
     @State private var showsPicker = false
@@ -54,6 +55,10 @@ struct GitHubConnectionFormView: View {
             cancel(); qualification = nil
         }
         .task {
+            await preferences.load()
+            if let path = preferences.snapshot.ghPath { executablePath = path }
+            repositories = preferences.snapshot.repositories.joined(separator: ", ")
+            if let message = preferences.message { selectionProblem = message }
             if let executable = connection.executable {
                 executablePath = executable.url.path
                 qualification = executable
@@ -84,10 +89,14 @@ struct GitHubConnectionFormView: View {
             do {
                 let result = try await GitHubExecutableResolver().qualify(path: path)
                 guard generation == current, !Task.isCancelled else { return }
+                try await preferences.storage.saveGitHub(executable: result)
+                guard generation == current, !Task.isCancelled else { return }
                 qualification = result
+                await preferences.load()
             } catch {
                 guard generation == current, !Task.isCancelled else { return }
                 if case let GitHubCLIError.source(problem) = error { selectionProblem = SourceStatusText.message(for: problem) + ". " + ConnectionRecoveryController.guidance(source: .github, problem: problem) }
+                else if error is PreferencesError { selectionProblem = PreferencesController.message(error) }
                 else { selectionProblem = "A validação foi interrompida." }
             }
             guard generation == current else { return }
@@ -104,13 +113,15 @@ struct GitHubConnectionFormView: View {
                 try await connection.connect(executable: qualification, repositories: repositories)
                 guard generation == current, !Task.isCancelled else { return }
                 selectionProblem = "Identidade qualificada. A lista de PRs será atualizada."
+                await preferences.load()
             } catch {
                 guard generation == current, !Task.isCancelled else { return }
                 if case let GitHubCLIError.source(problem) = error { selectionProblem = SourceStatusText.message(for: problem) + ". " + ConnectionRecoveryController.guidance(source: .github, problem: problem) }
                 else if case GitHubCLIError.identityChanged = error {
                     connection.requireRequalification()
                     selectionProblem = "A conta ativa mudou durante a consulta. Qualifique novamente."
-                } else { selectionProblem = "A consulta foi interrompida." }
+                } else if error is PreferencesError { selectionProblem = PreferencesController.message(error) }
+                else { selectionProblem = "A consulta foi interrompida." }
             }
             guard generation == current else { return }
             operation = nil

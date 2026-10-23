@@ -41,4 +41,5 @@ enum JiraConnectionError: Error, Sendable {
     case source(SourceProblem)
     case vault(CredentialVaultError)
     case removalPending
+    case preferences(PreferencesError)
 }

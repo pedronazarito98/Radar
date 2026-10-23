@@ -8,6 +8,7 @@ final class RadarStore {
     private(set) var jira = SourcePresentationState<JiraWorkItem>()
     private(set) var github = SourcePresentationState<PullRequestItem>()
     private(set) var isPanelOpen = false
+    var repositoryCategories: [GitHubRepositoryName: RepositoryCategory] = [:]
     let selection: SelectionStore
     let relations = RelatedItemsStore()
     private(set) var repositoryAliases: RepositoryIdentityAliases
