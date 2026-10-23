@@ -39,3 +39,5 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 | T28 | 3c6ebc2 | BUILD/REVIEW independente PASS; LIVE-GitHub NOT-RUN | T28.md |
 | T29 | cce213e | BUILD/REVIEW independente PASS | T29.md |
 | C06 | commit desta evidência | BUILD/REVIEW independente PASS; corridas runtime NOT-RUN | C06.md |
+| T30 | 9b30356 | BUILD/REVIEW independente PASS; LIVE-Relações NOT-RUN | T30.md |
+| C07 | commit desta evidência | REVIEW PASS; BUILD árvore com WIP T31 PASS | C07.md |

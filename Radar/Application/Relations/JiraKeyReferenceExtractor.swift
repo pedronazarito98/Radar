@@ -19,11 +19,15 @@ struct JiraKeyReferenceExtractor: Sendable {
               let pattern = try? NSRegularExpression(
                 pattern: #"(?<![\p{L}\p{N}\p{M}_])([A-Za-z][A-Za-z0-9_]*-[0-9]+)(?![\p{L}\p{N}\p{M}_])"#
               ) else { return [] }
+        guard let links = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else { return [] }
         var found: [JiraIssueKey: Set<JiraReferenceProvenance>] = [:]
         for (text, origin) in [(title, JiraReferenceProvenance.title), (branch ?? "", .branch)] {
             let range = NSRange(text.startIndex..<text.endIndex, in: text)
+            // Keep original offsets: removing links could join unrelated fragments into a key.
+            let excluded = links.matches(in: text, range: range).map(\.range)
             pattern.enumerateMatches(in: text, range: range) { match, _, _ in
-                guard let match, let range = Range(match.range(at: 1), in: text),
+                guard let match, !excluded.contains(where: { NSIntersectionRange($0, match.range(at: 1)).length > 0 }),
+                      let range = Range(match.range(at: 1), in: text),
                       let key = JiraIssueKey(String(text[range])), projects.contains(key.projectKey) else { return }
                 found[key, default: []].insert(origin)
             }
