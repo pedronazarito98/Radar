@@ -22,7 +22,7 @@ enum RadarTheme {
 
     enum Layout {
         static let compactWingWidth: CGFloat = 72
-        static let expandedSize = CGSize(width: 760, height: 410)
+        static let expandedSize = CGSize(width: 760, height: 520)
         static let compactRadius: CGFloat = 12
         static let expandedRadius: CGFloat = 24
         static let contentPadding: CGFloat = 24

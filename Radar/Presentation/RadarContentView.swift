@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct DisconnectedPanelView: View {
+struct RadarContentView: View {
     let store: RadarStore
     let close: () -> Void
 
@@ -9,6 +9,11 @@ struct DisconnectedPanelView: View {
             HStack {
                 Text("Meu trabalho").font(RadarTheme.Typography.title)
                 Spacer()
+                if store.jira.hasPendingUpdate || store.github.hasPendingUpdate {
+                    Button("Aplicar atualização", action: store.applyPendingUpdates)
+                        .font(RadarTheme.Typography.caption)
+                        .help("Aplicar a nova revisão das listas e dos totais")
+                }
                 Button(action: close) {
                     Image(systemName: "chevron.up")
                 }

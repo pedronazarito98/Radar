@@ -23,3 +23,4 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 | T16 | 49a0425 | Prepared; BUILD + visual CUA desconectado PASS | T16.md |
 | T17 | d96c7d0 | Prepared; BUILD + visual CUA desconectado PASS | T17.md |
 | T18 | 23b8fb8 | Prepared; BUILD + visual CUA sem seleção PASS | T18.md |
+| T19 | 892c825 | PARTIAL; BUILD/formulários CUA PASS; seleção gh pendente | T19.md |

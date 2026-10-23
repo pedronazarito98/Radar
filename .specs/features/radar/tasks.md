@@ -387,7 +387,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T20 — Composição agrupada
 
-- **Status**: Pending.
+- **Status**: PARTIAL — BUILD + REVIEW autor PASS; UI do novo tamanho aguarda relaunch após interação T19; docs/evidence/T20.md.
 - **What**: Compor indicadores, duas colunas e faixa usando stores existentes e preservando tamanho/ordem de apresentação.
 - **Where**: Radar/Presentation/RadarContentView.swift
 - **Depends on**: T19 (dependências anteriores transitivas).
