@@ -20,6 +20,7 @@ struct GitHubConnectionFormView: View {
                 Text("Use o gh já instalado e autenticado. O Radar consulta GitHub.com e não altera sua autenticação.")
                     .foregroundStyle(.secondary)
             }
+            ConnectionRecoveryView(source: .github, status: status, retry: work.requestAfterUserAction)
             Section("GitHub CLI") {
                 TextField("Caminho absoluto", text: $executablePath).autocorrectionDisabled()
                     .disabled(operation != nil || status.connection == .connected)
@@ -86,7 +87,7 @@ struct GitHubConnectionFormView: View {
                 qualification = result
             } catch {
                 guard generation == current, !Task.isCancelled else { return }
-                if case let GitHubCLIError.source(problem) = error { selectionProblem = SourceStatusText.message(for: problem) }
+                if case let GitHubCLIError.source(problem) = error { selectionProblem = SourceStatusText.message(for: problem) + ". " + ConnectionRecoveryController.guidance(source: .github, problem: problem) }
                 else { selectionProblem = "A validação foi interrompida." }
             }
             guard generation == current else { return }
@@ -105,7 +106,7 @@ struct GitHubConnectionFormView: View {
                 selectionProblem = "Identidade qualificada. A lista de PRs será atualizada."
             } catch {
                 guard generation == current, !Task.isCancelled else { return }
-                if case let GitHubCLIError.source(problem) = error { selectionProblem = SourceStatusText.message(for: problem) }
+                if case let GitHubCLIError.source(problem) = error { selectionProblem = SourceStatusText.message(for: problem) + ". " + ConnectionRecoveryController.guidance(source: .github, problem: problem) }
                 else if case GitHubCLIError.identityChanged = error {
                     connection.requireRequalification()
                     selectionProblem = "A conta ativa mudou durante a consulta. Qualifique novamente."

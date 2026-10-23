@@ -37,7 +37,9 @@ struct RadarContentView: View {
             .frame(maxHeight: .infinity)
 
             Rectangle().fill(RadarTheme.separator).frame(height: 1)
-            DetailsStripView(presentation: .current(in: store), close: focus.closeDetails, focused: $focused,
+            DetailsStripView(presentation: .current(in: store), close: focus.closeDetails, refresh: related.refresh,
+                             canRefresh: store.jira.status.connection == .connected && store.github.status.connection == .connected
+                                && !store.relations.isRefreshing, focused: $focused,
                              focus: focus, selectRelated: focus.selectRelated)
         }
         .padding(.horizontal, RadarTheme.Layout.contentPadding)
@@ -67,7 +69,7 @@ struct RadarContentView: View {
         }
         .onKeyPress(keys: [.return, .space], phases: .down) { press in
             guard press.modifiers.intersection([.command, .control, .option]).isEmpty else { return .ignored }
-            return focus.activate(close: close) ? .handled : .ignored
+            return focus.activate(close: close, refreshDetails: related.refresh) ? .handled : .ignored
         }
     }
 

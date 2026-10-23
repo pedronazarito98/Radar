@@ -6,6 +6,7 @@ enum RadarFocusTarget: Hashable {
     case applyUpdates
     case collapse
     case closeDetails
+    case refreshDetails
     case detailsContent
     case related(SelectionKey)
 }
@@ -79,6 +80,8 @@ final class RadarFocusCoordinator {
         targets.append(.collapse)
         targets += rows.map(RadarFocusTarget.row)
         if store.selection.selectedKey != nil {
+            if store.jira.status.connection == .connected, store.github.status.connection == .connected,
+               !store.relations.isRefreshing { targets.append(.refreshDetails) }
             targets += [.closeDetails, .detailsContent]
             if case let .observed(items, _, _, _, _) = DetailsStripPresentation.current(in: store)?.relations {
                 targets += items.map { .related($0.id) }
@@ -117,12 +120,16 @@ final class RadarFocusCoordinator {
         }
     }
 
-    func activate(close: () -> Void) -> Bool {
+    func activate(close: () -> Void, refreshDetails: () -> Void) -> Bool {
         switch focusedTarget ?? requestedTarget {
         case .row(let key): select(key)
         case .applyUpdates: applyUpdates()
         case .collapse: close()
         case .closeDetails: closeDetails()
+        case .refreshDetails:
+            guard store.jira.status.connection == .connected, store.github.status.connection == .connected,
+                  !store.relations.isRefreshing else { return false }
+            refreshDetails()
         case let .related(key): selectRelated(key)
         case .detailsContent, nil: return false
         }

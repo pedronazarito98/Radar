@@ -569,7 +569,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T33 — Recuperação por origem
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL; BUILD e revisão independente PASS; LIVE-Origens/recuperação real NOT-RUN. Evidência docs/evidence/T33.md.
 - **What**: Traduzir falhas permitidas em ações reconectar/repetir/aguardar/configurar gh sem executar auth ou ampliar escopo.
 - **Where**: Radar/Application/ConnectionRecoveryController.swift
 - **Depends on**: T32 (dependências anteriores transitivas).

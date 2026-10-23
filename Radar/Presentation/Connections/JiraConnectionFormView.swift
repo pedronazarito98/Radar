@@ -23,6 +23,7 @@ struct JiraConnectionFormView: View {
                 Text("Conecte sua conta pessoal do Jira Cloud. O token será guardado somente no Keychain do Radar.")
                     .foregroundStyle(.secondary)
             }
+            ConnectionRecoveryView(source: .jira, status: store.jira.status, retry: work.requestAfterUserAction)
             Section("Conta e escopo") {
                 TextField("Site HTTPS", text: $site, prompt: Text("https://sua-equipe.atlassian.net"))
                     .autocorrectionDisabled()

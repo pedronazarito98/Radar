@@ -23,7 +23,8 @@ final class RelatedItemsCoordinator {
     }
 
     func refresh() {
-        guard !store.relations.isRefreshing else { return }
+        guard !store.relations.isRefreshing, store.jira.status.connection == .connected,
+              store.github.status.connection == .connected else { return }
         selectionChanged(force: true)
     }
 

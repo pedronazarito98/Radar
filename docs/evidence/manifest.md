@@ -43,3 +43,4 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 | C07 | commit desta evidência | REVIEW PASS; BUILD árvore com WIP T31 PASS | C07.md |
 | T31 | commit desta evidência | BUILD/REVIEW independente PASS; LIVE/foco preenchido NOT-RUN | T31.md |
 | T32 | commit desta evidência | BUILD/REVIEW independente PASS; LIVE/sleep-wake NOT-RUN | T32.md |
+| T33 | commit desta evidência | BUILD/REVIEW independente PASS; LIVE/recuperação real NOT-RUN | T33.md |

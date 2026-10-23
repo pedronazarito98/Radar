@@ -21,7 +21,13 @@ struct SourceEmptyStateView: View {
     }
 
     var body: some View {
-        Text(message)
+        VStack(alignment: .leading, spacing: 8) {
+            Text(message)
+            if let recovery = ConnectionRecoveryController.plan(source: source, status: status) {
+                Text(recovery.message + " Acesse Configurações pelo menu Radar.")
+                    .font(RadarTheme.Typography.caption)
+            }
+        }
             .font(RadarTheme.Typography.body)
             .foregroundStyle(RadarTheme.secondaryText)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

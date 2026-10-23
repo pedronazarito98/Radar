@@ -3,6 +3,8 @@ import SwiftUI
 struct DetailsStripView: View {
     let presentation: DetailsStripPresentation?
     let close: () -> Void
+    let refresh: () -> Void
+    let canRefresh: Bool
     let focused: FocusState<RadarFocusTarget?>.Binding
     let focus: RadarFocusCoordinator
     @State private var scrollPosition = ScrollPosition(y: 0)
@@ -19,6 +21,10 @@ struct DetailsStripView: View {
                         Text("Conexões · \(presentation.title)")
                             .font(RadarTheme.Typography.body.weight(.semibold)).lineLimit(1)
                         Spacer(minLength: 4)
+                        Button("Atualizar", systemImage: "arrow.clockwise", action: refresh)
+                            .disabled(!canRefresh)
+                            .focusable().focused(focused, equals: .refreshDetails).focusEffectDisabled()
+                            .modifier(RadarFocusOutline(isFocused: focused.wrappedValue == .refreshDetails))
                         Button("Abrir", systemImage: "arrow.up.right.square") { open?(presentation.key) }
                             .disabled(open == nil)
                         Button(action: close) { Image(systemName: "xmark") }
