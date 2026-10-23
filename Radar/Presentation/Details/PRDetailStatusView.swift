@@ -7,6 +7,13 @@ struct PRDetailStatusView: View {
         VStack(alignment: .leading, spacing: 5) {
             Text("Fase: \(PRStatusText.lifecycle(details.lifecycle))")
             Text("CI: \(PRStatusText.ci(details.ci.summary))")
+            ForEach(Array(details.ci.signals.enumerated()), id: \.offset) { _, signal in
+                Text(CISignalText.label(signal))
+                    .foregroundStyle(RadarTheme.secondaryText)
+            }
+            Text("Solicitações observadas: \(details.review.requests.users.count) pessoas · \(details.review.requests.teams.count) equipes")
+            Text("Cobertura de solicitações: \(coverage(details.review.requests.coverage))")
+                .foregroundStyle(RadarTheme.secondaryText)
             Text("Revisão: \(PRStatusText.review(details.review.summary))")
             if details.ci.coverage != .complete || details.review.coverage != .complete
                 || details.review.requests.coverage != .complete {
@@ -25,5 +32,12 @@ struct PRDetailStatusView: View {
         }
         .font(RadarTheme.Typography.caption)
         .accessibilityElement(children: .combine)
+    }
+    private func coverage(_ value: ObservationCoverage) -> String {
+        switch value {
+        case .complete: "completa"
+        case .partial: "parcial"
+        case .unavailable: "indisponível"
+        }
     }
 }

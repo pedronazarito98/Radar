@@ -834,3 +834,11 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 - **Tests**: Nenhum teste/mock/fixture/sensor; runtime do provider permanece NOT-RUN.
 - **Commit**: Um commit próprio em pt-BR, após o gate. A baseline continua com 42 tarefas planejadas; C01 acrescenta um nó e uma aresta de correção ao grafo de execução.
 
+
+### C02 — Rolagem de detalhe e sinais observados
+
+- **Status**: Prepared — BUILD/REVIEW independente PASS; runtime com dados NOT-RUN. docs/evidence/C02.md.
+- **What / Where**: Foco/rolagem na faixa, sinais CI individuais e solicitações separadas em Presentation/Details e RadarFocusCoordinator.
+- **Depends on / sequência**: T21; correção de T18/T21 antes de T22.
+- **Requirement / Gate**: R07/R17; BUILD + revisão independente. Nenhum teste/mock.
+- **Commit**: Atômico em pt-BR, preservando limites de execução.

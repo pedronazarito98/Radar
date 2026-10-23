@@ -6,6 +6,7 @@ enum RadarFocusTarget: Hashable {
     case applyUpdates
     case collapse
     case closeDetails
+    case detailsContent
 }
 
 @MainActor
@@ -15,6 +16,9 @@ final class RadarFocusCoordinator {
     var focusedTarget: RadarFocusTarget?
     private(set) var requestedTarget: RadarFocusTarget?
     private(set) var requestGeneration: UInt64 = 0
+
+    private(set) var detailScrollGeneration: UInt64 = 0
+    private(set) var detailScrollDelta: CGFloat = 0
 
     init(store: RadarStore) { self.store = store }
 
@@ -56,7 +60,7 @@ final class RadarFocusCoordinator {
         if store.jira.hasPendingUpdate || store.github.hasPendingUpdate { targets.append(.applyUpdates) }
         targets.append(.collapse)
         targets += rows.map(RadarFocusTarget.row)
-        if store.selection.selectedKey != nil { targets.append(.closeDetails) }
+        if store.selection.selectedKey != nil { targets += [.closeDetails, .detailsContent] }
         let current = focusedTarget ?? requestedTarget
         let index = current.flatMap { targets.firstIndex(of: $0) }
         let next = index.map { ($0 + (backwards ? targets.count - 1 : 1)) % targets.count }
@@ -65,6 +69,13 @@ final class RadarFocusCoordinator {
     }
 
     func move(_ direction: MoveCommandDirection) {
+        if focusedTarget == .detailsContent {
+            guard direction == .up || direction == .down else { return }
+            detailScrollDelta = direction == .up ? -64 : 64
+            precondition(detailScrollGeneration < .max, "Scroll generation exhausted")
+            detailScrollGeneration += 1
+            return
+        }
         guard !rows.isEmpty else { return }
         guard case let .row(key) = focusedTarget ?? requestedTarget else {
             request(.row(rows[0]))
@@ -89,7 +100,7 @@ final class RadarFocusCoordinator {
         case .applyUpdates: applyUpdates()
         case .collapse: close()
         case .closeDetails: closeDetails()
-        case nil: return false
+        case .detailsContent, nil: return false
         }
         return true
     }

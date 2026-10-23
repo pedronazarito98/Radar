@@ -36,7 +36,7 @@ struct RadarContentView: View {
             .frame(maxHeight: .infinity)
 
             Rectangle().fill(RadarTheme.separator).frame(height: 1)
-            DetailsStripView(presentation: .current(in: store), close: focus.closeDetails, focused: $focused)
+            DetailsStripView(presentation: .current(in: store), close: focus.closeDetails, focused: $focused, focus: focus)
         }
         .padding(.horizontal, RadarTheme.Layout.contentPadding)
         .padding(.bottom, RadarTheme.Layout.contentPadding)

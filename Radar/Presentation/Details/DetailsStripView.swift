@@ -4,6 +4,10 @@ struct DetailsStripView: View {
     let presentation: DetailsStripPresentation?
     let close: () -> Void
     let focused: FocusState<RadarFocusTarget?>.Binding
+    let focus: RadarFocusCoordinator
+    @State private var scrollPosition = ScrollPosition(y: 0)
+    @State private var contentOffset: CGFloat = 0
+    @State private var maximumOffset: CGFloat = 0
     var selectRelated: ((SelectionKey) -> Void)?
     var open: ((SelectionKey) -> Void)?
 
@@ -37,6 +41,20 @@ struct DetailsStripView: View {
                         .font(RadarTheme.Typography.caption)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
+                    .scrollPosition($scrollPosition)
+                    .onScrollGeometryChange(for: CGFloat.self) { $0.contentOffset.y } action: { _, value in
+                        contentOffset = value
+                    }
+                    .onScrollGeometryChange(for: CGFloat.self) {
+                        max(0, $0.contentSize.height - $0.containerSize.height)
+                    } action: { _, value in maximumOffset = value }
+                    .focusable().focused(focused, equals: .detailsContent).focusEffectDisabled()
+                    .modifier(RadarFocusOutline(isFocused: focused.wrappedValue == .detailsContent))
+                    .accessibilityLabel("Conteúdo dos detalhes; use as setas para rolar")
+                    .onChange(of: focus.detailScrollGeneration) { _, _ in
+                        scrollPosition.scrollTo(y: min(maximumOffset, max(0, contentOffset + focus.detailScrollDelta)))
+                    }
+                    .onChange(of: presentation.key) { _, _ in scrollPosition.scrollTo(y: 0) }
                 }
                 .frame(height: 128)
             } else {
