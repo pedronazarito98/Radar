@@ -122,6 +122,14 @@
 - **Date**: 2026-10-23
 - **Status**: active
 
+### AD-016
+- **Decision**: Publicar C1.4 antes dos consumidores GitHub: adicionar responsabilidade de revisão solicitada sem modalidade qualificada; reduzir statuses pela primeira ocorrência do contexto sem diferenciar maiúsculas/minúsculas na ordem documentada; qualificar o teto de check-runs com o total de check-suites do mesmo SHA, sem filtros.
+- **Reason**: Pesquisa oficial e revisão independente confirmaram que review-requested inclui equipes e que o endpoint de runs limita a leitura às 1.000 suites mais recentes sem indicador próprio desse truncamento.
+- **Trade-off**: Uma consulta adicional por detalhe usa o mesmo orçamento. Mais de 1.000 suites, total ausente/incoerente ou falha mantém checks parciais. Até 1.000 afasta somente esse teto observado; paginação e validade dos runs continuam obrigatórias. Não inferir associação a equipe ou prontidão de merge.
+- **Scope**: Correção atômica de T10 e consumidores T17/T18/T26–T28; demais contratos preservados.
+- **Date**: 2026-10-23
+- **Status**: active
+
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
