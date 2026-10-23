@@ -513,7 +513,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T29 — Extração de referências Jira
 
-- **Status**: Pending.
+- **Status**: BUILD e revisão independente PASS; extração preparada em fonte real, sem testes/mocks. Evidência docs/evidence/T29.md.
 - **What**: Extrair chaves explícitas com limites de token de título/branch, normalizar e validar no contexto do site/projeto.
 - **Where**: Radar/Application/Relations/JiraKeyReferenceExtractor.swift
 - **Depends on**: T28 (dependências anteriores transitivas).
