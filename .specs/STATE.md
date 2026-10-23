@@ -141,10 +141,11 @@
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote4 T22 preparado; root único escritor.
-- **Completed**: Handoffs batch-01/batch-02 preservados. T15–T20 preparados; seleção gh confirmada pelo usuário; T21 BUILD/UI-base desconectada PASS.
-- **In-progress**: T21 09450fd, handoff3c94228, C02 b5b957b/C03 ef973f2 com revisão independente PASS. T22 build PASS; review em andamento.
-- **Next step**: T23–T28 sequenciais após commit T22; C1.5 publicado.
-- **Blockers**: Revisão independente T13/T14 indisponível por limite anterior de subagentes. T21 com dados reais, política/escopos/providers, VoiceOver, Reduzir Movimento, modos específicos, desempenho e Release pendentes. Nenhum gate dispensado.
-- **Uncommitted files**: T22 e documentação de contrato.
+- **Phase / Task**: Lote4 T22–T28 preparado; handoff docs/handoffs/batch-04.md. providers_writer encerrou escrita; root/relations_writer assumem lote5.
+- **Completed**: T22 671efae, T23 cb9c140, C04 3b8a1a6, C05 2eed4b3, T24 330d241, T25 10871d4, T26 272ba61, T27 fb5ed1b, T28 3c6ebc2. BUILD/REVIEW independente PASS; T25 UI-gh versão PASS. LIVE/consentimento não executados. Handoffs anteriores preservados.
+- **In-progress**: Nenhuma alteração de código pendente do lote4. T13/T14 receberam revisão independente retomada, com correção do backoff em C04; bloqueio antigo removido.
+- **Next step**: T29, C06 antes de T30, depois T30–T35 sequenciais sob C1.10. Orçamento atual começa após lease; C06 deve incluir espera na fila. Manter scheduler compartilhado e qualificação de contexto/seleção/conexões.
+- **Blockers**: Política/site/projetos/repos e contas reais pendentes; LIVE-Jira/GitHub, cofre/consentimento/reinício, conteúdo real, acessibilidade, movimento reduzido, modos específicos, desempenho e Release continuam NOT-RUN. Ver docs/evidence/pending-gates.md. Nenhum gate dispensado; tarefas com gate obrigatório externo permanecem Prepared/PARTIAL.
+- **Persistence**: T34 deve persistir referência não secreta antes de gravar token no cofre. Até lá, não solicitar token real no build intermediário; nenhum agente acessa cofre/auth. Não auto-conectar após reinício.
+- **Uncommitted files**: Nenhum após commit deste handoff.
 - **Branch**: feat/radar-v1-local; sem remote.

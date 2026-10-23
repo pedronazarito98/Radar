@@ -289,7 +289,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T13 — Seleção e geração
 
-- **Status**: Prepared — BUILD + REVIEW do autor PASS; revisão independente interrompida por limite de uso dos subagentes; dependências parciais sob AD-013; docs/evidence/T13.md.
+- **Status**: Prepared — BUILD + REVIEW independente retomada PASS; dependências parciais sob AD-013; runtime NOT-RUN. docs/evidence/T13.md.
 - **What**: Criar seleção por contexto+identidade, geração monotônica e restauração de foco por linha.
 - **Where**: Radar/Application/SelectionStore.swift
 - **Depends on**: C01 após T12 (dependências anteriores transitivas).
@@ -303,7 +303,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T14 — Agendamento limitado
 
-- **Status**: Prepared — BUILD + REVIEW do autor PASS; revisão independente indisponível por limite de uso; ligação aos providers/sleep real posterior; docs/evidence/T14.md.
+- **Status**: Prepared — BUILD + REVIEW independente após C04 PASS; integração completa/sleep real posteriores em T32; docs/evidence/T14.md e C04.md.
 - **What**: Implementar elegibilidade por origem/escopo, coalescência, sleep/wake e backoff com cancelamento.
 - **Where**: Radar/Application/RefreshScheduler.swift
 - **Depends on**: T13 (dependências anteriores transitivas).
