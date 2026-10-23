@@ -303,7 +303,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T14 — Agendamento limitado
 
-- **Status**: Pending.
+- **Status**: Prepared — BUILD + REVIEW do autor PASS; revisão independente indisponível por limite de uso; ligação aos providers/sleep real posterior; docs/evidence/T14.md.
 - **What**: Implementar elegibilidade por origem/escopo, coalescência, sleep/wake e backoff com cancelamento.
 - **Where**: Radar/Application/RefreshScheduler.swift
 - **Depends on**: T13 (dependências anteriores transitivas).
