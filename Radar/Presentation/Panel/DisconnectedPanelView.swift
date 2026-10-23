@@ -19,10 +19,7 @@ struct DisconnectedPanelView: View {
             HStack(alignment: .top, spacing: RadarTheme.Layout.contentPadding) {
                 JiraListView(store: store)
                 Rectangle().fill(RadarTheme.separator).frame(width: 1)
-                disconnectedSource(
-                    title: "GitHub", brand: .github, color: RadarTheme.githubAccent,
-                    subtitle: "Conta não qualificada", message: "Use o gh existente para consultar PRs e revisões."
-                )
+                GitHubListView(store: store)
             }
             .frame(maxHeight: .infinity)
 
@@ -39,28 +36,4 @@ struct DisconnectedPanelView: View {
         .foregroundStyle(RadarTheme.primaryText)
     }
 
-    private func disconnectedSource(
-        title: String, brand: SourceBrandMark.Brand, color: Color, subtitle: String, message: String
-    ) -> some View {
-        VStack(alignment: .leading, spacing: RadarTheme.Layout.sectionSpacing) {
-            HStack(spacing: 12) {
-                SourceBrandMark(brand: brand)
-                    .frame(width: RadarTheme.Layout.sourceSymbolSize, height: RadarTheme.Layout.sourceSymbolSize)
-                    .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(title).font(RadarTheme.Typography.heading).foregroundStyle(color)
-                    Text(subtitle).font(RadarTheme.Typography.caption).foregroundStyle(RadarTheme.secondaryText)
-                }
-            }
-            Text(message)
-                .font(RadarTheme.Typography.body)
-                .foregroundStyle(RadarTheme.secondaryText)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            Text("Use Configurações no menu Radar.")
-                .font(RadarTheme.Typography.caption)
-                .foregroundStyle(RadarTheme.secondaryText)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.top, 8)
-    }
 }

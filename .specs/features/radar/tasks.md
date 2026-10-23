@@ -345,7 +345,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T17 — Lista GitHub
 
-- **Status**: Pending.
+- **Status**: Prepared — BUILD + revisão visual CUA desconectada PASS; PRs/status reais posteriores; docs/evidence/T17.md.
 - **What**: Criar lista de PRs com repo, responsabilidade e status separados sem barra colorida.
 - **Where**: Radar/Presentation/GitHub/GitHubListView.swift
 - **Depends on**: T16 (dependências anteriores transitivas).
