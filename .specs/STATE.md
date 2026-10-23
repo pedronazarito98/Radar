@@ -125,10 +125,10 @@
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote2, T10 preparado com BUILD/REVIEW PASS; writer único batch_2_resume, revisão independente domain_review.
-- **Completed**: Lote1 em docs/handoffs/batch-01.md. T08 eded612; T09 2ee8cde; T10 modelos PR/CI/revisão com C1.3 e evidência própria; hash entra no manifesto após commit.
-- **In-progress**: T11 próximo. T05/T07 conservaram confirmação humana delimitada em evidências, código observado 5fe9ecb.
-- **Next step**: T11–T14 sequenciais no domínio/Application; nenhum relaunch necessário. Preservar C1 e refinamentos C1.1–C1.3, AD-009–AD-015.
+- **Phase / Task**: Lote2, T11 preparado com BUILD/REVIEW PASS; writer único batch_2_resume, revisão independente domain_review.
+- **Completed**: Lote1 em docs/handoffs/batch-01.md. T08 eded612; T09 2ee8cde; T10 1fb9d4e; T11 snapshots/contagem/status ortogonais; hash entra no manifesto após commit.
+- **In-progress**: T12 próximo. Cobertura vazia/toda failed não é novo sucesso; T12 deve preservar dados/freshness anteriores. T05/T07 conservam confirmação humana delimitada em evidências.
+- **Next step**: T12–T14 sequenciais no domínio/Application; nenhum relaunch necessário. Preservar C1 e refinamentos C1.1–C1.3, AD-009–AD-015.
 - **Blockers**: T04 modos específicos e T07 Reduzir Movimento NOT-RUN; lote1/aceite não concluídos. Providers/escopos/política Jira pendentes; domínio é preparação independente sob AD-013.
-- **Uncommitted files**: Entrega T10 e evidência própria em preparação de commit atômico; nenhum dado corporativo.
+- **Uncommitted files**: Entrega T11 e evidência própria em preparação de commit atômico; nenhum dado corporativo.
 - **Branch**: feat/radar-v1-local; sem remote.

@@ -261,7 +261,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T11 — Snapshots e contagem
 
-- **Status**: Pending.
+- **Status**: Prepared — gate local BUILD + REVIEW independente PASS; precondições dos consumidores registradas em docs/evidence/T11.md; dependências parciais sob AD-013.
 - **What**: Definir snapshot imutável, completude, contagem e conexão/refresh/problema/freshness ortogonais.
 - **Where**: Radar/Domain/SourceSnapshot.swift
 - **Depends on**: T10 (dependências anteriores transitivas).
