@@ -304,3 +304,7 @@ Publicado pelo root após leitura dos consumidores e acordo com relations_readin
 - **Referência do cofre:** T34 confirma a persistência local do UUID próprio antes do save no Keychain; falha de persistência impede a gravação do segredo. Reinício recupera somente essa referência e preferências não secretas, mantendo conexão inativa até ação explícita. Remoção negada conserva referência para repetir; só remover a referência após remoção/no-item confirmado. Não persistir payloads remotos ou token. Nenhum acesso automático ao Keychain.
 
 Esses são contratos de implementação, não evidência de execução com contas. Gates LIVE e de consentimento permanecem NOT-RUN até observação humana real.
+
+### Ocupação de escopos no scheduler integrado
+
+Acordo root/integration_review para T32: “consulta em voo” de R15.1 significa operação/lote, não apenas um request. Cada Entry declara o conjunto de SourceScope que usa. start reserva todos atomicamente somente quando livres e elegíveis; um mapa de ocupação por SourceScope/runID é independente de kind e contextID. Relação mista ocupa seus escopos Jira/GitHub; listas independentes continuam podendo avançar em paralelo. remove/cancel/context switch não liberam ocupação antes do término real; finish do runID correspondente libera e reagenda aguardantes. As dependências de cooldown derivam das origens desses escopos. Não manter timer imediato repetindo start enquanto ocupado. A serialização do transporte gh continua como fronteira adicional para consultas explícitas de conexão e consumidores.
