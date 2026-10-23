@@ -1,8 +1,8 @@
 # Radar — V1 pessoal local
 
-**22/10/2026 · Implementação local autorizada · T01–T02 concluídas**
+**23/10/2026 · Implementação local em andamento · Integrações em preparação**
 
-A V1 será pessoal: um app nativo para macOS 27 que reúne seus cards do Jira Cloud e PRs do GitHub.com usando o gh existente. O notch fica fechado com indicadores; um clique abre as duas colunas e a faixa inferior conecta tarefa e código.
+A V1 é pessoal: um app nativo para macOS 27 que reúne seus cards do Jira Cloud e PRs do GitHub.com usando o gh existente. O notch fica fechado com indicadores; um clique abre as duas colunas e a faixa inferior conecta tarefa e código.
 
 A identidade visual canônica é a revisão 3: superfície preta, seleção cinza, símbolos/rótulos claros e nenhuma borda lateral colorida. As imagens estão incluídas neste pacote.
 
@@ -20,11 +20,11 @@ A identidade visual canônica é a revisão 3: superfície preta, seleção cinz
 | Estados | Fase do PR, CI e revisão separados; total pessoal independente do número de vínculos. |
 | Entrega | Bundle local pessoal, qualificado pelo Finder. Auth/distribuição pública recebem especificação própria depois. |
 
-Stack, método Jira e configuração pessoal sem App Sandbox com assinatura/Hardened Runtime são **recomendações**, sujeitas à qualificação técnica e à aceitação do plano. Não foram alteradas configurações neste Mac.
+O target local usa Swift 6, SwiftUI/AppKit, assinatura ad-hoc e Hardened Runtime sem App Sandbox, conforme AD-010. O método Jira depende da política da conta e da entrada segura pelo usuário. Não foram instaladas ferramentas, publicadas versões ou alteradas configurações globais.
 
 O adapter gh verifica a identidade no começo e no fim de cada lote. Como a autenticação é administrada externamente pelo CLI, a V1 pressupõe uma conta ativa durante a sincronização; trocas externas rápidas de conta não têm garantia transacional. Essa limitação e a alternativa futura de auth próprio estão documentadas no design.
 
-## Sequência proposta
+## Sequência de implementação
 
 | Lote | Tarefas | Entrega |
 |---|---|---|
@@ -35,7 +35,7 @@ O adapter gh verifica a identidade no começo e no fim de cada lote. Como a aute
 | 5. Relações e recuperação | T29–T35 | Card ↔ PR, proteção contra respostas atrasadas, reconexão e ciclo de dados. |
 | 6. Qualificação | T36–T42 | Integração final, destinos, displays, fluidez, acessibilidade e bundle pessoal. |
 
-São **42 tarefas**, **28 requisitos** e **56 critérios de aceite**. As fases não representam dias estimados. A primeira tarefa qualifica ambiente e destino; a duração só poderá ser ajustada com essa evidência.
+São **42 tarefas**, **28 requisitos** e **56 critérios de aceite**. As fases não representam dias estimados. A prontidão foi qualificada em T01; cada entrega conserva seus gates e limites no manifesto.
 
 ## Como os subagentes trabalham
 
@@ -70,7 +70,7 @@ A regra do usuário impede criar testes, arquivos de teste ou mocks. O plano usa
 
 Os gates de uso real incluem recorte/foco, Jira e GitHub, relação bidirecional, teclado/VoiceOver/Reduzir Movimento, 30 ciclos de interação e lançamento pelo Finder. Condições externas não reproduzidas são registradas separadamente; revisão estática não comprova fluidez ou funcionamento no hardware.
 
-T01 qualificou o ambiente. T02 criou o target nativo e passou build, assinatura local e início de processo. O usuário confirmou abertura das configurações e encerramento normalmente; a UI-base T02 está validada nessa maturidade, sem painel ou contas. Lint e testes não rodaram. O repositório permanece sem remote.
+A base nativa, domínio e apresentação foram implementados; os gates de runtime permanecem delimitados por tarefa. O usuário confirmou menu/configurações/encerramento, recorte/cliques, foco/transições e escolha do gh. A apresentação desconectada passou por build e interação local; C02/C03 corrigiram achados da revisão independente. T22 acrescentou o cofre próprio, revisado sem executar Keychain. Integrações reais, relações, acessibilidade, desempenho e bundle Release continuam em preparação ou aguardam evidência. Isso não é aceite da V1. Estado atual em [.specs/STATE.md](.specs/STATE.md) e [manifesto](docs/evidence/manifest.md). Lint e testes não rodaram. O repositório permanece sem remote.
 
 Para abrir o bundle local: `./script/build_and_run.sh`. Detalhes e limites em docs/readiness.md.
 
