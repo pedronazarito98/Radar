@@ -34,7 +34,10 @@ struct JiraHTTPTransport: Sendable {
             case 429:
                 throw JiraConnectionError.source(.rateLimited(
                     retryAfter: retryDate(http.value(forHTTPHeaderField: "Retry-After")),
-                    resetAt: http.value(forHTTPHeaderField: "X-RateLimit-Reset").flatMap { ISO8601DateFormatter().date(from: $0) }))
+                    resetAt: resetDate(http.value(forHTTPHeaderField: "X-RateLimit-Reset"))))
+            case 503: throw JiraConnectionError.source(.serviceUnavailable(retryAfter: retryDate(http.value(forHTTPHeaderField: "Retry-After"))))
+            case 500...599 where http.value(forHTTPHeaderField: "Retry-After") != nil:
+                throw JiraConnectionError.source(.serviceUnavailable(retryAfter: retryDate(http.value(forHTTPHeaderField: "Retry-After"))))
             default: throw JiraConnectionError.source(.remoteFailure(statusCode: http.statusCode))
             }
             let cap = 5 * 1_024 * 1_024
@@ -51,6 +54,15 @@ struct JiraHTTPTransport: Sendable {
         catch let error as URLError {
             throw JiraConnectionError.source(error.code == .timedOut ? .timeout : error.code == .cancelled ? .cancelled : .networkFailure)
         } catch { throw JiraConnectionError.source(.transportUnavailable) }
+    }
+
+    private func resetDate(_ value: String?) -> Date? {
+        guard let value else { return nil }
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let date = formatter.date(from: value) { return date }
+        formatter.formatOptions = [.withInternetDateTime]
+        return formatter.date(from: value)
     }
 
     private func retryDate(_ value: String?) -> Date? {

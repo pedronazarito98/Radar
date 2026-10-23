@@ -858,3 +858,11 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 - **Depends on / sequência**: T23; antes T24; contrato C1.6 publicado.
 - **Requirement / Gate**: R15/R27; BUILD + revisão independente. Sem testes/mocks.
 - **Commit**: Atômico em pt-BR.
+
+### C05 — Espera por indisponibilidade temporária
+
+- **Status**: Prepared — BUILD/REVIEW independente PASS; runtime NOT-RUN. docs/evidence/C05.md.
+- **What / Where**: SourceProblem/SourceStatusText/RefreshOutcome e JiraHTTPTransport preservam espera5xx conforme C1.7.
+- **Depends on / sequência**: C04; antes T24.
+- **Requirement / Gate**: R15/R27; BUILD + revisão independente. Sem testes/mocks.
+- **Commit**: Atômico em pt-BR.

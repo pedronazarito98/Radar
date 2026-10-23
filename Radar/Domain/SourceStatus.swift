@@ -6,6 +6,7 @@ enum SourceProblem: Equatable, Sendable {
     case permissionDenied
     case singleSignOnRequired
     case rateLimited(retryAfter: Date?, resetAt: Date?)
+    case serviceUnavailable(retryAfter: Date?)
     case timeout
     case cancelled
     case invalidResponse

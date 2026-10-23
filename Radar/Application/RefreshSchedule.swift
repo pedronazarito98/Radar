@@ -24,8 +24,13 @@ struct RefreshOutcome: Sendable {
     /// Every query contributes; the problem chosen for UI is not a retry policy.
     func retryDeadline(at now: Date) -> Date? {
         problems.compactMap { problem -> Date? in
-            guard case let .rateLimited(retryAfter, resetAt) = problem else { return nil }
-            return [retryAfter, resetAt].compactMap { $0 }.max()
+            let deadlines: [Date?]
+            switch problem {
+            case let .rateLimited(retryAfter, resetAt): deadlines = [retryAfter, resetAt]
+            case let .serviceUnavailable(retryAfter): deadlines = [retryAfter]
+            default: return nil
+            }
+            return deadlines.compactMap { $0 }.max()
                 .map { max($0, now.addingTimeInterval(1)) }
                 ?? now.addingTimeInterval(60)
         }.max()

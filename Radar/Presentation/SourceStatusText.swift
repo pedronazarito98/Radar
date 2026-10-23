@@ -26,6 +26,7 @@ enum SourceStatusText {
         case .permissionDenied: "Acesso não permitido"
         case .singleSignOnRequired: "Autorização SSO necessária"
         case .rateLimited: "Limite de consultas; aguardando nova tentativa"
+        case .serviceUnavailable: "Serviço temporariamente indisponível"
         case .timeout: "Tempo de consulta esgotado"
         case .cancelled: "Consulta interrompida"
         case .invalidResponse: "Resposta não pôde ser validada"
