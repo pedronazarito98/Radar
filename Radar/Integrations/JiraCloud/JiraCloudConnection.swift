@@ -87,14 +87,40 @@ actor JiraCloudConnection {
         return data
     }
 
+    func readIssue(_ key: JiraIssueKey, expectedConnectionID: ConnectionID, budget: RequestBudget) async throws -> Data {
+        guard let token, let qualified, qualified.connectionID == expectedConnectionID,
+              qualified.configuration.projectKeys.contains(key.projectKey) else {
+            throw JiraConnectionError.source(.authenticationRequired)
+        }
+        let operation = operationID
+        guard await budget.consume(reserving: 1) else { throw JiraConnectionError.source(.resourceLimit) }
+        let remaining = await budget.timeRemaining.components
+        let timeout = min(15, Double(remaining.seconds) + Double(remaining.attoseconds) / 1e18)
+        let query = [URLQueryItem(name: "fields", value: "summary,status,project,assignee,updated"),
+                     URLQueryItem(name: "updateHistory", value: "false")]
+        let request = try authenticatedRequest(configuration: qualified.configuration, cloudID: qualified.cloudID,
+            token: token, path: "issue/" + key.rawValue, query: query)
+        try ensureCurrent(operation)
+        let data = try await transport.get(request, timeout: timeout)
+        try ensureCurrent(operation)
+        return data
+    }
+
     private func ensureCurrent(_ operation: UUID) throws {
         guard operationID == operation, !Task.isCancelled else { throw JiraConnectionError.source(.cancelled) }
     }
 
     private func authenticatedRequest(configuration: JiraConnectionConfiguration, cloudID: UUID,
                                       token: String, path: String, query: [URLQueryItem] = []) throws -> URLRequest {
-        guard ["myself", "search/jql"].contains(path) else { throw JiraConnectionError.source(.capabilityUnavailable) }
-        let allowedNames: Set<String> = ["jql", "fields", "maxResults", "nextPageToken"]
+        let issueKey = path.hasPrefix("issue/") ? JiraIssueKey(String(path.dropFirst(6))) : nil
+        guard ["myself", "search/jql"].contains(path) || issueKey.map({ configuration.projectKeys.contains($0.projectKey) }) == true else {
+            throw JiraConnectionError.source(.capabilityUnavailable)
+        }
+        let allowedNames: Set<String> = issueKey == nil
+            ? ["jql", "fields", "maxResults", "nextPageToken"] : ["fields", "updateHistory"]
+        if issueKey != nil, query.first(where: { $0.name == "updateHistory" })?.value != "false" {
+            throw JiraConnectionError.source(.invalidResponse)
+        }
         guard query.allSatisfy({ allowedNames.contains($0.name) }), Set(query.map(\.name)).count == query.count else {
             throw JiraConnectionError.source(.invalidResponse)
         }

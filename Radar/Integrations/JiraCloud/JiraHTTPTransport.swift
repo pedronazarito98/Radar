@@ -12,20 +12,22 @@ private final class JiraSessionDelegate: NSObject, URLSessionTaskDelegate, Senda
 }
 
 struct JiraHTTPTransport: Sendable {
-    func get(_ request: URLRequest) async throws -> Data {
+    func get(_ request: URLRequest, timeout: TimeInterval = 15) async throws -> Data {
+        guard timeout.isFinite, timeout > 0, timeout <= 15 else { throw JiraConnectionError.source(.timeout) }
+        var request = request
+        request.timeoutInterval = timeout
         let configuration = URLSessionConfiguration.ephemeral
         configuration.urlCache = nil
         configuration.httpCookieStorage = nil
         configuration.urlCredentialStorage = nil
         configuration.httpShouldSetCookies = false
         configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
-        configuration.timeoutIntervalForRequest = 15
-        configuration.timeoutIntervalForResource = 15
+        configuration.timeoutIntervalForRequest = timeout
+        configuration.timeoutIntervalForResource = timeout
         let session = URLSession(configuration: configuration, delegate: JiraSessionDelegate(), delegateQueue: nil)
         defer { session.invalidateAndCancel() }
         do {
             let (bytes, response) = try await session.bytes(for: request)
-            try Task.checkCancellation()
             guard let http = response as? HTTPURLResponse else { throw JiraConnectionError.source(.invalidResponse) }
             switch http.statusCode {
             case 200: break
@@ -40,6 +42,8 @@ struct JiraHTTPTransport: Sendable {
                 throw JiraConnectionError.source(.serviceUnavailable(retryAfter: retryDate(http.value(forHTTPHeaderField: "Retry-After"))))
             default: throw JiraConnectionError.source(.remoteFailure(statusCode: http.statusCode))
             }
+            // Preserve received rate/availability control errors even if cancellation arrived with headers.
+            try Task.checkCancellation()
             let cap = 5 * 1_024 * 1_024
             guard response.expectedContentLength <= cap else { throw JiraConnectionError.source(.resourceLimit) }
             var data = Data()

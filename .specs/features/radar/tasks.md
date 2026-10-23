@@ -527,7 +527,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T30 — Resolução de relações
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL; BUILD e revisão independente PASS; LIVE-Relações NOT-RUN. Evidência docs/evidence/T30.md.
 - **What**: Resolver M:N com proveniência e orçamento: reutilizar PRs conhecidos e consultar lista de PRs abertos dos repos autorizados; obter card referenciado quando necessário.
 - **Where**: Radar/Application/Relations/RelationResolver.swift
 - **Depends on**: T29 (dependências anteriores transitivas).

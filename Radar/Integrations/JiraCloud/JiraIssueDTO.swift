@@ -45,10 +45,14 @@ struct JiraIssueDTO: Decodable {
     struct Assignee: Decodable { let accountId: String; let displayName: String? }
 
     func item(connection: JiraQualifiedConnection) -> JiraWorkItem? {
+        guard fields.assignee?.accountId == connection.accountID, fields.status.statusCategory.key != "done" else { return nil }
+        return contextualItem(connection: connection)
+    }
+
+    func contextualItem(connection: JiraQualifiedConnection) -> JiraWorkItem? {
         guard let site = JiraSiteIdentity(cloudID: connection.cloudID.uuidString.lowercased()),
               let identity = JiraIdentity(site: site, issueID: id), let key = JiraIssueKey(key),
               fields.project.key == key.projectKey, connection.configuration.projectKeys.contains(key.projectKey),
-              fields.assignee?.accountId == connection.accountID, fields.status.statusCategory.key != "done",
               !fields.status.id.isEmpty, !fields.status.name.isEmpty, !fields.project.id.isEmpty else { return nil }
         return JiraWorkItem(id: identity, key: key, summary: fields.summary,
             status: JiraWorkStatus(id: fields.status.id, name: fields.status.name,
