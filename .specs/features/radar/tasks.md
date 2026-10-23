@@ -247,7 +247,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T10 — Modelo de PR e estados
 
-- **Status**: Pending.
+- **Status**: Prepared — gate local BUILD + REVIEW independente PASS; C1.3 aplicado após publicação AD-015; dependências manuais parciais sob AD-013; docs/evidence/T10.md.
 - **What**: Representar PR, responsabilidades, repo e detalhes com lifecycle, CI e revisão independentes.
 - **Where**: Radar/Domain/PullRequestItem.swift
 - **Depends on**: T09 (dependências anteriores transitivas).
