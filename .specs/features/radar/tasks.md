@@ -842,3 +842,11 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 - **Depends on / sequência**: T21; correção de T18/T21 antes de T22.
 - **Requirement / Gate**: R07/R17; BUILD + revisão independente. Nenhum teste/mock.
 - **Commit**: Atômico em pt-BR, preservando limites de execução.
+
+### C03 — Conteúdo e falha de relações ortogonais
+
+- **Status**: Prepared — BUILD/REVIEW independente PASS; runtime real NOT-RUN. docs/evidence/C03.md.
+- **What / Where**: Preservar relações observadas com refresh/problema em Presentation/Details.
+- **Depends on / sequência**: C02; correção T18 antes de T22.
+- **Requirement / Gate**: R13; BUILD + revisão independente. Sem testes/mocks.
+- **Commit**: Atômico em pt-BR.

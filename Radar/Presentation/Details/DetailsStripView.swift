@@ -77,7 +77,12 @@ struct DetailsStripView: View {
             Text("Consultando conexões…")
         case .failed(let problem):
             Text(SourceStatusText.message(for: problem))
-        case let .observed(items, coverage, scope):
+        case let .observed(items, coverage, scope, isRefreshing, problem):
+            if isRefreshing { Text("Atualizando conexões…") }
+            if let problem {
+                Text("Conexões anteriores · \(SourceStatusText.message(for: problem))")
+                    .foregroundStyle(RadarTheme.attention)
+            }
             Text(scope).foregroundStyle(RadarTheme.secondaryText)
             if coverage != .complete {
                 Text("Resultado parcial ou indisponível; podem existir outros vínculos.")

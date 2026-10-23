@@ -10,7 +10,7 @@ struct RelatedWorkPresentation: Identifiable {
 enum RelationPresentation {
     case notQueried
     case loading
-    case observed(items: [RelatedWorkPresentation], coverage: ObservationCoverage, scope: String)
+    case observed(items: [RelatedWorkPresentation], coverage: ObservationCoverage, scope: String, isRefreshing: Bool = false, problem: SourceProblem? = nil)
     case failed(SourceProblem)
 }
 
