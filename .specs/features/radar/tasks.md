@@ -275,7 +275,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T12 — Estado principal
 
-- **Status**: Pending.
+- **Status**: Prepared — gate local BUILD + REVIEW independente PASS; publicação/status/término guardados; dependências parciais sob AD-013; docs/evidence/T12.md.
 - **What**: Criar estado observável no MainActor com snapshots por contexto, ordenação apresentada e invalidação.
 - **Where**: Radar/Application/RadarStore.swift
 - **Depends on**: T11 (dependências anteriores transitivas).

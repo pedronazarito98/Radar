@@ -5,7 +5,7 @@ enum WorkSource: Hashable, Sendable {
     case github
 }
 
-enum PersonalWorkQuery: Hashable, Sendable {
+enum PersonalWorkQuery: Hashable, CaseIterable, Sendable {
     case assignedJiraWork
     case authoredPullRequests
     case assignedPullRequests

@@ -60,4 +60,12 @@ struct SourceSnapshot<Item: SourceSnapshotItem>: Equatable, Sendable {
     }
 
     var count: Count { Count(snapshot: self) }
+
+    /// Stable query order prevents dictionary iteration from choosing the displayed problem.
+    var firstProblem: SourceProblem? {
+        for query in PersonalWorkQuery.allCases {
+            if case let .failed(problem) = queryCoverage[query] { return problem }
+        }
+        return nil
+    }
 }
