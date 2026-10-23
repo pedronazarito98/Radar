@@ -33,3 +33,4 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 | T23 | cb9c140 | Prepared/PARTIAL; BUILD/REVIEW independente PASS; LIVE-Jira NOT-RUN | T23.md |
 | C04 | 3b8a1a6 | BUILD/REVIEW independente PASS; runtime NOT-RUN | C04.md |
 | C05 | 2eed4b3 | BUILD/REVIEW independente PASS; runtime NOT-RUN | C05.md |
+| T24 | 330d241 | Prepared/PARTIAL; BUILD/REVIEW independente PASS; LIVE-Jira NOT-RUN | T24.md |

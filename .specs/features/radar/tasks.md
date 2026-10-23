@@ -457,7 +457,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T25 — Resolução do gh
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL — BUILD/REVIEW independente PASS; UI-gh/Finder NOT-RUN. docs/evidence/T25.md.
 - **What**: Resolver caminho absoluto escolhido/padrões permitidos e qualificar binário, versão e execução fora do terminal; sem ler auth.
 - **Where**: Radar/Integrations/GitHubCLI/GitHubExecutableResolver.swift
 - **Depends on**: T24 (dependências anteriores transitivas).
