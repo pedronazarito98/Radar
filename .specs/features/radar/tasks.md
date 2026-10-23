@@ -429,7 +429,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T23 — Conexão Jira Cloud
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL — BUILD + REVIEW independente PASS; LIVE-Jira NOT-RUN. docs/evidence/T23.md.
 - **What**: Qualificar método permitido, token/gateway/site/cloudID e identidade; expor somente capacidade e erro sanitizado.
 - **Where**: Radar/Integrations/JiraCloud/JiraCloudConnection.swift
 - **Depends on**: T22 (dependências anteriores transitivas).

@@ -3,6 +3,7 @@ import AppKit
 @MainActor
 final class RadarAppDelegate: NSObject, NSApplicationDelegate {
     let store = RadarStore()
+    let jiraConnection = JiraCloudConnection()
     private(set) var panelController: NotchPanelController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {

@@ -28,3 +28,5 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 | T21 | 09450fd | PARTIAL; BUILD/REVIEW autor/UI-base desconectada PASS | T21.md |
 | C02 | b5b957b | BUILD/REVIEW independente PASS; runtime preenchido NOT-RUN | C02.md |
 | C03 | ef973f2 | BUILD/REVIEW independente PASS; runtime relações NOT-RUN | C03.md |
+
+| T22 | 671efae | Prepared; BUILD/REVIEW independente PASS; cofre runtime NOT-RUN | T22.md |

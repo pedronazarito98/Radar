@@ -21,7 +21,7 @@ struct RadarApp: App {
         }
 
         Settings {
-            ConnectionsSettingsView(store: appDelegate.store)
+            ConnectionsSettingsView(store: appDelegate.store, jiraConnection: appDelegate.jiraConnection)
         }
     }
 }

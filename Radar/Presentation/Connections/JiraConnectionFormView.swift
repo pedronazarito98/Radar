@@ -2,7 +2,12 @@ import AppKit
 import SwiftUI
 
 struct JiraConnectionFormView: View {
-    let status: SourceStatus
+    let store: RadarStore
+    let connection: JiraCloudConnection
+    @State private var operation: Task<Void, Never>?
+    @State private var generation = UUID()
+    @State private var message: String?
+    @State private var hasSavedReference = false
     @State private var site = ""
     @State private var email = ""
     @State private var projects = ""
@@ -13,7 +18,7 @@ struct JiraConnectionFormView: View {
     var body: some View {
         Form {
             Section {
-                Text(SourceStatusText.summary(status))
+                Text(SourceStatusText.summary(store.jira.status))
                 Text("Conecte sua conta pessoal do Jira Cloud. O token será guardado somente no Keychain do Radar.")
                     .foregroundStyle(.secondary)
             }
@@ -32,14 +37,90 @@ struct JiraConnectionFormView: View {
                 Toggle("A política da minha organização permite esse método", isOn: $policyAllowsToken)
                 SecureField("Token", text: $token)
                     .textContentType(.password)
-                    .disabled(true)
-                Text("A conexão ainda não está disponível neste build. Não informe o token agora.")
+                    .disabled(!policyAllowsToken || operation != nil || hasSavedReference || store.jira.status.connection == .connected)
+                Text("Informe o token somente aqui. A identidade será validada antes de salvar; consulta de cards exige uma ação separada.")
                     .font(.caption).foregroundStyle(.secondary)
-                Button("Conectar Jira") {}.disabled(true)
+                Button("Conectar Jira", action: connect)
+                    .disabled(!policyAllowsToken || token.isEmpty || operation != nil || hasSavedReference || store.jira.status.connection == .connected)
+                if hasSavedReference || store.jira.status.connection == .connected {
+                    Button("Desconectar e remover token", action: disconnect).disabled(operation != nil)
+                }
+                if let message { Text(message).font(.caption).foregroundStyle(.secondary) }
             }
         }
         .formStyle(.grouped)
-        .onDisappear { token = "" }
-        .onReceive(NotificationCenter.default.publisher(for: NSWindow.willCloseNotification)) { _ in token = "" }
+        .onDisappear(perform: cancelPending)
+        .background(ConnectionWindowCloseObserver(onClose: cancelPending).frame(width: 0, height: 0))
+        .task {
+            let current = generation
+            let saved = await connection.hasSavedReference()
+            guard generation == current, !Task.isCancelled else { return }
+            hasSavedReference = saved
+        }
+    }
+
+    private func connect() {
+        guard let configuration = JiraConnectionConfiguration(site: site, email: email, projects: projects,
+            tokenKind: usesScopedToken ? .scoped : .legacy, policyAllowed: policyAllowsToken) else {
+            message = "Confira site HTTPS atlassian.net, e-mail, projetos e a política da conta."
+            return
+        }
+        let secret = token
+        token = ""
+        let current = UUID(); generation = current
+        message = "Qualificando identidade…"
+        operation = Task {
+            do {
+                let qualified = try await connection.connectAfterUserAction(configuration: configuration, token: secret, attemptID: current)
+                guard generation == current, !Task.isCancelled else { return }
+                store.configureSource(qualified.scope, connection: .connected)
+                hasSavedReference = true
+                message = "Identidade validada e token salvo. Os cards ainda não foram consultados."
+            } catch {
+                let saved = await connection.hasSavedReference()
+                guard generation == current, !Task.isCancelled else { return }
+                hasSavedReference = saved
+                message = JiraConnectionErrorText.message(error)
+            }
+            guard generation == current else { return }
+            operation = nil
+        }
+    }
+
+    private func disconnect() {
+        let current = UUID(); generation = current
+        store.invalidate(.jira)
+        token = ""
+        operation = Task {
+            do {
+                try await connection.removeAfterUserAction()
+                guard generation == current, !Task.isCancelled else { return }
+                hasSavedReference = false
+                message = "Conexão removida."
+            } catch {
+                guard generation == current, !Task.isCancelled else { return }
+                hasSavedReference = true
+                message = "Uso em memória interrompido. Remoção pendente: " + JiraConnectionErrorText.message(error)
+            }
+            guard generation == current else { return }
+            operation = nil
+        }
+    }
+
+    private func cancelPending() {
+        token = ""
+        guard operation != nil else { return }
+        let cancelledAttempt = generation
+        let cancelledOperation = operation
+        generation = UUID()
+        let cancellationGeneration = generation
+        operation?.cancel(); operation = nil
+        Task {
+            await connection.cancelConnection(attemptID: cancelledAttempt)
+            await cancelledOperation?.value
+            let saved = await connection.hasSavedReference()
+            guard generation == cancellationGeneration else { return }
+            hasSavedReference = saved
+        }
     }
 }
