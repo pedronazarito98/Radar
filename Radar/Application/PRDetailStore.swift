@@ -54,13 +54,13 @@ final class PRDetailStore {
     }
 
     @discardableResult
-    func publish(_ details: PRDetails, for request: PRDetailRequestToken) -> Bool {
+    func publish(_ details: PRDetails, problem: SourceProblem? = nil, for request: PRDetailRequestToken) -> Bool {
         guard isCurrent(request), observedHead?.version == details.version,
               observedHead?.lifecycle == details.lifecycle else { return false }
         self.details = details
         activeRequest = nil
         isRefreshing = false
-        problem = nil
+        self.problem = problem
         return true
     }
 

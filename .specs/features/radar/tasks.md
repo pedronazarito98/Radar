@@ -499,7 +499,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T28 — Detalhes de CI e revisão
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL — BUILD/REVIEW independente PASS; LIVE-GitHub NOT-RUN. docs/evidence/T28.md.
 - **What**: Enriquecer apenas seleção relevante com PR/commit/checks/statuses/reviews e SHA observado; aplicar o token headSHA+detailGeneration e as políticas determinísticas C1 de CI/revisão em design.md, mantendo dimensão desconhecida quando a capacidade faltar.
 - **Where**: Radar/Integrations/GitHub/GitHubPRDetailEnricher.swift
 - **Depends on**: T27 (dependências anteriores transitivas).

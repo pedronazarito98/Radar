@@ -3,6 +3,7 @@ import SwiftUI
 struct RadarContentView: View {
     let store: RadarStore
     let focus: RadarFocusCoordinator
+    let details: GitHubDetailController
     let close: () -> Void
     @FocusState private var focused: RadarFocusTarget?
 
@@ -42,6 +43,8 @@ struct RadarContentView: View {
         .padding(.bottom, RadarTheme.Layout.contentPadding)
         .foregroundStyle(RadarTheme.primaryText)
         .onAppear { focused = focus.requestedTarget }
+        .task(id: store.selection.token) { details.selectionChanged() }
+        .onDisappear { details.stop() }
         .onChange(of: focused) { _, value in focus.focusedTarget = value }
         .onChange(of: focus.requestGeneration) { _, generation in
             Task { @MainActor in
