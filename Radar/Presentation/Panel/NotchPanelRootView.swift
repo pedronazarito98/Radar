@@ -4,6 +4,7 @@ struct NotchPanelRootView: View {
     let store: RadarStore
     let focus: RadarFocusCoordinator
     let related: RelatedItemsCoordinator
+    let navigation: NavigationCoordinator
     let isExpanded: Bool
     let showsContent: Bool
     let contentOpacity: CGFloat
@@ -34,7 +35,7 @@ struct NotchPanelRootView: View {
                 .position(x: cameraRect.maxX + RadarTheme.Layout.compactWingWidth / 2, y: cameraRect.height / 2)
 
             if showsContent {
-                RadarContentView(store: store, focus: focus, related: related, close: toggle)
+                RadarContentView(store: store, focus: focus, related: related, navigation: navigation, close: toggle)
                     .padding(.top, cameraRect.height + RadarTheme.Layout.headerSpacing)
                     .opacity(contentOpacity)
                     .allowsHitTesting(isExpanded)

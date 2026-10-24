@@ -46,3 +46,4 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 | T33 | 791c6ac | BUILD/REVIEW independente PASS; LIVE/recuperação real NOT-RUN | T33.md |
 | T34 | 965578b | BUILD/REVIEW persistência PASS; reinício/cofre MANUAL NOT-RUN | T34.md |
 | T35 | 066b86b | BUILD/REVIEW independente PASS; LIVE-Origens/shutdown NOT-RUN | T35.md |
+| T36 | d3f95f7 | BUILD/REVIEW independente PASS; UI-integrada/LIVE NOT-RUN | T36.md |

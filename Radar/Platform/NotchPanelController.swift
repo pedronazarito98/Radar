@@ -13,17 +13,19 @@ final class NotchPanelController {
     private let interaction: PanelInteractionController
     private let animator = NotchFrameAnimator()
     private let geometry: ScreenGeometry
+    private let navigation: NavigationCoordinator
     private let related: RelatedItemsCoordinator
     private let store: RadarStore
     private let focus: RadarFocusCoordinator
     private let hostingView: NSHostingView<NotchPanelRootView>
     private var contentOpacity: CGFloat = 0
 
-    init(geometry: ScreenGeometry, store: RadarStore, related: RelatedItemsCoordinator) {
+    init(geometry: ScreenGeometry, store: RadarStore, related: RelatedItemsCoordinator, navigation: NavigationCoordinator) {
         self.geometry = geometry
         self.store = store
         self.related = related
-        focus = RadarFocusCoordinator(store: store)
+        self.navigation = navigation
+        focus = RadarFocusCoordinator(store: store, navigation: navigation)
         panel = RadarPanel(
             contentRect: .zero,
             styleMask: [.borderless, .nonactivatingPanel],
@@ -32,7 +34,7 @@ final class NotchPanelController {
         )
         interaction = PanelInteractionController(panel: panel)
         hostingView = NSHostingView(rootView: NotchPanelRootView(
-            store: store, focus: focus, related: related,
+            store: store, focus: focus, related: related, navigation: navigation,
             isExpanded: false, showsContent: false, contentOpacity: 0,
             cameraRect: .zero, toggle: {}, escape: {}
         ))
@@ -50,6 +52,7 @@ final class NotchPanelController {
         panel.contentView = hostingView
         panel.onEscape = { [weak self] in self?.handleEscape() }
         interaction.onDismiss = { [weak self] reason in self?.dismiss(reason: reason) }
+        navigation.didOpenDestination = { [weak self] in self?.dismiss(reason: .externalDestination) }
     }
 
     func toggle() {
@@ -92,6 +95,8 @@ final class NotchPanelController {
     }
 
     func invalidate() {
+        navigation.cancel()
+        navigation.didOpenDestination = nil
         focus.clear()
         store.setPanelOpen(false)
         animator.cancel()
@@ -159,7 +164,7 @@ final class NotchPanelController {
             NSRect(x: $0.minX - frame.minX, y: frame.maxY - $0.maxY, width: $0.width, height: $0.height)
         } ?? NSRect(x: frame.width / 2, y: 0, width: 0, height: 32)
         hostingView.rootView = NotchPanelRootView(
-            store: store, focus: focus, related: related,
+            store: store, focus: focus, related: related, navigation: navigation,
             isExpanded: isExpanded,
             showsContent: phase != .compact,
             contentOpacity: contentOpacity,

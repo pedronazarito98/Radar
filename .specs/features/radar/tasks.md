@@ -625,7 +625,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T37 — Ações de navegação
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL — BUILD e revisão independente PASS; UI-integrada/navegação real NOT-RUN. Evidência docs/evidence/T37.md.
 - **What**: Implementar abrir/copiar link HTTPS validado por site/host e coordenação de fechamento por destino.
 - **Where**: Radar/Platform/NavigationCoordinator.swift
 - **Depends on**: T36 (dependências anteriores transitivas).

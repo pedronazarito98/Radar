@@ -9,12 +9,15 @@ enum RadarFocusTarget: Hashable {
     case refreshDetails
     case detailsContent
     case related(SelectionKey)
+    case openDestination(SelectionKey)
+    case copyDestination(SelectionKey)
 }
 
 @MainActor
 @Observable
 final class RadarFocusCoordinator {
     let store: RadarStore
+    private let navigation: NavigationCoordinator
     var focusedTarget: RadarFocusTarget?
     private(set) var requestedTarget: RadarFocusTarget?
     private(set) var requestGeneration: UInt64 = 0
@@ -22,7 +25,9 @@ final class RadarFocusCoordinator {
     private(set) var detailScrollGeneration: UInt64 = 0
     private(set) var detailScrollDelta: CGFloat = 0
 
-    init(store: RadarStore) { self.store = store }
+    init(store: RadarStore, navigation: NavigationCoordinator) {
+        self.store = store; self.navigation = navigation
+    }
 
     func request(_ target: RadarFocusTarget?) {
         precondition(requestGeneration < .max, "Focus generation exhausted")
@@ -52,6 +57,8 @@ final class RadarFocusCoordinator {
             switch target {
             case let .row(key): store.repositoryAliases.canonical(key).map(RadarFocusTarget.row)
             case let .related(key): store.repositoryAliases.canonical(key).map(RadarFocusTarget.related)
+            case let .openDestination(key): store.repositoryAliases.canonical(key).map(RadarFocusTarget.openDestination)
+            case let .copyDestination(key): store.repositoryAliases.canonical(key).map(RadarFocusTarget.copyDestination)
             default: target
             }
         }
@@ -82,9 +89,15 @@ final class RadarFocusCoordinator {
         if store.selection.selectedKey != nil {
             if store.jira.status.connection == .connected, store.github.status.connection == .connected,
                !store.relations.isRefreshing { targets.append(.refreshDetails) }
+            if let key = store.selection.selectedKey, navigation.canNavigate(key) {
+                targets += [.openDestination(key), .copyDestination(key)]
+            }
             targets += [.closeDetails, .detailsContent]
             if case let .observed(items, _, _, _, _) = DetailsStripPresentation.current(in: store)?.relations {
-                targets += items.map { .related($0.id) }
+                for item in items {
+                    targets.append(.related(item.id))
+                    if navigation.canNavigate(item.id) { targets += [.openDestination(item.id), .copyDestination(item.id)] }
+                }
             }
         }
         let current = focusedTarget ?? requestedTarget
@@ -131,6 +144,8 @@ final class RadarFocusCoordinator {
                   !store.relations.isRefreshing else { return false }
             refreshDetails()
         case let .related(key): selectRelated(key)
+        case let .openDestination(key): navigation.open(key)
+        case let .copyDestination(key): navigation.copyLink(key)
         case .detailsContent, nil: return false
         }
         return true

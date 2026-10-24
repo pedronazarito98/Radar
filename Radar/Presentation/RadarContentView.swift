@@ -4,6 +4,7 @@ struct RadarContentView: View {
     let store: RadarStore
     let focus: RadarFocusCoordinator
     let related: RelatedItemsCoordinator
+    let navigation: NavigationCoordinator
     let close: () -> Void
     @FocusState private var focused: RadarFocusTarget?
 
@@ -40,7 +41,8 @@ struct RadarContentView: View {
             DetailsStripView(presentation: .current(in: store), close: focus.closeDetails, refresh: related.refresh,
                              canRefresh: store.jira.status.connection == .connected && store.github.status.connection == .connected
                                 && !store.relations.isRefreshing, focused: $focused,
-                             focus: focus, selectRelated: focus.selectRelated)
+                             focus: focus, selectRelated: focus.selectRelated, open: navigation.open, copyLink: navigation.copyLink,
+                             canNavigate: navigation.canNavigate, navigationMessage: navigation.message)
         }
         .padding(.horizontal, RadarTheme.Layout.contentPadding)
         .padding(.bottom, RadarTheme.Layout.contentPadding)
@@ -52,7 +54,8 @@ struct RadarContentView: View {
             related.selectionChanged()
         }
         .onChange(of: store.github.items.map(\.id)) { _, _ in focus.reconcileAliases() }
-        .onDisappear { related.stop() }
+        .onDisappear { related.stop(); navigation.cancel() }
+        .onChange(of: store.selection.token) { _, _ in navigation.cancel() }
         .onChange(of: focused) { _, value in focus.focusedTarget = value }
         .onChange(of: focus.requestGeneration) { _, generation in
             Task { @MainActor in

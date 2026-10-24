@@ -18,6 +18,7 @@ final class AppComposition {
         jira: jiraWork, github: githubWork)
     lazy var lifecycle = DataLifecycleController(store: store, jira: jiraConnection, github: githubConnection,
         jiraWork: jiraWork, githubWork: githubWork, details: githubDetails, relations: relatedItems, refresh: sourceRefresh)
+    lazy var navigation = NavigationCoordinator(store: store, jira: jiraConnection, github: githubConnection)
     private(set) var panelController: NotchPanelController?
 
     private var started = false
@@ -29,7 +30,7 @@ final class AppComposition {
         preferencesLoad = Task { await preferences.load() }
         lifecycle.start()
         guard let geometry = ScreenGeometryResolver().resolve() else { return }
-        panelController = NotchPanelController(geometry: geometry, store: store, related: relatedItems)
+        panelController = NotchPanelController(geometry: geometry, store: store, related: relatedItems, navigation: navigation)
         panelController?.showCompact()
     }
 
