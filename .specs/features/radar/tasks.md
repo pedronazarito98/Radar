@@ -639,7 +639,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T38 — Política de display
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL — BUILD e revisão independente PASS; UI-display/modos reais NOT-RUN. Evidência docs/evidence/T38.md.
 - **What**: Ligar mudanças de tela/escala/resolução, Spaces e fullscreen ao painel único; qualificar comportamento e menu bar alternativo.
 - **Where**: Radar/Platform/DisplayPolicyController.swift
 - **Depends on**: T37 (dependências anteriores transitivas).

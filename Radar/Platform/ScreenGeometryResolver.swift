@@ -1,6 +1,6 @@
 import AppKit
 
-struct ScreenGeometry {
+struct ScreenGeometry: Equatable {
     let displayID: CGDirectDisplayID
     let screenFrame: NSRect
     let visibleFrame: NSRect
@@ -34,20 +34,24 @@ struct ScreenGeometry {
 
 @MainActor
 struct ScreenGeometryResolver {
-    func resolve() -> ScreenGeometry? {
+    func resolve(preferredDisplayID: UInt32? = nil) -> ScreenGeometry? {
         let candidates = NSScreen.screens
-        let screen = candidates.first(where: { cameraFrame(on: $0) != nil })
+        let preferred = preferredDisplayID.flatMap { id in candidates.first { Self.displayID(of: $0) == id } }
+        let screen = preferred ?? candidates.first(where: { cameraFrame(on: $0) != nil })
             ?? NSScreen.main
             ?? candidates.first
         guard let screen else { return nil }
-        let number = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber
         return ScreenGeometry(
-            displayID: number?.uint32Value ?? CGMainDisplayID(),
+            displayID: Self.displayID(of: screen) ?? CGMainDisplayID(),
             screenFrame: screen.frame,
             visibleFrame: screen.visibleFrame,
             backingScale: screen.backingScaleFactor,
             cameraFrame: cameraFrame(on: screen)
         )
+    }
+
+    static func displayID(of screen: NSScreen) -> UInt32? {
+        (screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)?.uint32Value
     }
 
     private func cameraFrame(on screen: NSScreen) -> NSRect? {

@@ -12,7 +12,8 @@ final class NotchPanelController {
     var isExpanded: Bool { phase == .opening || phase == .expanded }
     private let interaction: PanelInteractionController
     private let animator = NotchFrameAnimator()
-    private let geometry: ScreenGeometry
+    private var geometry: ScreenGeometry
+    private var hasAvailableDisplay = true
     private let navigation: NavigationCoordinator
     private let related: RelatedItemsCoordinator
     private let store: RadarStore
@@ -79,7 +80,7 @@ final class NotchPanelController {
     }
 
     func showExpanded() {
-        guard !isExpanded else { return }
+        guard hasAvailableDisplay, !isExpanded else { return }
         store.setPanelOpen(true)
         transition(expanding: true)
         interaction.beginExplicitInteraction()
@@ -92,6 +93,32 @@ final class NotchPanelController {
         interaction.endInteraction(reason: reason)
         guard phase != .compact, phase != .closing else { return }
         transition(expanding: false)
+    }
+
+    func updateGeometry(_ value: ScreenGeometry?) {
+        guard let value else {
+            hasAvailableDisplay = false
+            animator.cancel(); navigation.cancel(); related.stop()
+            focus.clear(); store.setPanelOpen(false)
+            interaction.endInteraction(reason: .outsideClick)
+            phase = .compact; contentOpacity = 0
+            panel.orderOut(nil)
+            return
+        }
+        guard value != geometry || !hasAvailableDisplay else { return }
+        let expanded = isExpanded
+        animator.cancel()
+        geometry = value; hasAvailableDisplay = true
+        phase = expanded ? .expanded : .compact
+        contentOpacity = expanded ? 1 : 0
+        guard let frame = expanded
+            ? geometry.expandedFrame(preferredSize: RadarTheme.Layout.expandedSize)
+            : compactFrame else {
+            panel.orderOut(nil)
+            return
+        }
+        present(frame: frame)
+        if !panel.isVisible { panel.orderFrontRegardless() }
     }
 
     func invalidate() {
@@ -109,7 +136,8 @@ final class NotchPanelController {
     }
 
     private var compactFrame: NSRect? {
-        geometry.compactFrame(
+        guard hasAvailableDisplay else { return nil }
+        return geometry.compactFrame(
             wingWidth: RadarTheme.Layout.compactWingWidth,
             height: geometry.safeTopHeight
         )

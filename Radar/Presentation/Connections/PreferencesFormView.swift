@@ -1,8 +1,8 @@
-import AppKit
 import SwiftUI
 
 struct PreferencesFormView: View {
     let preferences: PreferencesController
+    let displays: DisplayPolicyController
 
     var body: some View {
         Form {
@@ -12,10 +12,12 @@ struct PreferencesFormView: View {
                     set: { value in Task { await preferences.selectDisplay(value) } }
                 )) {
                     Text("Automática — priorizar notch").tag(UInt32?.none)
-                    ForEach(NSScreen.screens, id: \.self) { screen in
-                        if let id = (screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)?.uint32Value {
-                            Text(screen.localizedName).tag(Optional(id))
-                        }
+                    ForEach(displays.availableDisplays) { display in
+                        Text(display.name).tag(Optional(display.id))
+                    }
+                    if let saved = preferences.snapshot.preferredDisplayID,
+                       !displays.availableDisplays.contains(where: { $0.id == saved }) {
+                        Text("Tela salva — indisponível").tag(Optional(saved))
                     }
                 }
                 Text("Se a tela escolhida estiver indisponível, o Radar usa o fallback disponível.")
@@ -44,6 +46,6 @@ struct PreferencesFormView: View {
                 .font(.caption).foregroundStyle(.secondary)
         }
         .formStyle(.grouped)
-        .task { await preferences.load() }
+        .task { displays.refresh(); await preferences.load() }
     }
 }

@@ -8,6 +8,7 @@ struct ConnectionsSettingsView: View {
     let githubWork: GitHubWorkController
     let preferences: PreferencesController
     let lifecycle: DataLifecycleController
+    let displays: DisplayPolicyController
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -18,7 +19,7 @@ struct ConnectionsSettingsView: View {
                     .tabItem { Label("Jira Cloud", systemImage: "square.stack") }
                 GitHubConnectionFormView(status: store.github.status, connection: githubConnection, work: githubWork, preferences: preferences, lifecycle: lifecycle)
                     .tabItem { Label("GitHub.com", systemImage: "chevron.left.forwardslash.chevron.right") }
-                PreferencesFormView(preferences: preferences)
+                PreferencesFormView(preferences: preferences, displays: displays)
                     .tabItem { Label("Preferências", systemImage: "slider.horizontal.3") }
             }
         }
