@@ -695,7 +695,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T42 — Aceite integrado e handoff
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL. 56 registros por critério em docs/evidence/acceptance.md; gates obrigatórios externos NOT-RUN impedem aceite. Verificação fresca será disparada após este commit.
 - **What**: Executar roteiro manual por critério, consolidar manifesto sem dados privados, atualizar estado e preparar pacote de contexto para verificador fresco.
 - **Where**: docs/evidence/acceptance.md; .specs/STATE.md; tasks.md
 - **Depends on**: T41 (dependências anteriores transitivas).

@@ -1,13 +1,13 @@
 # Radar — especificação da V1 pessoal
 
-**Status**: execução local autorizada por AD-009. **Complexidade**: Complex. **Execute**: T01 concluída; demais tarefas conforme tasks.md.  
+**Status**: execução local autorizada por AD-009. **Complexidade**: Complex. **Execute**: implementação local T01–T38 preparada; qualificação parcial T39–T42 conforme tasks.md e acceptance.md.
 **Data**: 22/10/2026. **Contexto**: [context.md](context.md). **Decisões ativas**: [STATE](../../STATE.md).
 
 ## Problema e objetivo
 
 Engenheiros alternam entre Jira e GitHub para saber o que está atribuído a eles, o que exige revisão e como tarefa e código se relacionam. A V1 oferece consulta discreta no notch, com contexto bidirecional e navegação aos serviços.
 
-O alvo confirmado é uso pessoal em macOS 27, Jira Cloud e GitHub.com com gh CLI. A identidade aprovada é Radar revisão 3. A existência/compatibilidade da instalação, SDK, gh e permissões ainda não foi verificada.
+O alvo confirmado é uso pessoal em macOS 27, Jira Cloud e GitHub.com com gh CLI. A identidade aprovada é Radar revisão 3. Ambiente, SDK e gh existente foram qualificados localmente; permissões e funcionamento autenticado das contas continuam pendentes. Evidências em docs/evidence/acceptance.md.
 
 ## Escopo P1
 
@@ -363,7 +363,7 @@ Tabela histórica do plano. AD-009 autoriza implementação local; AD-010 adota 
 | R27 | T11, T14, T23, T24, T26, T27, T28, T33 | Pending |
 | R28 | T19, T23, T24, T26, T27, T28, T37 | Pending |
 
-**Cobertura documental**: 28 requisitos, 56 critérios, todos mapeados. Cobertura executada: zero. Esta matriz não é cobertura automatizada.
+**Cobertura documental**: 28 requisitos, 56 critérios, todos mapeados. Resultados atuais por modo em docs/evidence/acceptance.md. Esta matriz é rastreabilidade de requisitos, não cobertura automatizada nem aceite.
 
 ## Sucesso da V1
 

@@ -100,6 +100,18 @@ A política do usuário exclui testes novos, mocks e sensor de mutação. O veri
 
 Esse texto é uma instrução futura reutilizável, não uma ordem executada nesta etapa.
 
+## Coordenação da execução local — fechamento T42
+
+Autorização AD-009/AD-013 permite implementar localmente e preparar tarefas independentes de gates reais bloqueados. Os handoffs registram cada transferência; código nunca teve dois escritores simultâneos. Root publicou contratos antes dos consumidores e manteve ownership das correções finais/documentação.
+
+- Providers: `providers_writer` encerrou T22–T28 em handoff04, HEAD526b7d4, com revisão independente `integration_review`.
+- Relações/ciclo: `relations_writer` recebeu contexto compartilhado explícito, executou T29–T35 e correções C06/C07; `relations_review` começou com contexto fresco e dialogou diretamente. Handoff05 HEAD6795dc3 liberou ownership.
+- Composição/navegação/display: `native_finish_readiness` recebeu handoff05 e executou T36–T38; `native_final_review` teve contexto fresco e revisou cada diff. Handoff06-implementation HEAD881b050 liberou ownership ao root.
+- Root executou UI, medições delimitadas e T39–T42. `visual_accessibility_review`, sem histórico do autor, comparou capturas reais e V3 em T40. C08 foi escrita apenas pelo root e revisada independentemente por `native_final_review` com metadados do bundle.
+- Após commit T42, root dispara novo verificador com `fork_turns=none`, somente documentos canônicos/árvore/evidências e restrições. Resultado será registrado em docs/evidence/final-verification.md; eventuais correções seguem tarefas atômicas e nova revisão.
+
+Os nomes acima descrevem trabalho realizado e autoria; não são prova de funcionamento autenticado. Gates LIVE, acessibilidade física e demais cenários não observados continuam NOT-RUN. Não foram criados chats externos, publicados conteúdos ou lidas credenciais.
+
 ## Colaboração realizada no planejamento
 
 radar_native_plan e radar_providers_plan herdaram o contexto e conversaram diretamente sobre identidades, snapshots, geração e transporte. Seus acordos foram consolidados em design.md. Um terceiro agente fresco revisará a coerência deste pacote de planejamento. Nenhum deles implementou o app.

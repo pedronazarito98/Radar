@@ -141,11 +141,11 @@
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote6 T36–T38 preparados; handoff docs/handoffs/batch-06-implementation.md. native_finish_readiness encerra escrita e libera ownership ao root para T39–T42.
-- **Completed**: Lote5 preservado em docs/handoffs/batch-05.md, base6795dc3. T36 d3f95f7, T37 d9ed688, T38 5d98465: BUILD Debug/REVIEW independente PASS; UI-integrada/LIVE NOT-RUN.
-- **In-progress**: Nenhuma implementação pendente deste escritor. Composição, navegação explícita e display dinâmico preparados; root conduz UI/medição/Release/aceite. Sem duplicar lifecycle, scheduler, relações ou recuperação já existentes.
-- **Next step**: Root: T39 performance, T40 visual/acessibilidade, T41 Release local, T42 aceite e verificação fresca; incorporar evidência independente já observada pelo root.
-- **Blockers**: Contas/política/escopos, LIVE, cofre/consentimento/reinício, conteúdo real, acessibilidade, movimento reduzido, modos específicos, desempenho e Release permanecem NOT-RUN. Nenhum gate obrigatório dispensado; ver docs/evidence/pending-gates.md.
-- **Persistence**: T34 confirma escrita atômica da referência antes do cofre; startup só lê metadata própria. Agentes não acessam cofre/auth.
-- **Uncommitted files**: Nenhum após commit deste handoff.
-- **Branch**: feat/radar-v1-local; sem remote.
+- **Phase / Task**: Implementação local T01–T38 preparada; T39–T42 qualificação parcial documentada. V1 NÃO ACEITA enquanto gates obrigatórios externos não passarem.
+- **Completed**: Composição d3f95f7, navegação d9ed688, displays 5d98465; persistência/reinício desconectado c952406; performance 23ed6f5; visual independente d26d4db; C08 Release sem get-task-allow 45cafdd; bundle 833c2d9. Builds Debug/Release, revisões por lote, launch pelo caminho completo, gh --version e preferências via UI passaram no limite registrado.
+- **In-progress**: T42 reúne 56 registros em docs/evidence/acceptance.md. Após commit deste relatório, root inicia verificador independente com contexto fresco. Root mantém único ownership para eventuais correções atômicas.
+- **Next step**: Verificação fresca pós-T42; depois somente gates reais disponíveis e correções decorrentes. Não reiniciar implementação nem repetir acesso/auth automaticamente.
+- **Blockers**: Política/site/projetos/repos/contas, LIVE central, Keychain/consentimento/remoção, seleção/links reais, VoiceOver/Reduzir Movimento, 30 ciclos físicos com seleção e modos/displays não observados. Roteiro humano enviado com Release aberto/recolhido; silêncio não é PASS. Ver docs/evidence/pending-gates.md.
+- **Persistence**: UUID próprio persistido antes do cofre; startup metadata-only, retomada explícita. Preferência gh/tela verificada por UI/reinício; cofre não acessado por agentes.
+- **Artifact**: .build/DerivedData/Build/Products/Release/Radar.app; arm64/macOS 27, ad-hoc/runtime, sem App Sandbox/get-task-allow; SHA256 c89e2634a81d942b5af4b7ae9268acf26d08ea722f3b38d3664d3e56d6e23475. Nenhuma publicação/instalação/global change.
+- **Branch**: feat/radar-v1-local; sem remote. Testes/mocks/sensores/Swift lint não executados.

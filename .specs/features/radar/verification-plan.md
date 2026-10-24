@@ -90,7 +90,7 @@ Campos obrigatórios:
 | Status | PASS, FAIL ou NOT-RUN; REVIEW não se disfarça de MANUAL |
 | Limits | O que não foi observado/medido e impacto na alegação |
 
-Somente preencher PASS depois da observação/revisão correspondente. Registro atual de implementação: todos Pending/NOT-RUN, nenhum hash de app.
+Somente preencher PASS depois da observação/revisão correspondente. Resultados atuais de implementação em docs/evidence/acceptance.md e manifest.md; o estado inicial de planejamento era Pending/NOT-RUN.
 
 ## Manifesto final
 
@@ -98,7 +98,7 @@ O futuro acceptance.md reúne uma entrada por subcritério e apontadores para os
 
 O verificador independente confronta a árvore no commit final e o que cada evidência realmente prova. Não reexecuta automaticamente autenticação, não lê logs/auth/Keychain e não pede segredo no chat. Correções seguem o ciclo de coordination.md.
 
-## O que já pode ser verificado nesta etapa
+## Limite histórico da baseline de planejamento
 
-Apenas coerência dos documentos, referências locais, rastreabilidade, dependências, integridade do pacote e revisão independente do plano. Isso não é build, teste ou validação funcional do Radar.
+Na baseline de planejamento, apenas coerência documental, referências, rastreabilidade e revisão do plano estavam verificadas. A execução autorizada posterior registra build, UI e demais modos separadamente em acceptance.md; os roteiros acima continuam válidos.
 

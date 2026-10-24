@@ -1,6 +1,6 @@
 # Radar — V1 pessoal local
 
-**23/10/2026 · Implementação local em andamento · Integrações em preparação**
+**23/10/2026 · Implementação local preparada · Aceite real pendente**
 
 A V1 é pessoal: um app nativo para macOS 27 que reúne seus cards do Jira Cloud e PRs do GitHub.com usando o gh existente. O notch fica fechado com indicadores; um clique abre as duas colunas e a faixa inferior conecta tarefa e código.
 
@@ -70,9 +70,11 @@ A regra do usuário impede criar testes, arquivos de teste ou mocks. O plano usa
 
 Os gates de uso real incluem recorte/foco, Jira e GitHub, relação bidirecional, teclado/VoiceOver/Reduzir Movimento, 30 ciclos de interação e lançamento pelo Finder. Condições externas não reproduzidas são registradas separadamente; revisão estática não comprova fluidez ou funcionamento no hardware.
 
-A base nativa, domínio e apresentação foram implementados; os gates de runtime permanecem delimitados por tarefa. O usuário confirmou menu/configurações/encerramento, recorte/cliques, foco/transições e escolha do gh. A apresentação desconectada passou por build e interação local; C02/C03 corrigiram achados da revisão independente. T22 acrescentou o cofre próprio, revisado sem executar Keychain. Integrações reais, relações, acessibilidade, desempenho e bundle Release continuam em preparação ou aguardam evidência. Isso não é aceite da V1. Estado atual em [.specs/STATE.md](.specs/STATE.md) e [manifesto](docs/evidence/manifest.md). Lint e testes não rodaram. O repositório permanece sem remote.
+A implementação local inclui integrações, relações, recuperação, persistência, ciclo de dados, navegação e display. Builds Debug/Release e revisões independentes passaram. O Release foi aberto pelo caminho completo; gh 2.96.0 e persistência de preferências foram verificados pela UI sem consultar contas. Três ciclos CUA, duas leituras de repouso e comparação visual desconectada estão documentados. Isso não aceita a V1: fluxo central real, Keychain, VoiceOver/Reduzir Movimento e protocolo físico continuam pendentes. Os 56 critérios estão em [aceite](docs/evidence/acceptance.md); ver [gates pendentes](docs/evidence/pending-gates.md). Testes/mocks/sensores/Swift lint não rodaram; nenhum remote/publicação foi criado.
 
-Para abrir o bundle local: `./script/build_and_run.sh`. Detalhes e limites em docs/readiness.md.
+Para abrir o Release já gerado: [.build/DerivedData/Build/Products/Release/Radar.app](.build/DerivedData/Build/Products/Release/Radar.app). Metadados e procedimento em [bundle local](docs/evidence/local-bundle.md). `./script/build_and_run.sh` continua gerando/abrindo Debug.
+
+Ao iniciar, as contas ficam desconectadas. Em Configurações, valide o gh existente antes de conectar aos repositórios autorizados. Jira depende da política da organização e de entrada pessoal no SecureField; nunca envie token no chat. Retomar token salvo também é explícito. O app consulta apenas Jira Cloud/GitHub.com, mas as permissões existentes da credencial podem ser mais amplas.
 
 ## Execução local
 

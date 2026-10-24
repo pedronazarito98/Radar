@@ -46,8 +46,13 @@ Complemento T34/T35: `c952406`, persistência do caminho gh e encerramento/reabe
 | T31 | e13e1ab | BUILD/REVIEW independente PASS; LIVE/foco preenchido NOT-RUN | T31.md |
 | T32 | d81169d | BUILD/REVIEW independente PASS; LIVE/sleep-wake NOT-RUN | T32.md |
 | T33 | 791c6ac | BUILD/REVIEW independente PASS; LIVE/recuperação real NOT-RUN | T33.md |
-| T34 | 965578b | BUILD/REVIEW persistência PASS; reinício/cofre MANUAL NOT-RUN | T34.md |
-| T35 | 066b86b | BUILD/REVIEW independente PASS; LIVE-Origens/shutdown NOT-RUN | T35.md |
+| T34 | 965578b | BUILD/REVIEW e UI persistência gh/tela PASS; cofre/categorias reais NOT-RUN | T34.md |
+| T35 | 066b86b | BUILD/REVIEW/quit-reinício desconectado PASS; LIVE/shutdown em voo NOT-RUN | T35.md |
 | T36 | d3f95f7 | BUILD/REVIEW independente PASS; UI-integrada/LIVE NOT-RUN | T36.md |
 | T37 | d9ed688 | BUILD/REVIEW independente PASS; UI-integrada/navegação real NOT-RUN | T37.md |
-| T38 | 5d98465 | BUILD/REVIEW independente PASS; UI-display/modos reais NOT-RUN | T38.md |
+| T38 | 5d98465 | BUILD/REVIEW/preferência da tela interna via UI PASS; hotplug/modos NOT-RUN | T38.md |
+| T39 | 23ed6f5 | PARTIAL; 3 ciclos CUA/2 pontos repouso; 30 ciclos/timing NOT-RUN | performance.md |
+| T40 | d26d4db | PARTIAL; REVIEW visual/código independente PASS; a11y real NOT-RUN | visual-accessibility.md |
+| C08 | 45cafdd | BUILD Release/REVIEW/codesign PASS | C08.md |
+| T41 | 833c2d9 | BUILD/codesign/launch/UI gh e prefs PASS; auth NOT-RUN | local-bundle.md |
+| T42 | commit deste relatório; hash no fechamento independente | 56 registros; aceite bloqueado por NOT-RUN; verificador fresco a seguir | acceptance.md |
