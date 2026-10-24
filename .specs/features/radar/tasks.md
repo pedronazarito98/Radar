@@ -653,7 +653,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T39 — Relatório de fluidez e recursos
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL. Três ciclos CUA desconectados e duas observações nativas de repouso registrados em docs/evidence/performance.md; 30 ciclos com seleção/hit-through físico e timing NOT-RUN.
 - **What**: Medir transições/repouso e executar 30 ciclos no app real; registrar recursos/limitações em relatório, sem criar sensor/teste.
 - **Where**: docs/evidence/performance.md
 - **Depends on**: T38 (dependências anteriores transitivas).
