@@ -138,12 +138,20 @@
 - **Date**: 2026-10-23
 - **Status**: active
 
+### AD-018
+- **Decision**: Substituir gh por GitHub App device flow nativo com refresh sem client secret e catálogo selecionável de repositórios. G1 em github-onboarding.md prevalece sobre a baseline gh (AD-004/011 e critérios afetados).
+- **Reason**: Usuário rejeitou a UX técnica e pediu conexão amigável/listagem em 24/10/2026.
+- **Trade-off**: Cadastro GitHub App e aprovação/instalação pelos usuários são gates externos; não há cadastro existente. Client ID público/slug no build, segredo só no fluxo do app/cofre. Sem backend/publicação.
+- **Scope**: Integração GitHub e configurações; Jira e visual V3 preservados. Root escritor exclusivo.
+- **Date**: 2026-10-24
+- **Status**: active; implementação G02 em andamento.
+
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
 - **Phase / Task**: Implementação local T01–T38 preparada; T39–T42 qualificação parcial documentada. V1 NÃO ACEITA enquanto gates obrigatórios externos não passarem.
 - **Completed**: Composição d3f95f7, navegação d9ed688, displays 5d98465; persistência/reinício desconectado c952406; performance 23ed6f5; visual independente d26d4db; C08 Release sem get-task-allow 45cafdd; bundle 833c2d9; C09 299514b e Release reconstruído. Builds Debug/Release, revisões por lote, launch pelo caminho completo, gh --version e preferências via UI passaram no limite registrado.
-- **In-progress**: Nenhuma implementação independente restante identificada. T42/545705e reúne 56 critérios; verificador fresco encontrou P2 de revisão direta, resolvido em C09/299514b com nova revisão PASS. Resultado em docs/evidence/final-verification.md.
+- **In-progress**: Revisão G01/G02 de autenticação nativa e seleção de repos em github-onboarding.md. Baseline anterior: nenhuma implementação independente restante identificada. T42/545705e reúne 56 critérios; verificador fresco encontrou P2 de revisão direta, resolvido em C09/299514b com nova revisão PASS. Resultado em docs/evidence/final-verification.md.
 - **Next step**: Receber observações humanas e escopos/política/contas; executar somente gates reais autorizados e correções decorrentes. Não reiniciar implementação nem repetir acesso/auth automaticamente.
 - **Blockers**: Política/site/projetos/repos/contas, LIVE central, Keychain/consentimento/remoção, seleção/links reais, VoiceOver/Reduzir Movimento, 30 ciclos físicos com seleção e modos/displays não observados. Roteiro humano enviado com Release aberto/recolhido; silêncio não é PASS. Ver docs/evidence/pending-gates.md.
 - **Persistence**: UUID próprio persistido antes do cofre; startup metadata-only, retomada explícita. Preferência gh/tela verificada por UI/reinício; cofre não acessado por agentes.

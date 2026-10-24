@@ -13,6 +13,6 @@ Atue como um engenheiro sênior criterioso. Antes de alterar código, leia a est
 - Skills são lidas sob demanda; nunca carregar todas no bootstrap.
 - Não ler/copiar credenciais, sessões, arquivos de auth, logs, SQLite, paste cache ou históricos brutos. Se um segredo aparecer incidentalmente, registrar somente [REDACTED]. Nunca expor tokens nem consultar Keychain como agente.
 - Jira token é informado pelo usuário diretamente no fluxo seguro do app, condicionado à política da conta. Nunca pedir no chat. Não executar gh auth token/status/login/refresh/switch nem abrir seus arquivos de auth/configuração.
-- Escopo local pessoal: Jira Cloud + GitHub.com por gh existente. Não publicar, configurar remotes, instalar ferramentas ou alterar configurações globais. Nenhuma escrita de trabalho remota (merge/aprovação/comentário/transição).
+- Escopo local pessoal: Jira Cloud + GitHub.com. O pedido de 24/10/2026 substitui gh por autenticação nativa e seletor de repositórios, conforme .specs/features/radar/github-onboarding.md. Não publicar, configurar remotes, instalar ferramentas ou alterar configurações globais. Nenhuma escrita de trabalho remota (merge/aprovação/comentário/transição).
 - Commits em primeira pessoa, claros e objetivos em pt-BR, descrevendo o que fiz, impacto e como validar de verdade.
 - Ao finalizar: resumo, arquivos alterados/criados, decisões técnicas, pontos de atenção e validação manual. Não inventar testes/lint/build; informar o que não rodou.

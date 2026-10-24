@@ -116,3 +116,7 @@ Os nomes acima descrevem trabalho realizado e autoria; não são prova de funcio
 
 radar_native_plan e radar_providers_plan herdaram o contexto e conversaram diretamente sobre identidades, snapshots, geração e transporte. Seus acordos foram consolidados em design.md. Um terceiro agente fresco revisará a coerência deste pacote de planejamento. Nenhum deles implementou o app.
 
+
+## Revisão de onboarding — G01/G02, 24/10/2026
+
+Root é escritor exclusivo. github_onboarding_review e github_auth_research receberam contexto compartilhado por fork all, fonte canônica, pedido atual e limites; conversaram diretamente sobre transporte/catálogo/refresh. Contrato G1 publicado em github-onboarding.md antes dos consumidores. Após implementação, revisor fresco somente leitura; registro/client ID/conta dependem do usuário, sem acesso por agentes.
