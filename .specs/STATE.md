@@ -141,11 +141,11 @@
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote6 T36–T38 preparados; native_finish_readiness único escritor T36–T38, native_final_review independente.
-- **Completed**: Lote5 preservado em docs/handoffs/batch-05.md, base6795dc3. T36 d3f95f7, T37 d9ed688 e T38 BUILD Debug/REVIEW independente PASS; UI-integrada/LIVE NOT-RUN.
-- **In-progress**: Composição, navegação explícita e display dinâmico validados por build/review; gates reais permanecem pendentes. Sem duplicar lifecycle, scheduler, relações ou recuperação já existentes.
-- **Next step**: Commit T38 e handoff ao root para T39–T42.
+- **Phase / Task**: Lote6 T36–T38 preparados; handoff docs/handoffs/batch-06-implementation.md. native_finish_readiness encerra escrita e libera ownership ao root para T39–T42.
+- **Completed**: Lote5 preservado em docs/handoffs/batch-05.md, base6795dc3. T36 d3f95f7, T37 d9ed688, T38 5d98465: BUILD Debug/REVIEW independente PASS; UI-integrada/LIVE NOT-RUN.
+- **In-progress**: Nenhuma implementação pendente deste escritor. Composição, navegação explícita e display dinâmico preparados; root conduz UI/medição/Release/aceite. Sem duplicar lifecycle, scheduler, relações ou recuperação já existentes.
+- **Next step**: Root: T39 performance, T40 visual/acessibilidade, T41 Release local, T42 aceite e verificação fresca; incorporar evidência independente já observada pelo root.
 - **Blockers**: Contas/política/escopos, LIVE, cofre/consentimento/reinício, conteúdo real, acessibilidade, movimento reduzido, modos específicos, desempenho e Release permanecem NOT-RUN. Nenhum gate obrigatório dispensado; ver docs/evidence/pending-gates.md.
 - **Persistence**: T34 confirma escrita atômica da referência antes do cofre; startup só lê metadata própria. Agentes não acessam cofre/auth.
-- **Uncommitted files**: T38 até seu commit; nenhum arquivo fora do ownership declarado.
+- **Uncommitted files**: Nenhum após commit deste handoff.
 - **Branch**: feat/radar-v1-local; sem remote.
