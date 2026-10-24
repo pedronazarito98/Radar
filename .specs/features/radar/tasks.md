@@ -597,7 +597,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T35 — Ciclo de dados
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL — BUILD e revisão independente PASS; LIVE-Origens/shutdown/consentimento NOT-RUN. Evidência docs/evidence/T35.md.
 - **What**: Invalidar snapshots, seleções e consultas ao desconectar ou mudar identidade/contexto; limpar somente estado e item Jira próprios.
 - **Where**: Radar/Application/DataLifecycleController.swift
 - **Depends on**: T34 (dependências anteriores transitivas).

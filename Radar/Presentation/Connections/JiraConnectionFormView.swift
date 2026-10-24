@@ -5,6 +5,7 @@ struct JiraConnectionFormView: View {
     let store: RadarStore
     let connection: JiraCloudConnection
     let work: JiraWorkController
+    let lifecycle: DataLifecycleController
     @State private var operation: Task<Void, Never>?
     @State private var generation = UUID()
     @State private var message: String?
@@ -110,11 +111,11 @@ struct JiraConnectionFormView: View {
     private func resume() {
         guard policyAllowsToken, hasSavedReference, operation == nil else { return }
         let current = UUID(); generation = current
-        work.stop(); store.invalidate(.jira); token = ""
+        token = ""
         message = "Qualificando o token salvo após sua ação…"
         operation = Task {
             do {
-                let qualified = try await connection.resumeAfterUserAction(policyAllowed: policyAllowsToken, attemptID: current)
+                let qualified = try await lifecycle.resumeJiraAfterUserAction(policyAllowed: policyAllowsToken, attemptID: current)
                 guard generation == current, !Task.isCancelled else { return }
                 store.configureSource(qualified.scope, connection: .connected)
                 message = "Identidade qualificada. A lista será atualizada."
@@ -129,12 +130,10 @@ struct JiraConnectionFormView: View {
 
     private func disconnect() {
         let current = UUID(); generation = current
-        work.stop()
-        store.invalidate(.jira)
         token = ""
         operation = Task {
             do {
-                try await connection.removeAfterUserAction()
+                try await lifecycle.removeJiraAfterUserAction()
                 guard generation == current, !Task.isCancelled else { return }
                 hasSavedReference = false
                 message = "Conexão removida."

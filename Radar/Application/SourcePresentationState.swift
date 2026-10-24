@@ -3,6 +3,7 @@ import Foundation
 /// Rows and count are always read from the same immutable presented snapshot.
 struct SourcePresentationState<Item: SourceSnapshotItem> {
     let scope: SourceScope?
+    let configurationID = UUID()
     private(set) var presentedSnapshot: SourceSnapshot<Item>?
     private(set) var pendingSnapshot: SourceSnapshot<Item>?
     private(set) var status: SourceStatus

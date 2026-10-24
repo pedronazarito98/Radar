@@ -11,6 +11,7 @@ final class SourceRefreshCoordinator {
     private var observers: [NSObjectProtocol] = []
     private struct Configuration: Equatable {
         let context: WorkContextID
+        let identity: UUID
         let scope: SourceScope?
         let connection: SourceConnectionState
     }
@@ -47,8 +48,8 @@ final class SourceRefreshCoordinator {
 
     private func reconcile() {
         guard active else { return }
-        let jiraConfiguration = Configuration(context: store.contextID, scope: store.jira.scope, connection: store.jira.status.connection)
-        let githubConfiguration = Configuration(context: store.contextID, scope: store.github.scope, connection: store.github.status.connection)
+        let jiraConfiguration = Configuration(context: store.contextID, identity: store.jira.configurationID, scope: store.jira.scope, connection: store.jira.status.connection)
+        let githubConfiguration = Configuration(context: store.contextID, identity: store.github.configurationID, scope: store.github.scope, connection: store.github.status.connection)
         if jiraConfiguration != lastJira {
             lastJira = jiraConfiguration
             if jiraConfiguration.connection == .connected { jira.requestAfterUserAction() } else { jira.stop() }
@@ -64,6 +65,7 @@ final class SourceRefreshCoordinator {
         let generation = UUID(); observationGeneration = generation
         withObservationTracking {
             _ = store.contextID
+            _ = store.jira.configurationID; _ = store.github.configurationID
             _ = store.jira.scope; _ = store.github.scope
             _ = store.jira.status.connection; _ = store.github.status.connection
         } onChange: { [weak self] in

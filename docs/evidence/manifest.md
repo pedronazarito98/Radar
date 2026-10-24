@@ -45,3 +45,4 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 | T32 | commit desta evidência | BUILD/REVIEW independente PASS; LIVE/sleep-wake NOT-RUN | T32.md |
 | T33 | commit desta evidência | BUILD/REVIEW independente PASS; LIVE/recuperação real NOT-RUN | T33.md |
 | T34 | commit desta evidência | BUILD/REVIEW persistência PASS; reinício/cofre MANUAL NOT-RUN | T34.md |
+| T35 | commit desta evidência | BUILD/REVIEW independente PASS; LIVE-Origens/shutdown NOT-RUN | T35.md |

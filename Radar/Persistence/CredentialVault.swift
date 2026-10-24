@@ -23,6 +23,7 @@ actor CredentialVault {
     private let service = "dev.pedronazarito.Radar"
 
     func saveJiraToken(_ token: String, for reference: JiraCredentialReference) throws {
+        guard !Task.isCancelled else { throw CredentialVaultError.cancelled }
         guard !token.isEmpty, token.utf8.count <= 16_384 else { throw CredentialVaultError.invalidSecret }
         let data = Data(token.utf8)
         var attributes = query(for: reference)
@@ -38,6 +39,7 @@ actor CredentialVault {
     }
 
     func readJiraTokenAfterUserAction(for reference: JiraCredentialReference) throws -> String {
+        guard !Task.isCancelled else { throw CredentialVaultError.cancelled }
         var attributes = query(for: reference)
         attributes[kSecMatchLimit as String] = kSecMatchLimitOne
         attributes[kSecReturnData as String] = true
@@ -51,6 +53,7 @@ actor CredentialVault {
     }
 
     func removeJiraTokenAfterUserAction(for reference: JiraCredentialReference) throws {
+        guard !Task.isCancelled else { throw CredentialVaultError.cancelled }
         let result = SecItemDelete(query(for: reference) as CFDictionary)
         if result != errSecItemNotFound { try check(result) }
     }

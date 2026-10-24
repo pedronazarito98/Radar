@@ -52,6 +52,7 @@ final class RadarStore {
             repositoryAliases = RepositoryIdentityAliases(contextID: contextID)
             pendingRepositoryAliases = nil
         }
+        if let key = selection.selectedKey, !containsPresentedItem(key) { selection.clear() }
     }
 
     func setPanelOpen(_ isOpen: Bool) {
@@ -59,6 +60,7 @@ final class RadarStore {
         if !isOpen {
             applyPendingUpdates()
             selection.clear()
+            relations.clear()
         }
     }
 

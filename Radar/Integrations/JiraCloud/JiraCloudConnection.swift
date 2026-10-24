@@ -62,6 +62,7 @@ actor JiraCloudConnection {
         busy = true; operationID = attemptID; token = nil; qualified = nil
         defer { busy = false }
         do {
+            try ensureCurrent(attemptID)
             let secret: String
             do { secret = try await vault.readJiraTokenAfterUserAction(for: reference) }
             catch let error as CredentialVaultError { throw JiraConnectionError.vault(error) }
@@ -109,6 +110,7 @@ actor JiraCloudConnection {
         guard let reference else { return }
         busy = true
         defer { busy = false }
+        guard !Task.isCancelled else { throw JiraConnectionError.source(.cancelled) }
         do { try await vault.removeJiraTokenAfterUserAction(for: reference) }
         catch let error as CredentialVaultError { throw JiraConnectionError.vault(error) }
         do { try await preferences.clearJiraReference(expected: reference) }
@@ -120,6 +122,11 @@ actor JiraCloudConnection {
         // Metadata only. The form separately displays a sanitized load error.
         try? await restoreMetadata()
         return reference != nil
+    }
+
+    /// Memory-only lifecycle invalidation; pending metadata and the own vault item are untouched.
+    func invalidateActiveSession() {
+        operationID = UUID(); token = nil; qualified = nil
     }
 
     func currentConnection() throws -> JiraQualifiedConnection {

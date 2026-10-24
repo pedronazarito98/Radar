@@ -11,6 +11,7 @@ final class GitHubConnectionController {
     private(set) var identity: GitHubAuthor?
     private(set) var connectionID: ConnectionID?
     private var generation = UUID()
+    var onInvalidated: (() -> Void)?
 
     init(store: RadarStore, preferences: PreferencesStore) { self.store = store; self.preferences = preferences }
 
@@ -44,13 +45,13 @@ final class GitHubConnectionController {
         store.configureSource(scope, connection: .connected)
     }
 
-    func disconnect() {
-        generation = UUID(); identity = nil; executable = nil; connectionID = nil
-        store.invalidate(.github)
-    }
+    func disconnect() { invalidate(connection: .disconnected) }
 
-    func requireRequalification() {
-        disconnect()
-        store.invalidate(.github, connection: .requalificationRequired)
+    func requireRequalification() { invalidate(connection: .requalificationRequired) }
+
+    private func invalidate(connection: SourceConnectionState) {
+        generation = UUID(); identity = nil; executable = nil; connectionID = nil
+        store.invalidate(.github, connection: connection)
+        onInvalidated?()
     }
 }

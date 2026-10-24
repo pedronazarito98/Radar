@@ -6,6 +6,7 @@ struct GitHubConnectionFormView: View {
     let connection: GitHubConnectionController
     let work: GitHubWorkController
     let preferences: PreferencesController
+    let lifecycle: DataLifecycleController
     @State private var executablePath = "/opt/homebrew/bin/gh"
     @State private var repositories = ""
     @State private var showsPicker = false
@@ -43,7 +44,7 @@ struct GitHubConnectionFormView: View {
                 Button("Conectar GitHub", action: connect).disabled(qualification == nil || operation != nil || status.connection == .connected)
                 if status.connection == .connected {
                     Button("Consultar / atualizar PRs") { work.requestAfterUserAction() }.disabled(status.isRefreshing)
-                    Button("Desconectar GitHub") { work.stop(); connection.disconnect() }
+                    Button("Desconectar GitHub", action: lifecycle.disconnectGitHub)
                 }
             }
             Text("Validar gh executa somente --version. Conectar GitHub consulta sua identidade por GET /user. O Radar não instala o gh. As permissões existentes do CLI podem ser mais amplas que as consultas do app.")
