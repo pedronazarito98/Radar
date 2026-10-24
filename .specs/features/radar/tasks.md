@@ -883,3 +883,11 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 - **Depends on / sequência**: T30; correção T29 antes do commit T31 conforme C1.11.
 - **Requirement / Gate**: R12.1/R16; BUILD + revisão independente. Limite: URLs reconhecidas, sem promessa de parser universal. Nenhum teste/mock.
 - **Commit**: Atômico em pt-BR, já registrado no manifesto.
+
+### C08 — Entitlements do Release local
+
+- **Status**: BUILD Release/REVIEW independente/metadados públicos PASS; docs/evidence/C08.md.
+- **What / Where**: Desabilitar injeção de base entitlements somente no target Release de Radar.xcodeproj/project.pbxproj, removendo get-task-allow observado em T41.
+- **Depends on / sequência**: T40, descoberta no primeiro build T41; correção antes da qualificação final do bundle.
+- **Requirement / Gate**: R08/R21; BUILD Release + codesign + revisão independente. Sem testes/mocks, notarização ou publicação.
+- **Commit**: Atômico em pt-BR, preservando Debug e Hardened Runtime.
