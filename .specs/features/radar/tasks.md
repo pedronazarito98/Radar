@@ -681,7 +681,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T41 — Bundle pessoal
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL. BUILD Release/codesign/launch pelo caminho completo/UI-gh versão e preferências PASS; auth/contas NOT-RUN. C08 removeu get-task-allow; docs/evidence/local-bundle.md.
 - **What**: Gerar bundle local do target real e qualificar caminho completo/Finder com assinatura, sandbox e Hardened Runtime realmente aplicados.
 - **Where**: docs/evidence/local-bundle.md; artefato local do build
 - **Depends on**: T40 (dependências anteriores transitivas).
