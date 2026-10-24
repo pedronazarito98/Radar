@@ -7,7 +7,7 @@ struct RadarApp: App {
     var body: some Scene {
         MenuBarExtra("Radar", systemImage: "dot.radiowaves.left.and.right") {
             Button("Abrir ou recolher Radar") {
-                appDelegate.panelController?.toggle()
+                appDelegate.composition.panelController?.toggle()
             }
             Divider()
             SettingsLink {
@@ -21,7 +21,7 @@ struct RadarApp: App {
         }
 
         Settings {
-            ConnectionsSettingsView(store: appDelegate.store, jiraConnection: appDelegate.jiraConnection, jiraWork: appDelegate.jiraWork, githubConnection: appDelegate.githubConnection, githubWork: appDelegate.githubWork, preferences: appDelegate.preferences, lifecycle: appDelegate.lifecycle)
+            ConnectionsSettingsView(store: appDelegate.composition.store, jiraConnection: appDelegate.composition.jiraConnection, jiraWork: appDelegate.composition.jiraWork, githubConnection: appDelegate.composition.githubConnection, githubWork: appDelegate.composition.githubWork, preferences: appDelegate.composition.preferences, lifecycle: appDelegate.composition.lifecycle)
         }
     }
 }

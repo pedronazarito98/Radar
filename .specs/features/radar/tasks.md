@@ -611,7 +611,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T36 — Composição das dependências reais
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL — BUILD e revisão independente PASS; UI-integrada/LIVE NOT-RUN. Evidência docs/evidence/T36.md.
 - **What**: Ligar UI, stores, persistência e integrações no ponto único de composição, removendo ações desabilitadas temporárias.
 - **Where**: Radar/App/AppComposition.swift
 - **Depends on**: T35 (dependências anteriores transitivas).
