@@ -667,7 +667,7 @@ A coluna Requirement em cada tarefa cobre os requisitos relacionados; o aceite f
 
 ### T40 — Revisão visual e acessibilidade
 
-- **Status**: Pending.
+- **Status**: Prepared/PARTIAL. REVIEW visual/código independente PASS no estado desconectado; teclado básico CUA em T39. VoiceOver/Reduzir Movimento/dados reais/modos NOT-RUN; docs/evidence/visual-accessibility.md.
 - **What**: Conduzir revisão independente de V3, teclado, VoiceOver, Reduzir Movimento e cenários de display disponíveis.
 - **Where**: docs/evidence/visual-accessibility.md
 - **Depends on**: T39 (dependências anteriores transitivas).
