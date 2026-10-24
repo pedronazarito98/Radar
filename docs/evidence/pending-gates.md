@@ -1,6 +1,6 @@
 # Gates que dependem de interação ou ambiente real
 
-Atualizado em 23/10/2026. A implementação local continua nas tarefas independentes, conforme instrução do usuário. Este registro não substitui o manifesto por tarefa nem o aceite por critério.
+Atualizado em 23/10/2026. O escopo local independente foi implementado e qualificado nos limites registrados, incluindo a correção C09 e sua revisão independente. Este registro não substitui o manifesto por tarefa nem o aceite por critério; os gates abaixo continuam pendentes.
 
 ## Contas e recursos autorizados — NOT-RUN
 

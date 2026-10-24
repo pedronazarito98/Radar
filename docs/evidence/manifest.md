@@ -55,4 +55,5 @@ Complemento T34/T35: `c952406`, persistência do caminho gh e encerramento/reabe
 | T40 | d26d4db | PARTIAL; REVIEW visual/código independente PASS; a11y real NOT-RUN | visual-accessibility.md |
 | C08 | 45cafdd | BUILD Release/REVIEW/codesign PASS | C08.md |
 | T41 | 833c2d9 | BUILD/codesign/launch/UI gh e prefs PASS; auth NOT-RUN | local-bundle.md |
-| T42 | commit deste relatório; hash no fechamento independente | 56 registros; aceite bloqueado por NOT-RUN; verificador fresco a seguir | acceptance.md |
+| T42 | 545705e | 56 registros; revisão fresca executada, P2 resolvido em C09; aceite real bloqueado | acceptance.md; final-verification.md |
+| C09 | 299514b | BUILD Debug/Release/REVIEW independente/codesign/launch sem contas PASS; rótulo LIVE NOT-RUN | C09.md |

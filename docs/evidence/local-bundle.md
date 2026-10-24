@@ -8,6 +8,8 @@
 
 Código T38 `5d98465` + correção C08 `45cafdd`; fontes Swift não mudaram após a revisão T38. Executável SHA-256 `c89e2634a81d942b5af4b7ae9268acf26d08ea722f3b38d3664d3e56d6e23475`. Não confundir com a cópia Debug T35 usada no complemento de persistência.
 
+**Atualização após verificação final:** o artefato inicial acima foi substituído pela correção C09 `299514b`. O executável vigente tem SHA-256 `e479390fcbc42043ec45f29c782f3cc07ed4266c0db2cd884c8d6b9f619bd984`; builds Debug/Release, codesign strict, flags ad-hoc/runtime e ausência de entitlements foram reconfirmados. Root encerrou a versão anterior pela UI antes da substituição e abriu o novo Release pelo caminho completo. Startup compacto/desconectado, preferência Automática/caminho gh preservados e Validar gh2.96.0 sem auth foram observados novamente. Abaixo fica preservada a execução original T41; a nova linha de solicitação direta continua LIVE NOT-RUN. Ver [C09](C09.md) e [verificação final](final-verification.md).
+
 ## BUILD e metadados efetivos
 
 Em 23/10/2026, o comando abaixo terminou exit0, inclusive depois de C08:

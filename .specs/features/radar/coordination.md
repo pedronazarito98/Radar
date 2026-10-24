@@ -108,7 +108,7 @@ Autorização AD-009/AD-013 permite implementar localmente e preparar tarefas in
 - Relações/ciclo: `relations_writer` recebeu contexto compartilhado explícito, executou T29–T35 e correções C06/C07; `relations_review` começou com contexto fresco e dialogou diretamente. Handoff05 HEAD6795dc3 liberou ownership.
 - Composição/navegação/display: `native_finish_readiness` recebeu handoff05 e executou T36–T38; `native_final_review` teve contexto fresco e revisou cada diff. Handoff06-implementation HEAD881b050 liberou ownership ao root.
 - Root executou UI, medições delimitadas e T39–T42. `visual_accessibility_review`, sem histórico do autor, comparou capturas reais e V3 em T40. C08 foi escrita apenas pelo root e revisada independentemente por `native_final_review` com metadados do bundle.
-- Após commit T42, root dispara novo verificador com `fork_turns=none`, somente documentos canônicos/árvore/evidências e restrições. Resultado será registrado em docs/evidence/final-verification.md; eventuais correções seguem tarefas atômicas e nova revisão.
+- Após T42/545705e, root disparou `final_verifier` com `fork_turns=none`, somente documentos canônicos/árvore/evidências e restrições. O P2 de R11.2 foi corrigido pelo root em C09/299514b e recebeu nova revisão PASS. Resultado em docs/evidence/final-verification.md; demais gates reais continuam pendentes.
 
 Os nomes acima descrevem trabalho realizado e autoria; não são prova de funcionamento autenticado. Gates LIVE, acessibilidade física e demais cenários não observados continuam NOT-RUN. Não foram criados chats externos, publicados conteúdos ou lidas credenciais.
 

@@ -9,17 +9,18 @@ Implementação local preparada até T38, com C08 no empacotamento. Root recebeu
 | T40 — revisão visual independente | d26d4db; visual-accessibility.md |
 | C08 — Release sem get-task-allow | 45cafdd; C08.md |
 | T41 — Release, assinatura, launch, gh e preferências | 833c2d9; local-bundle.md |
-| T42 — 56 registros por critério | commit deste handoff; acceptance.md/manifest.md |
+| T42 — 56 registros por critério | 545705e; acceptance.md/manifest.md |
+| C09 — revisão direta qualificada | 299514b; C09.md/final-verification.md |
 
 ## Entrega disponível
 
 `/Users/pedronazarito/Developer/Radar/.build/DerivedData/Build/Products/Release/Radar.app`
 
-Executável SHA-256 `c89e2634a81d942b5af4b7ae9268acf26d08ea722f3b38d3664d3e56d6e23475`. Release ad-hoc/Hardened Runtime, sem App Sandbox/get-task-allow. Aberto pelo caminho completo e deixado compacto/desconectado; gh2.96.0 foi validado sem auth. Preferências gh/tela sobreviveram ao reinício pela UI; opção de tela voltou a Automática. Nenhuma instalação/publicação/alteração global.
+Executável SHA-256 `e479390fcbc42043ec45f29c782f3cc07ed4266c0db2cd884c8d6b9f619bd984`. Release ad-hoc/Hardened Runtime, sem App Sandbox/get-task-allow. Aberto pelo caminho completo e deixado compacto/desconectado; gh 2.96.0 foi validado sem auth. Preferências gh/tela sobreviveram ao reinício pela UI; opção de tela voltou a Automática. Nenhuma instalação/publicação/alteração global.
 
-## Próximo passo obrigatório de processo
+## Verificação independente concluída
 
-Depois do commit T42, revisor novo com contexto fresco confere fontes e evidências. Não herdar raciocínio do autor. Resultado em final-verification.md; achados concretos viram correções atômicas sob writer único. O relatório não deve transformar REVIEW em MANUAL ou assinatura em notarização.
+Depois de T42/545705e, revisor novo com contexto fresco conferiu fontes e evidências e encontrou um P2 em R11.2. Root corrigiu em C09/299514b; nova revisão estática PASS, builds Debug/Release e launch repetidos. Resultado em final-verification.md. Gates reais pendentes não foram convertidos em PASS. Root permanece o ponto de coordenação de futuras correções.
 
 ## Próxima interação humana
 

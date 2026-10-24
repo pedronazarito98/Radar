@@ -1,12 +1,12 @@
 # T42 — Aceite integrado da V1 pessoal
 
-**Estado: implementação local preparada; V1 NÃO ACEITA.** Gates obrigatórios de contas/fluxo central, acessibilidade e protocolo físico continuam NOT-RUN. A revisão final fresca é disparada somente após o commit deste relatório; seu resultado será anexado separadamente.
+**Estado: implementação local preparada; V1 NÃO ACEITA.** Gates obrigatórios de contas/fluxo central, acessibilidade e protocolo físico continuam NOT-RUN. A revisão final fresca foi executada após T42/545705e: encontrou um P2, corrigido e revisto em C09/299514b. Resultado e limites em final-verification.md.
 
 ## Contexto comum de cada registro
 
-- Environment: Mac arm64/macOS 27.0.1, tela 1470×956pt@2/60Hz; Xcode 27.1/SDK 27.0, Swift 6 strict. Release final em [T41](local-bundle.md), código45cafdd, SHA-256 c89e2634a81d942b5af4b7ae9268acf26d08ea722f3b38d3664d3e56d6e23475.
+- Environment: Mac arm64/macOS 27.0.1, tela 1470×956pt@2/60Hz; Xcode 27.1/SDK 27.0, Swift 6 strict. Release final em [T41](local-bundle.md), código 299514b, SHA-256 e479390fcbc42043ec45f29c782f3cc07ed4266c0db2cd884c8d6b9f619bd984.
 - Task/commit: indicado por registro; referências históricas apontam a evidência original e correções posteriores. O manifesto resolve hashes completos.
-- REVIEW PASS significa apenas invariante/código/documentação revisados, não execução de rede, teclado preenchido ou hardware. Revisões independentes por lotes e T40 são preservadas; a última revisão completa ainda será feita em contexto fresco.
+- REVIEW PASS significa apenas invariante/código/documentação revisados, não execução de rede, teclado preenchido ou hardware. Revisões independentes por lotes e T40 são preservadas; a revisão final fresca e a revisão da correção C09 estão registradas em final-verification.md.
 - MANUAL via CUA é interação com o app real; não é observação física humana. Respostas humanas anteriores ficam delimitadas ao roteiro respondido. Sem resposta nova não há PASS presumido.
 - BUILD: T41/R21.1 PASS no Release, e builds Debug por tarefa registrados; não é autenticação. MEASURE: R22.2 PASS somente para duas leituras nativas de repouso; duração/engasgos NOT-RUN.
 - Dados: nenhum seed/mock/fixture/teste/sensor; nenhum acesso por agente a contas, auth, Keychain, logs ou bancos. Tokens só podem ser informados pelo usuário no SecureField, após política permitida.
@@ -182,12 +182,12 @@
 - **Mode / action / observed / limits — MANUAL:** NOT-RUN: PR sobreposto real não consultado.
 
 ### R11.2 / U11
-- **Task / commit:** T08 eded612; T11 64ea581; T27 fb5ed1b.
+- **Task / commit:** T08 eded612; T11 64ea581; T27 fb5ed1b; C09 299514b.
 - **Preconditions:** Repos autorizados e permissões existentes.
 - **Expected:** Ao receber incomplete_results ou atingir limite/orçamento da busca, marcar parcial; distinguir revisão direta e de equipe quando houver dados suficientes.
-- **Mode / action / observed — REVIEW PASS limitado ao modo:** incomplete_results/limites preservam parcial; papel de review não qualificado evita inferir equipe.
-- **Evidence:** [T08.md](T08.md); [T11.md](T11.md); [T27.md](T27.md).
-- **Mode / action / observed / limits — MANUAL:** NOT-RUN: parcial/equipe real não consultados nem fabricados.
+- **Mode / action / observed — REVIEW PASS limitado ao modo:** incomplete_results/limites preservam parcial; C09 compara ID autenticado final com usuários solicitados e publica revisão direta observada. Ausência não infere equipe; papéis da busca/contadores permanecem intactos.
+- **Evidence:** [T08.md](T08.md); [T11.md](T11.md); [T27.md](T27.md); [C09.md](C09.md); [final-verification.md](final-verification.md).
+- **Mode / action / observed / limits — MANUAL:** NOT-RUN: parcial, solicitação direta e equipe não verificados com PR real; nenhum cenário fabricado.
 
 ### R12.1 / U12
 - **Task / commit:** T29 cce213e; C07 9957c09; T30 9b30356; T31 e13e1ab.
@@ -374,12 +374,12 @@
 - **Mode / action / observed / limits — MANUAL:** —: critério de processo/documentação.
 
 ### R23.2 / U23
-- **Task / commit:** T01 18f1de9; handoffs01–06; T42 neste commit.
+- **Task / commit:** T01 18f1de9; handoffs01–06; T42 545705e; C09 299514b.
 - **Preconditions:** Handoffs, commits e revisor sem histórico do autor.
 - **Expected:** Somente um worker escreve código por lote; lotes seguem ordem; verificador fresco usa spec e evidências sem herdar raciocínio do autor.
-- **Mode / action / observed — REVIEW NOT-RUN final pós-commit:** Ownership sequencial registrado; verificação final fresca será disparada depois do commit T42.
-- **Evidence:** [../handoffs/batch-05.md](../handoffs/batch-05.md); [../handoffs/batch-06-implementation.md](../handoffs/batch-06-implementation.md); [../../.specs/features/radar/coordination.md](../../.specs/features/radar/coordination.md).
-- **Mode / action / observed / limits — MANUAL:** —: critério de processo; revisão final pós-commit ainda pendente.
+- **Mode / action / observed — REVIEW PASS limitado ao modo:** Ownership sequencial registrado; verificação final fresca executada após T42, achado P2 corrigido e revisto em C09.
+- **Evidence:** [../handoffs/batch-05.md](../handoffs/batch-05.md); [../handoffs/batch-06-implementation.md](../handoffs/batch-06-implementation.md); [../../.specs/features/radar/coordination.md](../../.specs/features/radar/coordination.md); [final-verification.md](final-verification.md).
+- **Mode / action / observed / limits — MANUAL:** —: critério de processo; revisão final pós-commit executada, sem substituir gates reais.
 
 ### R24.1 / U24
 - **Task / commit:** T01 18f1de9; T39 23ed6f5.
@@ -463,7 +463,7 @@
 
 ## Totais por modo e bloqueios
 
-- REVIEW: 55 PASS limitados a fonte/documentação; 0 FAIL pendentes; 1 NOT-RUN (R23.2, verificador fresco pós-commit).
+- REVIEW: 56 PASS limitados a fonte/documentação após C09; 0 FAIL pendentes; 0 NOT-RUN de revisão. A rodada inicial teve 55 critérios sem achado adicional e 1 FAIL (R11.2), preservado em final-verification.md.
 - MANUAL: 3 PASS no critério delimitado; 44 NOT-RUN integral com observações parciais explicitadas; 9 critérios sem gate MANUAL aplicável, tratados em REVIEW/MEASURE.
 - BUILD: 1 registro agregado PASS (R21.1) com builds por tarefa no manifesto; 0 FAIL pendentes.
 - MEASURE: 1 registro PASS limitado (R22.2, repouso); duração/engasgos e protocolo completo não executados.
@@ -475,4 +475,4 @@ As questões de interação humana foram enviadas com Release aberto e recolhido
 
 ## Handoff para verificador fresco
 
-Revisar este commit e a árvore real contra spec/STATE/design/C1–C1.11/tasks/manifest, handoffs01–06 e relatórios T39–41. Conferir precisão das alegações e invariantes, sem repetir autenticação/cofre ou fabricar dados. Root é o único escritor; achado concreto gera correção atômica, gate apropriado e nova revisão antes de fechar. Resultado independente será registrado em final-verification.md.
+Revisar este commit e a árvore real contra spec/STATE/design/C1–C1.11/tasks/manifest, handoffs01–06 e relatórios T39–41. Conferir precisão das alegações e invariantes, sem repetir autenticação/cofre ou fabricar dados. Root é o único escritor; achado concreto gera correção atômica, gate apropriado e nova revisão antes de fechar. Resultado independente registrado em [final-verification.md](final-verification.md).
