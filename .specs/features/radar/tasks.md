@@ -891,3 +891,11 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 - **Depends on / sequência**: T40, descoberta no primeiro build T41; correção antes da qualificação final do bundle.
 - **Requirement / Gate**: R08/R21; BUILD Release + codesign + revisão independente. Sem testes/mocks, notarização ou publicação.
 - **Commit**: Atômico em pt-BR, preservando Debug e Hardened Runtime.
+
+### C09 — Solicitação direta qualificada no detalhe
+
+- **Status**: BUILD Debug/Release, REVIEW independente e metadados/launch sem contas PASS. P2 corrigido; LIVE do rótulo NOT-RUN. docs/evidence/C09.md.
+- **What / Where**: Qualificar directlyRequestedReviewer em ReviewReport usando a identidade estável autenticada e requested_reviewers.users; mostrar a observação em PRDetailStatusView, sem mudar snapshots/contadores pessoais.
+- **Depends on / sequência**: T42, correção de T28/R11.2 sob contrato existente C1.4; nenhuma inferência de equipe.
+- **Requirement / Gate**: R11.2/R26; BUILD real + revisão independente da correção e nova qualificação do bundle. LIVE permanece NOT-RUN sem conta.
+- **Commit**: Atômico em pt-BR; sem testes/mocks/sensores.

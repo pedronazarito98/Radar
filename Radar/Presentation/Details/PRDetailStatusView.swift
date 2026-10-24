@@ -12,6 +12,9 @@ struct PRDetailStatusView: View {
                     .foregroundStyle(RadarTheme.secondaryText)
             }
             Text("Solicitações observadas: \(details.review.requests.users.count) pessoas · \(details.review.requests.teams.count) equipes")
+            if let role = details.review.personalRequestRole {
+                Text("\(PRStatusText.roles([role])) · solicitação observada")
+            }
             Text("Cobertura de solicitações: \(coverage(details.review.requests.coverage))")
                 .foregroundStyle(RadarTheme.secondaryText)
             Text("Revisão: \(PRStatusText.review(details.review.summary))")

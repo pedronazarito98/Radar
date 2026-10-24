@@ -87,7 +87,8 @@ struct GitHubPRDetailEnricher: Sendable {
                 if users.count != requests.items.reduce(0, { $0 + $1.users.count }) ||
                     teams.count != requests.items.reduce(0, { $0 + $1.teams.count }) { requests.coverage = .partial }
                 let requestSummary = ReviewRequests(users: users, teams: teams, coverage: requests.coverage)
-                let review = ReviewReport(headSHA: sha, requests: requestSummary, reviews: reviews.items, coverage: reviews.coverage)
+                let review = ReviewReport(headSHA: sha, requests: requestSummary, reviews: reviews.items,
+                    coverage: reviews.coverage, authenticatedUserID: final.id)
                 let observation = GitHubPRDetailObservation(headSHA: sha, lifecycle: lifecycle, observedAt: observedAt,
                     ci: ci, review: review, problems: problems)
                 guard await publish(observation) else { throw GitHubCLIError.source(.cancelled) }

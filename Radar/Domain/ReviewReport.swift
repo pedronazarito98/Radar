@@ -46,13 +46,17 @@ struct ReviewReport: Equatable, Sendable {
     let reviews: [PullRequestReview]
     let coverage: ObservationCoverage
     let decisions: ReviewDecisionCounts
+    let personalRequestRole: PersonalPRRole?
 
-    init(headSHA: GitCommitSHA, requests: ReviewRequests, reviews: [PullRequestReview], coverage: ObservationCoverage) {
+    init(headSHA: GitCommitSHA, requests: ReviewRequests, reviews: [PullRequestReview],
+         coverage: ObservationCoverage, authenticatedUserID: GitHubUserID) {
         self.headSHA = headSHA
         self.requests = requests
         self.reviews = reviews
         self.coverage = coverage
         decisions = Self.evaluate(reviews, headSHA: headSHA)
+        // Positive evidence remains useful in a partial page set. Absence never qualifies a team.
+        personalRequestRole = requests.users.contains(authenticatedUserID) ? .directlyRequestedReviewer : nil
     }
 
     var summary: ReviewSummary {
