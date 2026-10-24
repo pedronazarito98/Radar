@@ -866,3 +866,20 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 - **Depends on / sequência**: C04; antes T24.
 - **Requirement / Gate**: R15/R27; BUILD + revisão independente. Sem testes/mocks.
 - **Commit**: Atômico em pt-BR.
+
+
+### C06 — Prazo da fila GitHub
+
+- **Status**: Prepared — BUILD/REVIEW independente PASS; corridas runtime NOT-RUN. docs/evidence/C06.md; commit d1af26d.
+- **What / Where**: Criar RequestBudget antes da lease e expirar waiters por ID/deadline em GitHubCLITransport; compartilhar a instância com chamadas Jira/GitHub.
+- **Depends on / sequência**: T29; correção T26 antes de T30 conforme C1.10.
+- **Requirement / Gate**: R12/R15/R26; BUILD + revisão independente. Nenhum teste/mock.
+- **Commit**: Atômico em pt-BR, já registrado no manifesto.
+
+### C07 — Origem textual de referências
+
+- **Status**: Prepared — REVIEW independente PASS; BUILD na árvore com WIP T31 PASS e build integrado T31 posterior PASS. docs/evidence/C07.md; commit 9957c09.
+- **What / Where**: Excluir referências dentro de URLs reconhecidas localmente por Foundation em JiraKeyReferenceExtractor; preservar intervalos originais.
+- **Depends on / sequência**: T30; correção T29 antes do commit T31 conforme C1.11.
+- **Requirement / Gate**: R12.1/R16; BUILD + revisão independente. Limite: URLs reconhecidas, sem promessa de parser universal. Nenhum teste/mock.
+- **Commit**: Atômico em pt-BR, já registrado no manifesto.

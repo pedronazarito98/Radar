@@ -38,11 +38,11 @@ Hashes são inseridos somente após cada commit existir; o próprio hash mais re
 | T27 | fb5ed1b | BUILD/REVIEW independente PASS; LIVE-GitHub NOT-RUN | T27.md |
 | T28 | 3c6ebc2 | BUILD/REVIEW independente PASS; LIVE-GitHub NOT-RUN | T28.md |
 | T29 | cce213e | BUILD/REVIEW independente PASS | T29.md |
-| C06 | commit desta evidência | BUILD/REVIEW independente PASS; corridas runtime NOT-RUN | C06.md |
+| C06 | d1af26d | BUILD/REVIEW independente PASS; corridas runtime NOT-RUN | C06.md |
 | T30 | 9b30356 | BUILD/REVIEW independente PASS; LIVE-Relações NOT-RUN | T30.md |
-| C07 | commit desta evidência | REVIEW PASS; BUILD árvore com WIP T31 PASS | C07.md |
-| T31 | commit desta evidência | BUILD/REVIEW independente PASS; LIVE/foco preenchido NOT-RUN | T31.md |
-| T32 | commit desta evidência | BUILD/REVIEW independente PASS; LIVE/sleep-wake NOT-RUN | T32.md |
-| T33 | commit desta evidência | BUILD/REVIEW independente PASS; LIVE/recuperação real NOT-RUN | T33.md |
-| T34 | commit desta evidência | BUILD/REVIEW persistência PASS; reinício/cofre MANUAL NOT-RUN | T34.md |
-| T35 | commit desta evidência | BUILD/REVIEW independente PASS; LIVE-Origens/shutdown NOT-RUN | T35.md |
+| C07 | 9957c09 | REVIEW PASS; BUILD árvore com WIP T31 PASS | C07.md |
+| T31 | e13e1ab | BUILD/REVIEW independente PASS; LIVE/foco preenchido NOT-RUN | T31.md |
+| T32 | d81169d | BUILD/REVIEW independente PASS; LIVE/sleep-wake NOT-RUN | T32.md |
+| T33 | 791c6ac | BUILD/REVIEW independente PASS; LIVE/recuperação real NOT-RUN | T33.md |
+| T34 | 965578b | BUILD/REVIEW persistência PASS; reinício/cofre MANUAL NOT-RUN | T34.md |
+| T35 | 066b86b | BUILD/REVIEW independente PASS; LIVE-Origens/shutdown NOT-RUN | T35.md |

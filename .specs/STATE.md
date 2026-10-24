@@ -141,11 +141,11 @@
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
-- **Phase / Task**: Lote4 T22–T28 preparado; handoff docs/handoffs/batch-04.md. providers_writer encerrou escrita; root/relations_writer assumem lote5.
-- **Completed**: T22 671efae, T23 cb9c140, C04 3b8a1a6, C05 2eed4b3, T24 330d241, T25 10871d4, T26 272ba61, T27 fb5ed1b, T28 3c6ebc2. BUILD/REVIEW independente PASS; T25 UI-gh versão PASS. LIVE/consentimento não executados. Handoffs anteriores preservados.
-- **In-progress**: Nenhuma alteração de código pendente do lote4. T13/T14 receberam revisão independente retomada, com correção do backoff em C04; bloqueio antigo removido.
-- **Next step**: T29, C06 antes de T30, depois T30–T35 sequenciais sob C1.10. Orçamento atual começa após lease; C06 deve incluir espera na fila. Manter scheduler compartilhado e qualificação de contexto/seleção/conexões.
-- **Blockers**: Política/site/projetos/repos e contas reais pendentes; LIVE-Jira/GitHub, cofre/consentimento/reinício, conteúdo real, acessibilidade, movimento reduzido, modos específicos, desempenho e Release continuam NOT-RUN. Ver docs/evidence/pending-gates.md. Nenhum gate dispensado; tarefas com gate obrigatório externo permanecem Prepared/PARTIAL.
-- **Persistence**: T34 deve persistir referência não secreta antes de gravar token no cofre. Até lá, não solicitar token real no build intermediário; nenhum agente acessa cofre/auth. Não auto-conectar após reinício.
+- **Phase / Task**: Lote5 T29–T35 preparado; handoff docs/handoffs/batch-05.md. Escrita do lote5 encerrada; root coordena o próximo escritor para T36–T38 e qualificação T39–T42.
+- **Completed**: T29 cce213e, C06 d1af26d, T30 9b30356, C07 9957c09, T31 e13e1ab, T32 d81169d, T33 791c6ac, T34 965578b, T35 066b86b. BUILD/REVIEW independente PASS, com limite de árvore WIP no gate C07 e build integrado T31 posterior. São entregas locais preparadas; LIVE/consentimento/aceite integrado não executados. Handoffs anteriores preservados.
+- **In-progress**: Nenhuma alteração de código pendente do lote5. Relações contextuais, scheduler por escopo, recuperação explícita, persistência própria e ciclo conectados; ações abrir/copiar e preferência de display ainda dependem do lote6.
+- **Next step**: T36 composição final, T37 abrir/copiar/foco, T38 display; depois T39–T42 com gates reais e verificador independente. Consumir DataLifecycleController como owner de start/stop e RelatedItemsCoordinator como único owner de seleção/detalhe/relações; não duplicar observers/consultas. Ler handoff05 e C1–C1.11.
+- **Blockers**: Política/site/projetos/repos e contas reais pendentes; LIVE-Jira/GitHub/relações, cofre/consentimento/reinício, conteúdo real, acessibilidade, movimento reduzido, modos específicos, desempenho e Release continuam NOT-RUN. Ver docs/evidence/pending-gates.md. Nenhum gate dispensado; tarefas com gate obrigatório externo permanecem Prepared/PARTIAL.
+- **Persistence**: T34 implementou confirmação de escrita atômica da referência não secreta antes do cofre; startup lê somente metadata própria e retomada exige ação explícita. Persistência/reinício/cofre ainda não observados em runtime. Nenhum agente acessa cofre/auth; eventual token somente no fluxo seguro do app pelo usuário.
 - **Uncommitted files**: Nenhum após commit deste handoff.
 - **Branch**: feat/radar-v1-local; sem remote.
