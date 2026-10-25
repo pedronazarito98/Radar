@@ -1,6 +1,10 @@
 # Radar — contexto do usuário
 
-**Status**: contexto de execução local autorizado. **Data**: 22/10/2026.
+**Status**: contexto de execução local autorizado. **Atualização**: 25/10/2026.
+
+O pedido mais recente rejeita o gh e a digitação de repositórios. AD-018/G1 autoriza implementação nativa com GitHub App, autorização no navegador e catálogo selecionável. O usuário ainda não cadastrou o App e pediu orientação após a implementação. As referências ao gh abaixo preservam o histórico superado.
+
+G02 está preparado em 5aaf302: builds finais e revisão fresca PASS; G03 observou UI real desconectada e encerramento/reabertura normal. Cadastro/instalação, Client ID/slug públicos e gates autenticados permanecem pendentes. O próximo passo é o guia docs/github-setup.md; nenhum segredo será solicitado no chat.
 
 ## Limite da autorização
 

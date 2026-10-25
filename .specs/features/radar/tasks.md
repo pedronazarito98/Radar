@@ -1,5 +1,7 @@
 # Radar — plano de tarefas
 
+> **Revisão vigente de 24/10/2026:** [GitHub nativo G1](github-onboarding.md) substitui a dependência do gh por GitHub App e seleção de repositórios. Trechos de gh abaixo são a baseline histórica; seus gates não qualificam o novo fluxo.
+
 **Status**: Execute local autorizado por AD-009. T01/T02 concluídas; demais conforme registro por tarefa.  
 **Referências**: [spec](spec.md), [design](design.md), [coordenação](coordination.md), [verificação](verification-plan.md), [STATE](../../STATE.md).
 
@@ -899,3 +901,9 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 - **Depends on / sequência**: T42, correção de T28/R11.2 sob contrato existente C1.4; nenhuma inferência de equipe.
 - **Requirement / Gate**: R11.2/R26; BUILD real + revisão independente da correção e nova qualificação do bundle. LIVE permanece NOT-RUN sem conta.
 - **Commit**: Atômico em pt-BR; sem testes/mocks/sensores.
+
+## Revisão GitHub nativo — G01–G03 (AD-018)
+
+- G01: contrato publicado em 7dd8c45; DOC/diffcheck PASS. Substitui baseline gh dos consumidores afetados.
+- G02: **Prepared/PARTIAL**, commit 5aaf302; único escritor github_onboarding_review após transferência do root. Auth/cofre/refresh/transport/catalog/UI sob G1, sem testes/mocks. BUILD Debug/Release finais e revisão independente fresca PASS estático. Fonte commitada corresponde ao fingerprint revisado; evidência docs/evidence/G02-implementation.md. Gates funcionais obrigatórios continuam NOT-RUN.
+- G03: **PARTIAL**, metadados/assinatura, UI real desconectada sem configuração, encerramento/reabertura normal e documentação PASS no limite observado. Cadastro, instalação/permissão, OAuth/refresh/cofre/catalog/PRs reais e acessibilidade preenchida NOT-RUN. Evidência docs/evidence/G03.md e handoff docs/handoffs/github-native.md; não reutilizar PASS de gh como evidência OAuth.

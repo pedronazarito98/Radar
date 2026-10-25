@@ -57,3 +57,7 @@ Complemento T34/T35: `c952406`, persistência do caminho gh e encerramento/reabe
 | T41 | 833c2d9 | BUILD/codesign/launch/UI gh e prefs PASS; auth NOT-RUN | local-bundle.md |
 | T42 | 545705e | 56 registros; revisão fresca executada, P2 resolvido em C09; aceite real bloqueado | acceptance.md; final-verification.md |
 | C09 | 299514b | BUILD Debug/Release/REVIEW independente/codesign/launch sem contas PASS; rótulo LIVE NOT-RUN | C09.md |
+| G01 | 7dd8c45 | DOC/diffcheck PASS; contrato GitHub nativo publicado antes dos consumidores | ../../.specs/features/radar/github-onboarding.md |
+| G02 | 5aaf302 | Prepared/PARTIAL; BUILD Debug/Release finais e REVIEW fresco PASS estático; LIVE NOT-RUN | G02-implementation.md |
+
+G03 é o fechamento documental parcial desta revisão: metadados/assinatura e UI desconectada/quit/reabertura PASS limitados, cadastro/contas/cofre/repos/PRs NOT-RUN. Evidência em [G03](G03.md), [guia de cadastro](../github-setup.md) e [handoff](../handoffs/github-native.md). O hash deste próprio fechamento será registrado somente num handoff posterior; não é inventado nem autorreferenciado.

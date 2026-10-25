@@ -1,5 +1,7 @@
 # Radar — design da V1 pessoal
 
+> **Revisão vigente de 24/10/2026:** [GitHub nativo G1](github-onboarding.md) substitui a dependência do gh por GitHub App e seleção de repositórios. Trechos de gh abaixo são a baseline histórica; seus gates não qualificam o novo fluxo.
+
 **Status**: implementação local autorizada; defaults adotados qualificáveis em AD-010. **Spec**: [spec.md](spec.md).  
 **Decisões lidas**: AD-001 a AD-016 de [STATE](../../STATE.md).
 

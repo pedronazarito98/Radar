@@ -32,7 +32,7 @@
 - **Trade-off**: gh é pré-requisito externo para a proposta inicial e a política da conta Jira ainda precisa permitir o método pessoal.
 - **Scope**: Integrações e entrega inicial.
 - **Date**: 2026-10-22
-- **Status**: active
+- **Status**: superseded na parte gh por AD-018/G1; demais limites preservados
 
 ### AD-005
 - **Decision**: Não criar testes, arquivos de teste ou mocks sem pedido explícito; gates e relatórios devem distinguir evidência manual, build e automação não executada.
@@ -88,7 +88,7 @@
 - **Trade-off**: Não herdar personalização corporativa; auth e Finder só qualificados pelo app em T26. Nenhum contrato de domínio C1 foi alterado.
 - **Scope**: GitHubCLI transport e gates T25–T28.
 - **Date**: 2026-10-22
-- **Status**: active
+- **Status**: superseded na parte gh por AD-018/G1; demais limites preservados
 
 ### AD-012
 - **Decision**: Contrato C1.2 publicado pelo orquestrador: GitHub usa X-GitHub-Api-Version: 2026-03-10 e Accept application/vnd.github+json, DTOs mínimos com assignees[]/head.sha; Jira distingue token scoped/legado, fields explícitos e paginação nextPageToken/isLast com parcial para contradição/truncamento.
@@ -142,18 +142,19 @@
 - **Decision**: Substituir gh por GitHub App device flow nativo com refresh sem client secret e catálogo selecionável de repositórios. G1 em github-onboarding.md prevalece sobre a baseline gh (AD-004/011 e critérios afetados).
 - **Reason**: Usuário rejeitou a UX técnica e pediu conexão amigável/listagem em 24/10/2026.
 - **Trade-off**: Cadastro GitHub App e aprovação/instalação pelos usuários são gates externos; não há cadastro existente. Client ID público/slug no build, segredo só no fluxo do app/cofre. Sem backend/publicação.
-- **Scope**: Integração GitHub e configurações; Jira e visual V3 preservados. Root escritor exclusivo.
+- **Scope**: Integração GitHub e configurações; Jira e visual V3 preservados. Escrita G02 transferida explicitamente a github_onboarding_review; root retomou ownership após entrega, sem alterar código.
 - **Date**: 2026-10-24
-- **Status**: active; implementação G02 em andamento.
+- **Status**: active; G02 preparado em 5aaf302, BUILD/REVIEW PASS; G03 parcial, LIVE pendente.
 
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
 - **Phase / Task**: Implementação local T01–T38 preparada; T39–T42 qualificação parcial documentada. V1 NÃO ACEITA enquanto gates obrigatórios externos não passarem.
 - **Completed**: Composição d3f95f7, navegação d9ed688, displays 5d98465; persistência/reinício desconectado c952406; performance 23ed6f5; visual independente d26d4db; C08 Release sem get-task-allow 45cafdd; bundle 833c2d9; C09 299514b e Release reconstruído. Builds Debug/Release, revisões por lote, launch pelo caminho completo, gh --version e preferências via UI passaram no limite registrado.
-- **In-progress**: Revisão G01/G02 de autenticação nativa e seleção de repos em github-onboarding.md. Baseline anterior: nenhuma implementação independente restante identificada. T42/545705e reúne 56 critérios; verificador fresco encontrou P2 de revisão direta, resolvido em C09/299514b com nova revisão PASS. Resultado em docs/evidence/final-verification.md.
-- **Next step**: Receber observações humanas e escopos/política/contas; executar somente gates reais autorizados e correções decorrentes. Não reiniciar implementação nem repetir acesso/auth automaticamente.
-- **Blockers**: Política/site/projetos/repos/contas, LIVE central, Keychain/consentimento/remoção, seleção/links reais, VoiceOver/Reduzir Movimento, 30 ciclos físicos com seleção e modos/displays não observados. Roteiro humano enviado com Release aberto/recolhido; silêncio não é PASS. Ver docs/evidence/pending-gates.md.
-- **Persistence**: UUID próprio persistido antes do cofre; startup metadata-only, retomada explícita. Preferência gh/tela verificada por UI/reinício; cofre não acessado por agentes.
-- **Artifact**: .build/DerivedData/Build/Products/Release/Radar.app; arm64/macOS 27, ad-hoc/runtime, sem App Sandbox/get-task-allow; SHA256 e479390fcbc42043ec45f29c782f3cc07ed4266c0db2cd884c8d6b9f619bd984. Nenhuma publicação/instalação/global change.
+- **Revisão atual**: G01/7dd8c45 definiu o escopo; G02/5aaf302 substituiu CLI por autenticação nativa e catálogo selecionável. Debug/Release finais e revisão fresca G1.1–G1.7 PASS no limite estático. G03 qualifica metadados, UI desconectada e quit/reabertura normal; OAuth/cofre/repos/PRs reais permanecem NOT-RUN. Evidências em docs/evidence/G03.md.
+- **Next step**: Orientar cadastro único do GitHub App conforme docs/github-setup.md, receber somente Client ID/endereço público do App e configurar o build. Depois, usuário instala/autoriza os repos permitidos e executa os gates reais G1.1–G1.7. Nenhum trabalho independente restante identificado nesta revisão.
+- **Blockers**: Cadastro/instalação GitHub App e Client ID/slug públicos; política/site/projetos Jira/contas, LIVE central, Keychain/consentimento/remoção, seleção/links reais, VoiceOver/Reduzir Movimento, 30 ciclos físicos com seleção e modos/displays não observados. Roteiro humano enviado com Release aberto/recolhido; silêncio não é PASS. Ver docs/evidence/pending-gates.md.
+- **Persistence**: UUID próprio persistido antes do cofre por contrato/revisão; startup metadata-only, retomada explícita. Preferência gh/tela tem evidência histórica; nenhum cofre acessado por agentes e GitHub nativo ainda sem qualificação real de persistência.
+- **Artifact histórico C09 (anterior a G02)**: .build/DerivedData/Build/Products/Release/Radar.app; arm64/macOS 27, ad-hoc/runtime, sem App Sandbox/get-task-allow; SHA256 e479390fcbc42043ec45f29c782f3cc07ed4266c0db2cd884c8d6b9f619bd984. Nenhuma publicação/instalação/global change.
+- **Artifact vigente G02**: mesmo caminho Release, fonte 5aaf302, arm64/ad-hoc/runtime, sem entitlements. Executável SHA256 2df75d3fcabdd6a04b78c61ad40e1dcf367ae44181793260d8aad829de52871c. Client ID/slug públicos vazios; conexão indisponível até cadastro. Aberto por caminho completo, encerrado e reaberto normalmente via CUA em 25/10/2026.
 - **Branch**: feat/radar-v1-local; sem remote. Testes/mocks/sensores/Swift lint não executados.

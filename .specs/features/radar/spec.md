@@ -1,5 +1,7 @@
 # Radar — especificação da V1 pessoal
 
+> **Revisão vigente de 24/10/2026:** [GitHub nativo G1](github-onboarding.md) substitui a dependência do gh por GitHub App e seleção de repositórios. Trechos de gh abaixo são a baseline histórica; seus gates não qualificam o novo fluxo.
+
 **Status**: execução local autorizada por AD-009. **Complexidade**: Complex. **Execute**: implementação local T01–T38 preparada; qualificação parcial T39–T42 conforme tasks.md e acceptance.md.
 **Data**: 22/10/2026. **Contexto**: [context.md](context.md). **Decisões ativas**: [STATE](../../STATE.md).
 
@@ -7,7 +9,7 @@
 
 Engenheiros alternam entre Jira e GitHub para saber o que está atribuído a eles, o que exige revisão e como tarefa e código se relacionam. A V1 oferece consulta discreta no notch, com contexto bidirecional e navegação aos serviços.
 
-O alvo confirmado é uso pessoal em macOS 27, Jira Cloud e GitHub.com com gh CLI. A identidade aprovada é Radar revisão 3. Ambiente, SDK e gh existente foram qualificados localmente; permissões e funcionamento autenticado das contas continuam pendentes. Evidências em docs/evidence/acceptance.md.
+O alvo confirmado é uso pessoal em macOS 27, Jira Cloud e GitHub.com com autenticação nativa e seletor de repositórios (AD-018/G1). A identidade aprovada é Radar revisão 3. Ambiente, SDK e gh existente foram qualificados localmente; permissões e funcionamento autenticado das contas continuam pendentes. Evidências em docs/evidence/acceptance.md.
 
 ## Escopo P1
 
@@ -20,7 +22,7 @@ Notch compacto, visão agrupada, seleção card/PR, faixa de relações, CI/revi
 | Jira Data Center, GitHub Enterprise Server/GHE.com | Possibilidades iniciais foram refinadas pelo usuário para Cloud + github.com; reavaliar em outra feature. |
 | Distribuição pública, App Store, notarização e atualizador | Primeira entrega pessoal; não executar publicação ou compra. |
 | OAuth Jira distribuído e serviço de token broker | A documentação atual exige segredo no fluxo; arquitetura futura separada. |
-| GitHub App/device flow próprio | gh existente é a proposta pessoal; migração posterior. |
+| Backend de autenticação, chave privada e client secret embarcado | Device flow/refresh local não requerem esses componentes; cadastro do GitHub App é gate externo. |
 | Merge, aprovação, comentários e transição Jira | O app é de consulta e navegação. |
 | IA, resumo de daily, notificações push, snooze e atalhos globais | Ideias não necessárias para o fluxo principal. |
 | Persistir títulos/PRs ou dados corporativos em banco/cache de disco | V1 usa memória; preferências e credenciais têm meios distintos. |
@@ -32,7 +34,7 @@ Notch compacto, visão agrupada, seleção card/PR, faixa de relações, CI/revi
 |---|---|---|
 | P1 | Consultar trabalho sem abandonar o editor | Abrir/fechar o painel e ver o estado de cada origem, inclusive desconectada. |
 | P1 | Conectar Jira Cloud pessoalmente | Conectar pela UI segura, listar cards reais permitidos e desconectar sem expor segredo. |
-| P1 | Aproveitar o GitHub pelo gh | Iniciar pelo Finder, consultar dados reais permitidos ou receber indicação clara de pré-requisito. |
+| P1 | Conectar GitHub e escolher repositórios | Autorizar no navegador, buscar/selecionar repos acessíveis e consultar PRs. |
 | P1 | Aproximar tarefa e código | Selecionar card com relações conhecidas, abrir PR e fazer o caminho inverso. |
 | P1 | Entender responsabilidade e falha | Diferenciar fase, CI, revisão, vazio, parcial e desatualizado. |
 | P1 | Usar teclado e preferências de acessibilidade | Navegar e fechar sem capturar digitação fora do painel. |
@@ -114,14 +116,14 @@ Conexão pessoal, condicionada à política da conta, com segredo restrito ao ap
 
 **Tarefas mapeadas**: T19, T22, T23, T35, T36.
 
-### R09 — GitHub pelo gh existente
+### R09 — GitHub nativo
 
-Reutilizar autenticação do CLI sem extrair credenciais.
+GitHub App com autorização no navegador, sessão própria e seletor de repositórios (G1).
 
-- **R09.1** — **QUANDO** adapter consultar GitHub, **ENTÃO DEVERÁ ser atendido este resultado**: Ao consultar GitHub, executar gh por caminho absoluto com argumentos estruturados, --hostname github.com e --method GET em endpoints permitidos; não invocar shell, login, refresh de auth ou gh auth token.
-- **R09.2** — **QUANDO** gh estiver ausente, incompatível ou não autenticado, **ENTÃO DEVERÁ ser atendido este resultado**: Se gh estiver ausente, incompatível ou não autenticado, apresentar ação específica; não instalar, alterar permissões ou aumentar escopos automaticamente.
+- **R09.1** — **QUANDO** usuário conectar GitHub, **ENTÃO** o Radar DEVERÁ iniciar autorização oficial no navegador sem CLI ou token colado; tokens são manipulados somente pelo app/cofre próprio e consultas de trabalho usam GET permitido em api.github.com.
+- **R09.2** — **QUANDO** autorização terminar, **ENTÃO** o Radar DEVERÁ listar os repositórios acessíveis ao App/usuário, com busca, seleção de 1–10 e paginação/erros explícitos; não ativar escopo anterior silenciosamente nem ampliar acesso.
 
-**Tarefas mapeadas**: T19, T25, T26, T27, T33.
+**Tarefas mapeadas**: G01–G03; T19/T25–T27/T33 são histórico substituído na parte gh. Critérios complementares G1.1–G1.7 em github-onboarding.md.
 
 ### R10 — Cards Jira corretos
 
@@ -179,9 +181,9 @@ Consultas limitadas, coalescidas e com espera por origem.
 
 ### R16 — Entradas e navegação validadas
 
-URLs, executável e parâmetros são dados controlados.
+URLs e parâmetros são dados controlados.
 
-- **R16.1** — **QUANDO** caminho do gh ou parâmetros de consulta forem recebidos, **ENTÃO DEVERÁ ser atendido este resultado**: Somente executar arquivo gh escolhido/validado e chamadas REST permitidas; títulos, chave e nomes de repo não se tornam comandos, flags, arquivos ou instruções.
+- **R16.1** — **QUANDO** parâmetros de conexão/consulta forem recebidos, **ENTÃO** o Radar DEVERÁ usar somente endpoints construídos e permitidos; URLs remotas não autorizam redirect, código, shell, arquivo ou escopo adicional. Configuração pública de OAuth fica no build; nenhum segredo embarcado.
 - **R16.2** — **QUANDO** usuário acionar um destino externo, **ENTÃO DEVERÁ ser atendido este resultado**: Abrir apenas HTTPS do site Jira configurado ou github.com, com destino validado; rejeitar javascript, file, shell e host divergente.
 
 **Tarefas mapeadas**: T23, T25, T26, T29, T37.
@@ -209,7 +211,7 @@ Uma superfície por vez, com fallback acessível.
 Conteúdo de trabalho em memória na V1; preferências separadas de segredos.
 
 - **R19.1** — **QUANDO** app reiniciar, **ENTÃO DEVERÁ ser atendido este resultado**: Ao reiniciar, consultar dados novamente e manter somente preferências não secretas; nenhum banco/cache em disco de títulos e PRs é criado por padrão.
-- **R19.2** — **QUANDO** conta/contexto mudar ou origem desconectar, **ENTÃO DEVERÁ ser atendido este resultado**: Ao mudar contexto ou detectar mudança de usuário no gh nas fronteiras de consulta, descartar seleções/snapshots/lote incompatíveis; ao desconectar, limpar apenas estado próprio. A limitação de troca externa A→B→A não observada é declarada, sem prometer sessão transacional entre contas.
+- **R19.2** — **QUANDO** conta/contexto mudar ou origem desconectar, **ENTÃO** o Radar DEVERÁ invalidar sessões, seleções, snapshots e lotes incompatíveis. Desconexão remove apenas credencial própria com retry se falhar; saída limpa memória preservando referência para retomada explícita. Identidade é qualificada nas fronteiras de cada lote.
 
 **Tarefas mapeadas**: T12, T34, T35, T36.
 
@@ -218,7 +220,7 @@ Conteúdo de trabalho em memória na V1; preferências separadas de segredos.
 Cada origem possui seu próprio estado de conexão.
 
 - **R20.1** — **QUANDO** apenas uma origem estiver disponível, **ENTÃO DEVERÁ ser atendido este resultado**: Jira e GitHub podem conectar independentemente; a origem disponível continua útil enquanto a outra precisa de conexão/reconexão.
-- **R20.2** — **QUANDO** usuário usar uma ação de conexão, **ENTÃO DEVERÁ ser atendido este resultado**: Os botões de conexão refletem o modo pessoal escolhido: token seguro para Jira e gh existente para GitHub; não prometer OAuth próprio pronto.
+- **R20.2** — **QUANDO** usuário conectar uma origem, **ENTÃO** os botões DEVERÃO refletir token seguro Jira e autorização GitHub no navegador com escolha de repos. Cadastro ausente, autorização negada, expiração e permissões têm orientação honesta; não apresentar sucesso antes da confirmação.
 
 **Tarefas mapeadas**: T19, T22, T23, T25, T33, T36.
 
@@ -280,7 +282,7 @@ Objetos remotos não são confundidos por apresentação ou conexão.
 
 Autenticação, permissão, limite e falha técnica não se confundem.
 
-- **R27.1** — **QUANDO** origem retornar erro de auth/permissão, **ENTÃO DEVERÁ ser atendido este resultado**: Erro 401 ou necessidade de auth do gh permite pedir reconexão; 403/code 1 não é automaticamente chamado de sessão expirada.
+- **R27.1** — **QUANDO** origem retornar erro de auth/permissão, **ENTÃO DEVERÁ ser atendido este resultado**: Erro 401 ou autorização revogada permite pedir reconexão; 403 não é automaticamente chamado de sessão expirada. Erros OAuth não expõem corpo ou segredo.
 - **R27.2** — **QUANDO** origem retornar limite, timeout, cancelamento ou conteúdo inválido, **ENTÃO DEVERÁ ser atendido este resultado**: 429/limite respeita espera; timeout, cancelamento, JSON inválido e capacidade indisponível têm representação própria e não viram vazio.
 
 **Tarefas mapeadas**: T11, T14, T23, T24, T26, T27, T28, T33.

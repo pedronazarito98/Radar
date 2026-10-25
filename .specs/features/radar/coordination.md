@@ -119,4 +119,14 @@ radar_native_plan e radar_providers_plan herdaram o contexto e conversaram diret
 
 ## Revisão de onboarding — G01/G02, 24/10/2026
 
-Root é escritor exclusivo. github_onboarding_review e github_auth_research receberam contexto compartilhado por fork all, fonte canônica, pedido atual e limites; conversaram diretamente sobre transporte/catálogo/refresh. Contrato G1 publicado em github-onboarding.md antes dos consumidores. Após implementação, revisor fresco somente leitura; registro/client ID/conta dependem do usuário, sem acesso por agentes.
+Inicialmente root foi escritor exclusivo do contrato. github_onboarding_review e github_auth_research receberam contexto compartilhado por fork all, fonte canônica, pedido atual e limites; conversaram diretamente sobre transporte/catálogo/refresh. Contrato G1 publicado em github-onboarding.md antes dos consumidores. Registro/client ID/conta dependem do usuário, sem acesso por agentes.
+
+### Transferência G02
+
+Após publicar G1/7dd8c45 e concluir a pesquisa, root transferiu ownership exclusivo de código a github_onboarding_review (implementador). Root limitou-se à documentação e qualificação; nenhum código foi editado por root nesta revisão. github_auth_research permaneceu consultor readonly.
+
+### Entrega e revisão fresca — 25/10/2026
+
+github_native_verifier iniciou com fork none, somente fonte canônica/árvore/limites; revisou o diff estável e dialogou sobre as correções sem escrever código. Catálogo parcial, revalidação após awaits e drenagem antes do quit foram corrigidos pelo único escritor e revistos; o delta final de User-Agent/cooldown também recebeu PASS. O implementador executou Debug/Release finais sequenciais, ambos exit 0 sem diagnóstico, e liberou ownership para root. Não houve revisão própria apresentada como independente.
+
+Root commitou G02 em 5aaf302 sem modificar código. O verificador confirmou os 103 arquivos de Radar/Radar.xcodeproj no commit com fingerprint 554c7994d585404e159d702abdadd67d88f612e9e572bda591d59fc504dcce2c, idêntico ao conteúdo revisado e sem alterações locais. Root qualificou metadados públicos e UI desconectada/quit/reabertura via CUA, sem contas/cofre. Estado e limites em docs/evidence/G03.md. Escritor ativo ao final: root; nenhum subagente com edição pendente.

@@ -1,5 +1,7 @@
 # Radar — plano de verificação
 
+> **Revisão vigente de 24/10/2026:** [GitHub nativo G1](github-onboarding.md) substitui a dependência do gh por GitHub App e seleção de repositórios. Trechos de gh abaixo são a baseline histórica; seus gates não qualificam o novo fluxo.
+
 **Status**: roteiro da baseline de planejamento, preservado para execução. Os resultados atuais ficam em [STATE](../../STATE.md) e no [manifesto](../../../docs/evidence/manifest.md); referências abaixo a nenhum caso executado descrevem a baseline, não a árvore atual.
 **Cobertura**: 28 casos, cada um com dois subcritérios da spec (56 critérios). Uma linha abaixo não representa um único clique nem um resultado concluído.
 

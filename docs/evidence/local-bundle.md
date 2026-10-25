@@ -1,5 +1,7 @@
 # T41 — Bundle pessoal Release
 
+> Evidência histórica anterior à revisão GitHub nativa G01–G03. O artefato vigente de fonte 5aaf302 e seus gates estão em [G03](G03.md); estes hashes e observações de gh não qualificam OAuth. A expressão “vigente” no relato C09 abaixo se refere àquela passagem histórica.
+
 **PARTIAL: BUILD, assinatura e launch/UI sem contas PASS.** Uso autenticado de Jira/GitHub pelo Release permanece NOT-RUN e impede aceite integral. Não há publicação/notarização/instalação de ferramentas/configuração global.
 
 ## Artefato

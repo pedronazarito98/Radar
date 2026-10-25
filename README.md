@@ -1,8 +1,8 @@
 # Radar — V1 pessoal local
 
-**23/10/2026 · Implementação local preparada · Aceite real pendente**
+**25/10/2026 · GitHub nativo preparado localmente · Cadastro e aceite real pendentes**
 
-A V1 é pessoal: um app nativo para macOS 27 que reúne seus cards do Jira Cloud e PRs do GitHub.com usando o gh existente. O notch fica fechado com indicadores; um clique abre as duas colunas e a faixa inferior conecta tarefa e código.
+A V1 é pessoal: um app nativo para macOS 27 que reúne seus cards do Jira Cloud e PRs do GitHub.com. A revisão atual substitui gh por autorização no navegador e escolha de repositórios em uma lista com busca. O notch fica fechado com indicadores; um clique abre as duas colunas e a faixa inferior conecta tarefa e código.
 
 A identidade visual canônica é a revisão 3: superfície preta, seleção cinza, símbolos/rótulos claros e nenhuma borda lateral colorida. As imagens estão incluídas neste pacote.
 
@@ -14,15 +14,17 @@ A identidade visual canônica é a revisão 3: superfície preta, seleção cinz
 |---|---|
 | App e painel | Swift + SwiftUI; AppKit restrito à janela, recorte, foco e displays. Target Xcode. |
 | Jira Cloud | Token pessoal permitido pela conta, inserido diretamente no app e guardado no Keychain próprio. |
-| GitHub.com | gh instalado e autenticado pelo usuário; Radar usa um conjunto limitado de consultas REST GET, sem extrair auth. |
+| GitHub.com | GitHub App, autorização no navegador e seleção de repos acessíveis; tokens no cofre próprio e consultas de trabalho REST GET. Cadastro inicial pendente. |
 | Dados | Conteúdo de trabalho em memória; preferências não secretas separadas das credenciais. |
 | Relações | Chave Jira explícita em título/branch, com repo, site e proveniência; busca limitada aos repos selecionados. |
 | Estados | Fase do PR, CI e revisão separados; total pessoal independente do número de vínculos. |
-| Entrega | Bundle local pessoal, qualificado pelo Finder. Auth/distribuição pública recebem especificação própria depois. |
+| Entrega | Bundle local pessoal, qualificado pelo Finder. Distribuição pública permanece fora do escopo. |
 
 O target local usa Swift 6, SwiftUI/AppKit, assinatura ad-hoc e Hardened Runtime sem App Sandbox, conforme AD-010. O método Jira depende da política da conta e da entrada segura pelo usuário. Não foram instaladas ferramentas, publicadas versões ou alteradas configurações globais.
 
-O adapter gh verifica a identidade no começo e no fim de cada lote. Como a autenticação é administrada externamente pelo CLI, a V1 pressupõe uma conta ativa durante a sincronização; trocas externas rápidas de conta não têm garantia transacional. Essa limitação e a alternativa futura de auth próprio estão documentadas no design.
+A revisão [GitHub nativo G1](.specs/features/radar/github-onboarding.md) conserva identidade no começo/fim dos lotes, contexto, cancelamento e limites. Autenticar não aplica repositórios antigos automaticamente: o usuário confirma as escolhas no catálogo da sessão atual. O cadastro único está descrito no [guia de ativação](docs/github-setup.md).
+
+G02 está em `5aaf302`: autorização por código no navegador, sessão própria, renovação e catálogo com busca/seleção de 1–10 repositórios. Os builds Debug/Release finais e a revisão independente fresca passaram. A [qualificação G03](docs/evidence/G03.md) confirma somente metadados e UI desconectada/quit/reabertura do Release; autorização, cofre e repositórios reais ainda não foram executados.
 
 ## Sequência de implementação
 
@@ -31,11 +33,11 @@ O adapter gh verifica a identidade no começo e no fim de cada lote. Como a aute
 | 1. Base nativa | T01–T07 | Prontidão, target, recorte, painel, foco e animação. |
 | 2. Domínio e estado | T08–T14 | IDs estáveis, contagem, snapshots, seleção e refresh limitado. |
 | 3. Apresentação | T15–T21 | Indicadores, listas, faixa, configurações e teclado com a identidade aprovada. |
-| 4. Integrações | T22–T28 | Jira pessoal e consultas gh reais, com estados de falha/completude. |
+| 4. Integrações | T22–T28 | Baseline Jira pessoal e gh; parte gh substituída por G01–G03. |
 | 5. Relações e recuperação | T29–T35 | Card ↔ PR, proteção contra respostas atrasadas, reconexão e ciclo de dados. |
 | 6. Qualificação | T36–T42 | Integração final, destinos, displays, fluidez, acessibilidade e bundle pessoal. |
 
-São **42 tarefas**, **28 requisitos** e **56 critérios de aceite**. As fases não representam dias estimados. A prontidão foi qualificada em T01; cada entrega conserva seus gates e limites no manifesto.
+A baseline tem **42 tarefas**, **28 requisitos** e **56 critérios de aceite**. A revisão G01–G03 acrescenta 7 critérios específicos de onboarding e substitui os critérios de gh afetados. As fases não representam dias estimados. A prontidão foi qualificada em T01; cada entrega conserva seus gates e limites no manifesto.
 
 ## Como os subagentes trabalham
 
@@ -62,7 +64,7 @@ O verificador final recebe os documentos, a árvore de código e as evidências 
 | [Comportamentos anteriores](references/radar-conexoes-comportamentos-v2.md) | Origem dos fluxos aprofundados na especificação. |
 | [Estudo inicial](references/estudo-notch-jira-github.md) | Pesquisa comparativa original. |
 
-O roteiro visual antecede a escolha final de auth: na implementação, seus textos de conexão serão adaptados para token Jira pessoal + gh, preservando a identidade.
+O roteiro visual antecede a autenticação atual: textos de conexão seguem Jira pessoal e GitHub nativo, preservando a identidade.
 
 ## Validação e limites
 
@@ -70,11 +72,11 @@ A regra do usuário impede criar testes, arquivos de teste ou mocks. O plano usa
 
 Os gates de uso real incluem recorte/foco, Jira e GitHub, relação bidirecional, teclado/VoiceOver/Reduzir Movimento, 30 ciclos de interação e lançamento pelo Finder. Condições externas não reproduzidas são registradas separadamente; revisão estática não comprova fluidez ou funcionamento no hardware.
 
-A implementação local inclui integrações, relações, recuperação, persistência, ciclo de dados, navegação e display. Builds Debug/Release e revisões independentes passaram, incluindo correção C09 após a verificação final fresca. O Release foi aberto pelo caminho completo; gh 2.96.0 e persistência de preferências foram verificados pela UI sem consultar contas. Três ciclos CUA, duas leituras de repouso e comparação visual desconectada estão documentados. Isso não aceita a V1: fluxo central real, Keychain, VoiceOver/Reduzir Movimento e protocolo físico continuam pendentes. Os 56 critérios estão em [aceite](docs/evidence/acceptance.md) e o resultado em [revisão final](docs/evidence/final-verification.md); ver [gates pendentes](docs/evidence/pending-gates.md). Testes/mocks/sensores/Swift lint não rodaram; nenhum remote/publicação foi criado.
+A baseline anterior inclui integrações, relações, recuperação, persistência, ciclo de dados, navegação e display. Seus builds Debug/Release e revisões independentes passaram, incluindo correção C09 após a verificação final fresca. O Release foi aberto pelo caminho completo; gh 2.96.0 e persistência de preferências foram verificados pela UI sem consultar contas. Três ciclos CUA, duas leituras de repouso e comparação visual desconectada estão documentados. Isso não aceita a V1: fluxo central real, Keychain, VoiceOver/Reduzir Movimento e protocolo físico continuam pendentes. Os 56 critérios estão em [aceite](docs/evidence/acceptance.md) e o resultado em [revisão final](docs/evidence/final-verification.md); ver [gates pendentes](docs/evidence/pending-gates.md). Testes/mocks/sensores/Swift lint não rodaram; nenhum remote/publicação foi criado.
 
-Para abrir o Release já gerado: [.build/DerivedData/Build/Products/Release/Radar.app](.build/DerivedData/Build/Products/Release/Radar.app). Metadados e procedimento em [bundle local](docs/evidence/local-bundle.md). `./script/build_and_run.sh` continua gerando/abrindo Debug.
+Para abrir o Release já gerado: [.build/DerivedData/Build/Products/Release/Radar.app](.build/DerivedData/Build/Products/Release/Radar.app). Metadados vigentes em [G03](docs/evidence/G03.md); o [bundle local](docs/evidence/local-bundle.md) preserva o histórico anterior. `./script/build_and_run.sh` continua gerando/abrindo Debug.
 
-Ao iniciar, as contas ficam desconectadas. Em Configurações, valide o gh existente antes de conectar aos repositórios autorizados. Jira depende da política da organização e de entrada pessoal no SecureField; nunca envie token no chat. Retomar token salvo também é explícito. O app consulta apenas Jira Cloud/GitHub.com, mas as permissões existentes da credencial podem ser mais amplas.
+Ao iniciar, as contas ficam desconectadas. O fluxo GitHub nativo exige primeiro configurar o Client ID público e slug do Radar no build, conforme o guia; depois a UI conduz autorização e seleção de repositórios. Jira depende da política da organização e de entrada pessoal no SecureField; nunca envie token no chat. Retomar token salvo também é explícito. O app consulta apenas Jira Cloud/GitHub.com, mas as permissões existentes da credencial podem ser mais amplas.
 
 ## Execução local
 

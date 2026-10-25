@@ -1,5 +1,7 @@
 # T42 — Aceite integrado da V1 pessoal
 
+> **Histórico da baseline até C09:** os resultados abaixo qualificam o build anterior com gh. A revisão de 24/10/2026 (AD-018/G1) substitui R09, R16.1, R19.2, R20.2 e a parte gh dos demais critérios. Os PASS antigos não qualificam OAuth/catálogo; novos gates em [G03](G03.md).
+
 **Estado: implementação local preparada; V1 NÃO ACEITA.** Gates obrigatórios de contas/fluxo central, acessibilidade e protocolo físico continuam NOT-RUN. A revisão final fresca foi executada após T42/545705e: encontrou um P2, corrigido e revisto em C09/299514b. Resultado e limites em final-verification.md.
 
 ## Contexto comum de cada registro
