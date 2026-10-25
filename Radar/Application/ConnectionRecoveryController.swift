@@ -32,9 +32,6 @@ enum ConnectionRecoveryController {
         case .serviceUnavailable:
             return ConnectionRecoveryPlan(action: .wait,
                 message: "O serviço pediu uma pausa. A próxima consulta respeitará esse prazo.")
-        case .executableMissing, .executableIncompatible:
-            return ConnectionRecoveryPlan(action: .configure,
-                message: "Escolha e valide uma instalação compatível do gh. O Radar não instala ferramentas.")
         case .transportUnavailable:
             return ConnectionRecoveryPlan(action: .restart,
                 message: "Encerre e abra o Radar novamente para requalificar o transporte. Nenhuma autenticação será alterada.")
@@ -53,6 +50,6 @@ enum ConnectionRecoveryController {
     private static func reconnect(_ source: WorkSource) -> ConnectionRecoveryPlan {
         ConnectionRecoveryPlan(action: .reconnect, message: source == .jira
             ? "Se houver token salvo, use Retomar / requalificar após confirmar a política da organização. Sem token salvo, informe-o somente neste formulário; para substituí-lo, remova antes a conexão."
-            : "Confira a autenticação do gh fora do Radar; se esta origem estiver conectada, desconecte-a e conecte novamente aqui. O Radar não executa comandos de autenticação.")
+            : "Retome a conexão salva pelo formulário do Radar. Se a autorização tiver expirado ou sido revogada, remova a sessão salva e conecte novamente pelo navegador.")
     }
 }

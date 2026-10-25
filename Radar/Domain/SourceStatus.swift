@@ -11,8 +11,6 @@ enum SourceProblem: Equatable, Sendable {
     case cancelled
     case invalidResponse
     case capabilityUnavailable
-    case executableMissing
-    case executableIncompatible
     case transportUnavailable
     case networkFailure
     case resourceLimit

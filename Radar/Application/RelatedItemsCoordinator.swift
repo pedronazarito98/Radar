@@ -45,7 +45,7 @@ final class RelatedItemsCoordinator {
         if !force, store.relations.selection == selection, store.relations.observation != nil { return }
         guard let jiraScope = store.jira.scope, let githubScope = store.github.scope,
               store.jira.status.connection == .connected, store.github.status.connection == .connected,
-              let connectionID = github.connectionID, let executable = github.executable, let user = github.identity else { return }
+              let connectionID = github.connectionID, let sessionReference = github.sessionReference, let user = github.identity else { return }
         let query = UUID(); queryID = query
         let invalidation = store.relations.invalidation
         store.relations.begin(selection: selection, queryID: query)
@@ -67,7 +67,7 @@ final class RelatedItemsCoordinator {
                 }
                 let problems = try await RelationResolver(jira: jira, github: github.transport).fetchAndPublish(
                     subject: subject, jiraConnection: qualified, githubConnectionID: connectionID, githubScope: githubScope,
-                    executable: executable, expectedUser: user, knownPRs: store.github.items,
+                    sessionReference: sessionReference, expectedUser: user, knownPRs: store.github.items,
                     isCurrent: { [weak self] in
                         self?.current(query, selection, invalidation, connectionID, jiraScope, githubScope) ?? false
                     }, publish: { [weak self] result in
@@ -78,7 +78,10 @@ final class RelatedItemsCoordinator {
             } catch {
                 let failure = Self.failure(error)
                 let problem = failure.problem
-                if failure.identityChanged, github.connectionID == connectionID {
+                let githubAuthenticationFailed = failure.observedProblems.contains {
+                    $0.source == .github && $0.problem == .authenticationRequired
+                }
+                if (failure.identityChanged || githubAuthenticationFailed), github.connectionID == connectionID {
                     github.requireRequalification()
                 }
                 store.relations.fail(problem, queryID: query)
@@ -100,8 +103,8 @@ final class RelatedItemsCoordinator {
         let problem: SourceProblem
         var changed = false
         switch error {
-        case let GitHubCLIError.source(value): source = .github; problem = value
-        case GitHubCLIError.identityChanged: source = .github; problem = .authenticationRequired; changed = true
+        case let GitHubAPIError.source(value): source = .github; problem = value
+        case GitHubAPIError.identityChanged: source = .github; problem = .authenticationRequired; changed = true
         case let JiraConnectionError.source(value): source = .jira; problem = value
         case is CancellationError: source = .github; problem = .cancelled
         default: source = .github; problem = .transportUnavailable

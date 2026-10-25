@@ -42,11 +42,11 @@ final class GitHubDetailController {
         let store = connection.store
         let details = store.selection.prDetails
         guard store.isPanelOpen, store.selection.isCurrent(selection), connection.connectionID == connectionID,
-              let executable = connection.executable, let user = connection.identity,
+              let sessionReference = connection.sessionReference, let user = connection.identity,
               let request = details.beginRefresh() else { return RefreshOutcome(problems: []) }
         do {
             let problems = try await GitHubPRDetailEnricher(transport: connection.transport).fetchAndPublish(
-                executable: executable, expectedUser: user, item: item) { [weak self] observation in
+                sessionReference: sessionReference, expectedUser: user, item: item) { [weak self] observation in
                     guard let self, self.connection.connectionID == connectionID, !Task.isCancelled,
                           store.isPanelOpen, store.selection.isCurrent(selection), details.isCurrent(request),
                           let version = details.observeHead(observation.headSHA, lifecycle: observation.lifecycle,
@@ -56,7 +56,7 @@ final class GitHubDetailController {
                     return details.publish(value, problem: observation.problems.first, for: request)
                 }
             return RefreshOutcome(problems: problems)
-        } catch GitHubCLIError.identityChanged {
+        } catch GitHubAPIError.identityChanged {
             if connection.connectionID == connectionID, details.isCurrent(request) {
                 connection.requireRequalification(); stop()
             }
@@ -64,7 +64,9 @@ final class GitHubDetailController {
         } catch {
             let failure = error as? GitHubBatchFailure
             let problem = failure?.problem ?? GitHubPersonalPRProvider.problem(error)
-            details.finish(with: problem, for: request)
+            if problem == .authenticationRequired, connection.connectionID == connectionID, details.isCurrent(request) {
+                connection.requireRequalification(); stop()
+            } else { details.finish(with: problem, for: request) }
             return RefreshOutcome(problems: (failure?.observedProblems ?? []) + [problem])
         }
     }

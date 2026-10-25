@@ -2,12 +2,12 @@ import Foundation
 
 struct RelationResolver: Sendable {
     let jira: JiraCloudConnection
-    let github: GitHubCLITransport
+    let github: GitHubAPITransport
 
     func fetchAndPublish(
         subject: RelationSubject, jiraConnection: JiraQualifiedConnection,
         githubConnectionID: ConnectionID, githubScope: SourceScope,
-        executable: QualifiedGitHubExecutable, expectedUser: GitHubAuthor,
+        sessionReference: GitHubSessionReference, expectedUser: GitHubAuthor,
         knownPRs: [PullRequestItem],
         isCurrent: @escaping @MainActor @Sendable () -> Bool,
         publish: @escaping @MainActor @Sendable (RelationObservation) -> Bool
@@ -16,19 +16,19 @@ struct RelationResolver: Sendable {
             throw RelationFailure(problem: .invalidResponse, observedProblems: [], identityChanged: false)
         }
         let budget = RequestBudget(maximumCalls: 20, duration: .seconds(30))
-        return try await github.withBatch(executable: executable, budget: budget) { session in
+        return try await github.withBatch(sessionReference: sessionReference, budget: budget) { session in
             var result = RelationObservation()
             var observed = false
             do {
                 try await ensureCurrent(jiraConnection, isCurrent)
                 let initial = try GitHubUserDTO.decode(try await session.get(.user).body)
-                guard initial.id == expectedUser.id else { throw GitHubCLIError.identityChanged }
+                guard initial.id == expectedUser.id else { throw GitHubAPIError.identityChanged }
                 try await ensureCurrent(jiraConnection, isCurrent)
                 switch subject {
                 case let .jira(card):
                     guard case let .jira(site, projects) = jiraConnection.scope.resources,
                           card.id.site == site, projects.contains(card.key.projectKey) else {
-                        throw GitHubCLIError.source(.invalidResponse)
+                        throw GitHubAPIError.source(.invalidResponse)
                     }
                     result.jiraItems = [card]
                     var fresh: [PullRequestItem] = []
@@ -40,7 +40,7 @@ struct RelationResolver: Sendable {
                                 let response = try await session.get(.pulls(repository, page: page))
                                 try await ensureCurrent(jiraConnection, isCurrent)
                                 let dtos = try JSONDecoder().decode([GitHubRelatedPRDTO].self, from: response.body)
-                                guard dtos.count <= 100 else { throw GitHubCLIError.source(.invalidResponse) }
+                                guard dtos.count <= 100 else { throw GitHubAPIError.source(.invalidResponse) }
                                 let items = try dtos.map { try $0.item(repository: repository, connectionID: githubConnectionID, requireOpen: true) }
                                 var validated = result
                                 for item in items { try register(item, in: &validated) }
@@ -76,13 +76,13 @@ struct RelationResolver: Sendable {
                         }
                     }
                 case let .pullRequest(selected):
-                    guard repositories.contains(selected.repositoryName) else { throw GitHubCLIError.source(.permissionDenied) }
+                    guard repositories.contains(selected.repositoryName) else { throw GitHubAPIError.source(.permissionDenied) }
                     let response = try await session.get(.pullRequest(selected.repositoryName, number: selected.id.number))
                     try await ensureCurrent(jiraConnection, isCurrent)
                     let dto = try JSONDecoder().decode(GitHubRelatedPRDTO.self, from: response.body)
                     let pr = try dto.item(repository: selected.repositoryName, connectionID: githubConnectionID, requireOpen: false)
-                    guard pr.id.number == selected.id.number else { throw GitHubCLIError.source(.invalidResponse) }
-                    if case .stable = selected.id.repository, pr.id != selected.id { throw GitHubCLIError.source(.invalidResponse) }
+                    guard pr.id.number == selected.id.number else { throw GitHubAPIError.source(.invalidResponse) }
+                    if case .stable = selected.id.repository, pr.id != selected.id { throw GitHubAPIError.source(.invalidResponse) }
                     try register(pr, in: &result)
                     result.pullRequests = [pr]
                     observed = true
@@ -109,21 +109,21 @@ struct RelationResolver: Sendable {
                 try await ensureCurrent(jiraConnection, isCurrent)
                 let finalResponse = try await session.get(.user, finalIdentity: true)
                 let final = try GitHubUserDTO.decode(finalResponse.body)
-                guard final.id == expectedUser.id else { throw GitHubCLIError.identityChanged }
+                guard final.id == expectedUser.id else { throw GitHubAPIError.identityChanged }
                 if finalResponse.remainingRequests == 0 {
                     result.problems.append(OriginProblem(source: .github,
                         problem: .rateLimited(retryAfter: nil, resetAt: finalResponse.resetAt)))
                 }
                 try await ensureCurrent(jiraConnection, isCurrent)
                 if !result.problems.isEmpty { result.coverage = .partial }
-                guard await budget.timeRemaining > .zero else { throw GitHubCLIError.source(.timeout) }
-                guard observed || !result.edges.isEmpty else { throw GitHubCLIError.source(result.problems.first?.problem ?? .invalidResponse) }
-                guard await publish(result) else { throw GitHubCLIError.source(.cancelled) }
+                guard await budget.timeRemaining > .zero else { throw GitHubAPIError.source(.timeout) }
+                guard observed || !result.edges.isEmpty else { throw GitHubAPIError.source(result.problems.first?.problem ?? .invalidResponse) }
+                guard await publish(result) else { throw GitHubAPIError.source(.cancelled) }
                 return result.problems
             } catch {
                 if let failure = error as? RelationFailure { throw failure }
                 let changed: Bool
-                if case GitHubCLIError.identityChanged = error { changed = true } else { changed = false }
+                if case GitHubAPIError.identityChanged = error { changed = true } else { changed = false }
                 let problem = error is JiraConnectionError ? jiraProblem(error) : GitHubPersonalPRProvider.problem(error)
                 let source: WorkSource = error is JiraConnectionError ? .jira : .github
                 throw RelationFailure(problem: problem, observedProblems: result.problems + [OriginProblem(source: source, problem: problem)], identityChanged: changed)
@@ -153,7 +153,7 @@ struct RelationResolver: Sendable {
     private func register(_ item: PullRequestItem, in result: inout RelationObservation) throws {
         guard case let .stable(id) = item.id.repository else { return }
         if let previous = result.repositoryResolutions.first(where: { $0.name == item.repositoryName }) {
-            guard previous.id == id else { throw GitHubCLIError.source(.invalidResponse) }
+            guard previous.id == id else { throw GitHubAPIError.source(.invalidResponse) }
         } else { result.repositoryResolutions.append(RepositoryIdentityResolution(name: item.repositoryName, id: id)) }
     }
 

@@ -1,30 +1,30 @@
 import Foundation
 
 struct GitHubPersonalPRProvider: Sendable {
-    let transport: GitHubCLITransport
+    let transport: GitHubAPITransport
 
-    func fetchAndPublish(executable: QualifiedGitHubExecutable, expectedUser: GitHubAuthor, connectionID: ConnectionID,
+    func fetchAndPublish(sessionReference: GitHubSessionReference, expectedUser: GitHubAuthor, connectionID: ConnectionID,
                          contextID: WorkContextID, scope: SourceScope, aliases: RepositoryIdentityAliases,
                          publish: @escaping @MainActor @Sendable (SourceSnapshot<PullRequestItem>, [RepositoryIdentityResolution]) -> Bool) async throws -> [SourceProblem] {
-        try await transport.withBatch(executable: executable, maximumCalls: 42, duration: .seconds(180)) { session in
+        try await transport.withBatch(sessionReference: sessionReference, maximumCalls: 42, duration: .seconds(180)) { session in
             var problems: [SourceProblem] = []
             do {
                 let initial = try GitHubUserDTO.decode(try await session.get(.user).body)
-                guard initial.id == expectedUser.id else { throw GitHubCLIError.identityChanged }
-                guard case let .github(repos) = scope.resources else { throw GitHubCLIError.source(.invalidResponse) }
+                guard initial.id == expectedUser.id else { throw GitHubAPIError.identityChanged }
+                guard case let .github(repos) = scope.resources else { throw GitHubAPIError.source(.invalidResponse) }
                 var identities: [GitHubRepositoryName: GitHubRepositoryIdentity] = [:]
                 var resolutions: [RepositoryIdentityResolution] = []
                 var identityPartial = false
                 for repo in repos.sorted(by: { $0.fullName < $1.fullName }) {
-                    guard let fallback = PullRequestIdentity(repository: .fallback(repo), number: 1) else { throw GitHubCLIError.source(.invalidResponse) }
+                    guard let fallback = PullRequestIdentity(repository: .fallback(repo), number: 1) else { throw GitHubAPIError.source(.invalidResponse) }
                     identities[repo] = aliases.canonical(fallback).repository
                     do {
                         let response = try await session.get(.repository(repo))
                         guard let dto = try? JSONDecoder().decode(GitHubRepositoryDTO.self, from: response.body),
                               dto.full_name.lowercased() == repo.fullName, let id = GitHubRepositoryID(dto.id) else {
-                            throw GitHubCLIError.source(.invalidResponse)
+                            throw GitHubAPIError.source(.invalidResponse)
                         }
-                        if case let .stable(previous) = identities[repo], previous != id { throw GitHubCLIError.source(.invalidResponse) }
+                        if case let .stable(previous) = identities[repo], previous != id { throw GitHubAPIError.source(.invalidResponse) }
                         identities[repo] = .stable(id)
                         resolutions.append(RepositoryIdentityResolution(name: repo, id: id))
                     } catch {
@@ -48,10 +48,10 @@ struct GitHubPersonalPRProvider: Sendable {
                         do {
                             let response = try await session.get(.search(query: query, login: initial.login, repositories: repos, page: page))
                             guard let dto = try? JSONDecoder().decode(GitHubSearchPageDTO.self, from: response.body), dto.total_count >= 0 else {
-                                throw GitHubCLIError.source(.invalidResponse)
+                                throw GitHubAPIError.source(.invalidResponse)
                             }
                             let items = dto.items.compactMap { $0.item(role: query, userID: initial.id, scope: scope, repositories: identities, connectionID: connectionID) }
-                            guard items.count == dto.items.count else { throw GitHubCLIError.source(.invalidResponse) }
+                            guard items.count == dto.items.count else { throw GitHubAPIError.source(.invalidResponse) }
                             observedPage = true
                             if let total, total != dto.total_count { reasons.insert(.inconsistentPagination) }
                             total = dto.total_count
@@ -79,7 +79,7 @@ struct GitHubPersonalPRProvider: Sendable {
                     if coverage[query] == nil { coverage[query] = reasons.isEmpty ? .complete : .partial(reasons) }
                 }
                 let final = try GitHubUserDTO.decode(try await session.get(.user, finalIdentity: true).body)
-                guard final.id == initial.id, final.id == expectedUser.id else { throw GitHubCLIError.identityChanged }
+                guard final.id == initial.id, final.id == expectedUser.id else { throw GitHubAPIError.identityChanged }
                 try Task.checkCancellation()
                 let items = union.values.sorted {
                     if $0.updatedAt != $1.updatedAt { return ($0.updatedAt ?? .distantPast) > ($1.updatedAt ?? .distantPast) }
@@ -89,18 +89,18 @@ struct GitHubPersonalPRProvider: Sendable {
                 let hasObservation = coverage.values.contains { value in
                     switch value { case .complete, .partial: true; case .failed: false }
                 }
-                guard hasObservation else { throw GitHubCLIError.source(problems.first ?? .invalidResponse) }
+                guard hasObservation else { throw GitHubAPIError.source(problems.first ?? .invalidResponse) }
                 guard let snapshot = SourceSnapshot(contextID: contextID, scope: scope, items: items, queryCoverage: coverage,
-                    lastSuccessfulAt: Date(), observedProblems: problems) else { throw GitHubCLIError.source(.invalidResponse) }
-                guard await publish(snapshot, resolutions) else { throw GitHubCLIError.source(.cancelled) }
+                    lastSuccessfulAt: Date(), observedProblems: problems) else { throw GitHubAPIError.source(.invalidResponse) }
+                guard await publish(snapshot, resolutions) else { throw GitHubAPIError.source(.cancelled) }
                 return snapshot.allProblems
-            } catch GitHubCLIError.identityChanged { throw GitHubCLIError.identityChanged }
+            } catch GitHubAPIError.identityChanged { throw GitHubAPIError.identityChanged }
             catch { throw GitHubBatchFailure(problem: Self.problem(error), observedProblems: problems) }
         }
     }
 
     static func problem(_ error: Error) -> SourceProblem {
-        if case let GitHubCLIError.source(problem) = error { return problem }
+        if case let GitHubAPIError.source(problem) = error { return problem }
         if error is CancellationError { return .cancelled }
         return .invalidResponse
     }

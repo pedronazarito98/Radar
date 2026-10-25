@@ -10,15 +10,15 @@ struct GitHubPRDetailObservation: Sendable {
 }
 
 struct GitHubPRDetailEnricher: Sendable {
-    let transport: GitHubCLITransport
+    let transport: GitHubAPITransport
 
-    func fetchAndPublish(executable: QualifiedGitHubExecutable, expectedUser: GitHubAuthor, item: PullRequestItem,
+    func fetchAndPublish(sessionReference: GitHubSessionReference, expectedUser: GitHubAuthor, item: PullRequestItem,
                          publish: @escaping @MainActor @Sendable (GitHubPRDetailObservation) -> Bool) async throws -> [SourceProblem] {
-        try await transport.withBatch(executable: executable, maximumCalls: 20, duration: .seconds(30)) { session in
+        try await transport.withBatch(sessionReference: sessionReference, maximumCalls: 20, duration: .seconds(30)) { session in
             var problems: [SourceProblem] = []
             do {
                 let initial = try GitHubUserDTO.decode(try await session.get(.user).body)
-                guard initial.id == expectedUser.id else { throw GitHubCLIError.identityChanged }
+                guard initial.id == expectedUser.id else { throw GitHubAPIError.identityChanged }
                 let response = try await session.get(.pullRequest(item.repositoryName, number: item.id.number))
                 let pr = try JSONDecoder().decode(GitHubPRDetailDTO.self, from: response.body)
                 let (sha, lifecycle) = try pr.observation(for: item)
@@ -40,7 +40,7 @@ struct GitHubPRDetailEnricher: Sendable {
                     let dto = try JSONDecoder().decode(GitHubSuiteProbeDTO.self, from: probe.body)
                     guard (0...1_000).contains(dto.total_count), dto.check_suites.count == min(1, dto.total_count),
                           dto.check_suites.allSatisfy({ GitCommitSHA($0.head_sha) == sha }),
-                          dto.total_count > 0 || checks.items.isEmpty else { throw GitHubCLIError.source(.invalidResponse) }
+                          dto.total_count > 0 || checks.items.isEmpty else { throw GitHubAPIError.source(.invalidResponse) }
                 } catch {
                     checks.coverage = .partial
                     problems.append(GitHubPersonalPRProvider.problem(error))
@@ -71,16 +71,16 @@ struct GitHubPRDetailEnricher: Sendable {
                         let teams = dto.teams.compactMap { GitHubTeamID($0.id) }
                         guard users.count == dto.users.count, teams.count == dto.teams.count,
                               Set(users).count == users.count, Set(teams).count == teams.count,
-                              dto.users.count <= 100, dto.teams.count <= 100 else { throw GitHubCLIError.source(.invalidResponse) }
+                              dto.users.count <= 100, dto.teams.count <= 100 else { throw GitHubAPIError.source(.invalidResponse) }
                         return GitHubDetailPage(items: [ReviewRequests(users: Set(users), teams: Set(teams), coverage: .complete)], total: nil)
                     }
                 problems += requests.problems
                 let final = try GitHubUserDTO.decode(try await session.get(.user, finalIdentity: true).body)
-                guard final.id == initial.id, final.id == expectedUser.id else { throw GitHubCLIError.identityChanged }
+                guard final.id == initial.id, final.id == expectedUser.id else { throw GitHubAPIError.identityChanged }
                 try Task.checkCancellation()
                 guard let ci = CIReport(headSHA: sha, signals: checks.items + latest,
                     coverage: checks.coverage == .complete && statuses.coverage == .complete ? .complete : .partial) else {
-                    throw GitHubCLIError.source(.invalidResponse)
+                    throw GitHubAPIError.source(.invalidResponse)
                 }
                 let users = requests.items.reduce(into: Set<GitHubUserID>()) { $0.formUnion($1.users) }
                 let teams = requests.items.reduce(into: Set<GitHubTeamID>()) { $0.formUnion($1.teams) }
@@ -91,9 +91,9 @@ struct GitHubPRDetailEnricher: Sendable {
                     coverage: reviews.coverage, authenticatedUserID: final.id)
                 let observation = GitHubPRDetailObservation(headSHA: sha, lifecycle: lifecycle, observedAt: observedAt,
                     ci: ci, review: review, problems: problems)
-                guard await publish(observation) else { throw GitHubCLIError.source(.cancelled) }
+                guard await publish(observation) else { throw GitHubAPIError.source(.cancelled) }
                 return problems
-            } catch GitHubCLIError.identityChanged { throw GitHubCLIError.identityChanged }
+            } catch GitHubAPIError.identityChanged { throw GitHubAPIError.identityChanged }
             catch { throw GitHubBatchFailure(problem: GitHubPersonalPRProvider.problem(error), observedProblems: problems) }
         }
     }

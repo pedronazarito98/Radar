@@ -19,18 +19,18 @@ struct GitHubRelatedPRDTO: Decodable {
               let id = PullRequestIdentity(repository: .stable(repositoryID), number: number),
               state == "open" || state == "closed", !requireOpen || state == "open",
               !(merged == true && state == "open"), !head.ref.isEmpty else {
-            throw GitHubCLIError.source(.invalidResponse)
+            throw GitHubAPIError.source(.invalidResponse)
         }
         let author = try user.map { user -> GitHubAuthor in
             guard let id = GitHubUserID(user.id), !user.login.isEmpty else {
-                throw GitHubCLIError.source(.invalidResponse)
+                throw GitHubAPIError.source(.invalidResponse)
             }
             return GitHubAuthor(id: id, login: user.login)
         }
         guard let item = PullRequestItem(id: id, repositoryName: repository, title: title, author: author,
             lifecycle: merged == true ? .merged : state == "closed" ? .closed : draft ? .draft : .open,
             personalRoles: [], headSHA: nil, headRef: head.ref, updatedAt: nil, sourceConnections: [connectionID]) else {
-            throw GitHubCLIError.source(.invalidResponse)
+            throw GitHubAPIError.source(.invalidResponse)
         }
         return item
     }

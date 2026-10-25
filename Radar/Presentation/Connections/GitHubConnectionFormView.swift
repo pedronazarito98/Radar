@@ -1,5 +1,5 @@
+import AppKit
 import SwiftUI
-import UniformTypeIdentifiers
 
 struct GitHubConnectionFormView: View {
     let status: SourceStatus
@@ -7,128 +7,113 @@ struct GitHubConnectionFormView: View {
     let work: GitHubWorkController
     let preferences: PreferencesController
     let lifecycle: DataLifecycleController
-    @State private var executablePath = "/opt/homebrew/bin/gh"
-    @State private var repositories = ""
-    @State private var showsPicker = false
-    @State private var qualification: QualifiedGitHubExecutable?
-    @State private var operation: Task<Void, Never>?
-    @State private var generation = UUID()
-    @State private var selectionProblem: String?
+    @State private var browserProblem: String?
+    @State private var copied = false
 
     var body: some View {
         Form {
             Section {
-                Text(SourceStatusText.summary(status))
-                Text("Use o gh já instalado e autenticado. O Radar consulta GitHub.com e não altera sua autenticação.")
+                Label("Seus pull requests, perto do trabalho", systemImage: "arrow.triangle.pull")
+                    .font(.headline)
+                Text("Entre com sua conta no navegador e escolha os repositórios que deseja acompanhar.")
                     .foregroundStyle(.secondary)
-            }
-            ConnectionRecoveryView(source: .github, status: status, retry: work.requestAfterUserAction)
-            Section("GitHub CLI") {
-                TextField("Caminho absoluto", text: $executablePath).autocorrectionDisabled()
-                    .disabled(operation != nil || status.connection == .connected)
-                Button("Escolher gh…") { showsPicker = true }.disabled(operation != nil || status.connection == .connected)
-                if let selectionProblem { Text(selectionProblem).foregroundStyle(.secondary) }
-                Button("Validar gh", action: qualify).disabled(operation != nil || status.connection == .connected)
-                if let qualification {
-                    Text(status.connection == .connected
-                         ? "gh \(qualification.version) · identidade qualificada"
-                         : "gh \(qualification.version) validado. A autenticação ainda não foi consultada.").font(.caption)
+                if connection.configuration == nil {
+                    Text("A conexão com o GitHub ainda precisa ser habilitada nesta versão do Radar. Depois disso, você poderá entrar por aqui, sem instalar ferramentas.")
+                        .foregroundStyle(.secondary)
+                    Button("Conectar ao GitHub") {}.disabled(true)
+                } else if let user = connection.identity {
+                    Label("Conectado como @\(user.login)", systemImage: "person.crop.circle.badge.checkmark")
+                    if connection.isConnected { Text(SourceStatusText.summary(status)).font(.caption).foregroundStyle(.secondary) }
+                } else if connection.challenge == nil {
+                    if connection.hasSavedSession {
+                        Button("Retomar conexão", action: connection.resumeAfterUserAction)
+                            .buttonStyle(.borderedProminent).disabled(connection.isBusy)
+                        Text("O macOS pode pedir sua permissão para usar a sessão salva neste Radar.")
+                            .font(.caption).foregroundStyle(.secondary)
+                    } else {
+                        Button("Conectar ao GitHub", action: connection.connectAfterUserAction)
+                            .buttonStyle(.borderedProminent).disabled(connection.isBusy)
+                    }
                 }
             }
-            Section("Escopo pessoal") {
-                TextField("Repositórios", text: $repositories, prompt: Text("owner/repo, owner/outro"))
-                    .autocorrectionDisabled().disabled(operation != nil || status.connection == .connected)
-                Text("A consulta inclui autoria, atribuição e revisão solicitada somente nos repositórios escolhidos.")
-                    .font(.caption).foregroundStyle(.secondary)
-                Text("Escolha de 1 a 10 repositórios; excesso será recusado.").font(.caption)
-                Button("Conectar GitHub", action: connect).disabled(qualification == nil || operation != nil || status.connection == .connected)
-                if status.connection == .connected {
-                    Button("Consultar / atualizar PRs") { work.requestAfterUserAction() }.disabled(status.isRefreshing)
-                    Button("Desconectar GitHub", action: lifecycle.disconnectGitHub)
+
+            if let challenge = connection.challenge {
+                Section("Autorize no GitHub") {
+                    Text("No navegador, confirme sua conta e informe este código:")
+                    Text(challenge.userCode).font(.system(.title2, design: .monospaced).weight(.semibold))
+                        .textSelection(.enabled).accessibilityLabel("Código de autorização: \(challenge.userCode)")
+                    HStack {
+                        Button(copied ? "Abrir GitHub novamente" : "Copiar código e abrir GitHub") { openAuthorization(challenge) }
+                            .buttonStyle(.borderedProminent)
+                        Button("Cancelar", action: connection.cancelOnboarding)
+                    }
+                    Text("Válido até \(challenge.expiresAt.formatted(date: .omitted, time: .shortened)). Volte ao Radar depois de autorizar.")
+                        .font(.caption).foregroundStyle(.secondary)
                 }
             }
-            Text("Validar gh executa somente --version. Conectar GitHub consulta sua identidade por GET /user. O Radar não instala o gh. As permissões existentes do CLI podem ser mais amplas que as consultas do app.")
+
+            if connection.isBusy {
+                HStack { ProgressView().controlSize(.small); Text(connection.activity).font(.callout) }
+                if connection.challenge == nil && connection.canCancel { Button("Cancelar", action: connection.cancelOnboarding) }
+            }
+            if let message = connection.message { Text(message).font(.callout).foregroundStyle(.secondary) }
+            if let browserProblem { Text(browserProblem).font(.callout).foregroundStyle(.secondary) }
+
+            if connection.identity != nil {
+                GitHubRepositoryPicker(connection: connection)
+                Section {
+                    HStack {
+                        Button(connection.isConnected ? "Salvar seleção" : "Começar a acompanhar",
+                               action: connection.applySelectionAfterUserAction)
+                            .buttonStyle(.borderedProminent).disabled(!connection.canApply)
+                        if connection.isConnected {
+                            Button("Atualizar PRs", action: work.requestAfterUserAction)
+                                .disabled(connection.isBusy || status.isRefreshing)
+                        }
+                    }
+                    if let configuration = connection.configuration {
+                        Button("Liberar acesso a outros repositórios no GitHub…") { open(configuration.installationURL) }
+                            .disabled(connection.isBusy)
+                        Text("Se um repositório não aparecer, libere o acesso no GitHub e atualize a lista. Organizações podem exigir aprovação de um administrador.")
+                            .font(.caption).foregroundStyle(.secondary)
+                    }
+                }
+                ConnectionRecoveryView(source: .github, status: status, retry: work.requestAfterUserAction)
+            }
+
+            if connection.hasSavedSession || connection.identity != nil {
+                Section {
+                    Button(connection.identity == nil ? "Remover sessão salva deste Radar" : "Desconectar GitHub",
+                           role: .destructive, action: lifecycle.disconnectGitHub)
+                        .disabled(connection.isBusy)
+                    Text("Remove apenas a sessão salva neste Radar. A autorização da aplicação pode ser gerenciada nas configurações do GitHub.")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+            }
+            Text("O Radar consulta repositórios, pull requests e seus estados. Não altera código, revisões ou tarefas.")
                 .font(.caption).foregroundStyle(.secondary)
         }
+        .disabled(connection.isTerminating)
         .formStyle(.grouped)
-        .onChange(of: executablePath) { _, _ in
-            guard status.connection != .connected else { return }
-            cancel(); qualification = nil
+        .scrollContentBackground(.hidden)
+        .contentMargins(.top, 8, for: .scrollContent)
+        .task { await connection.loadSavedState() }
+        .onDisappear(perform: connection.cancelOnboarding)
+        .onChange(of: connection.challenge?.userCode) { _, _ in copied = false; browserProblem = nil }
+        .onChange(of: connection.isConnected) { _, connected in
+            if connected { work.requestAfterUserAction(); Task { await preferences.load() } }
         }
-        .task {
-            await preferences.load()
-            if let path = preferences.snapshot.ghPath { executablePath = path }
-            repositories = preferences.snapshot.repositories.joined(separator: ", ")
-            if let message = preferences.message { selectionProblem = message }
-            if let executable = connection.executable {
-                executablePath = executable.url.path
-                qualification = executable
-            }
-            if case let .github(repos) = connection.store.github.scope?.resources {
-                repositories = repos.map(\.fullName).sorted().joined(separator: ", ")
-            }
-        }
-        .onDisappear(perform: cancel)
-        .background(ConnectionWindowCloseObserver(onClose: cancel).frame(width: 0, height: 0))
-        .fileImporter(isPresented: $showsPicker, allowedContentTypes: [.item]) { result in
-            switch result {
-            case .success(let url):
-                executablePath = url.path
-                selectionProblem = nil
-            case .failure:
-                selectionProblem = "Não foi possível selecionar o arquivo."
-            }
-        }
+        .background(ConnectionWindowCloseObserver(onClose: connection.cancelOnboarding).frame(width: 0, height: 0))
     }
 
-    private func qualify() {
-        let current = UUID(); generation = current
-        let path = executablePath
-        selectionProblem = nil
-        qualification = nil
-        operation = Task {
-            do {
-                let result = try await GitHubExecutableResolver().qualify(path: path)
-                guard generation == current, !Task.isCancelled else { return }
-                try await preferences.storage.saveGitHub(executable: result)
-                guard generation == current, !Task.isCancelled else { return }
-                qualification = result
-                await preferences.load()
-            } catch {
-                guard generation == current, !Task.isCancelled else { return }
-                if case let GitHubCLIError.source(problem) = error { selectionProblem = SourceStatusText.message(for: problem) + ". " + ConnectionRecoveryController.guidance(source: .github, problem: problem) }
-                else if error is PreferencesError { selectionProblem = PreferencesController.message(error) }
-                else { selectionProblem = "A validação foi interrompida." }
-            }
-            guard generation == current else { return }
-            operation = nil
-        }
+    private func openAuthorization(_ challenge: GitHubDeviceChallenge) {
+        guard challenge.expiresAt > Date() else { return }
+        NSPasteboard.general.clearContents()
+        copied = NSPasteboard.general.setString(challenge.userCode, forType: .string)
+        open(GitHubAppConfiguration.verificationURL)
     }
 
-    private func connect() {
-        guard let qualification else { return }
-        let current = UUID(); generation = current
-        selectionProblem = "Qualificando identidade…"
-        operation = Task {
-            do {
-                try await connection.connect(executable: qualification, repositories: repositories)
-                guard generation == current, !Task.isCancelled else { return }
-                selectionProblem = "Identidade qualificada. A lista de PRs será atualizada."
-                await preferences.load()
-            } catch {
-                guard generation == current, !Task.isCancelled else { return }
-                if case let GitHubCLIError.source(problem) = error { selectionProblem = SourceStatusText.message(for: problem) + ". " + ConnectionRecoveryController.guidance(source: .github, problem: problem) }
-                else if case GitHubCLIError.identityChanged = error {
-                    connection.requireRequalification()
-                    selectionProblem = "A conta ativa mudou durante a consulta. Qualifique novamente."
-                } else if error is PreferencesError { selectionProblem = PreferencesController.message(error) }
-                else { selectionProblem = "A consulta foi interrompida." }
-            }
-            guard generation == current else { return }
-            operation = nil
-        }
+    private func open(_ url: URL) {
+        browserProblem = NSWorkspace.shared.open(url) ? nil : "Não foi possível abrir o navegador. Tente novamente."
     }
-
-    private func cancel() { generation = UUID(); operation?.cancel(); operation = nil }
-
 }

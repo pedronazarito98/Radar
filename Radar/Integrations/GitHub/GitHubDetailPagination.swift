@@ -24,7 +24,7 @@ enum GitHubDetailPagination {
                 let response = try await session.get(endpoint(page))
                 let decoded = try decode(response.body)
                 guard decoded.items.count <= 100, decoded.total.map({ $0 >= 0 }) ?? true else {
-                    throw GitHubCLIError.source(.invalidResponse)
+                    throw GitHubAPIError.source(.invalidResponse)
                 }
                 observed = true
                 if let previous = total, previous != decoded.total { result.coverage = .partial }

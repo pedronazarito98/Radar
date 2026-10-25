@@ -30,17 +30,17 @@ final class GitHubWorkController {
 
     private func refresh() async -> RefreshOutcome {
         let store = connection.store
-        guard let executable = connection.executable, let user = connection.identity, let id = connection.connectionID,
+        guard let sessionReference = connection.sessionReference, let user = connection.identity, let id = connection.connectionID,
               let token = store.beginRefresh(for: .github) else { return RefreshOutcome(problems: []) }
         do {
             let problems = try await GitHubPersonalPRProvider(transport: connection.transport).fetchAndPublish(
-                executable: executable, expectedUser: user, connectionID: id, contextID: token.contextID,
+                sessionReference: sessionReference, expectedUser: user, connectionID: id, contextID: token.contextID,
                 scope: token.scope, aliases: store.repositoryAliases) { [weak self] snapshot, resolutions in
                     guard let self, self.connection.connectionID == id, !Task.isCancelled, store.isCurrent(token) else { return false }
                     return store.publish(snapshot, for: token, repositoryResolutions: resolutions)
                 }
             return RefreshOutcome(problems: problems)
-        } catch GitHubCLIError.identityChanged {
+        } catch GitHubAPIError.identityChanged {
             if connection.connectionID == id, store.isCurrent(token) {
                 connection.requireRequalification(); stop()
             }
@@ -48,7 +48,9 @@ final class GitHubWorkController {
         } catch {
             let failure = error as? GitHubBatchFailure
             let problem = failure?.problem ?? GitHubPersonalPRProvider.problem(error)
-            store.finishRefresh(with: problem, for: token)
+            if problem == .authenticationRequired, connection.connectionID == id, store.isCurrent(token) {
+                connection.requireRequalification(); stop()
+            } else { store.finishRefresh(with: problem, for: token) }
             return RefreshOutcome(problems: (failure?.observedProblems ?? []) + [problem])
         }
     }

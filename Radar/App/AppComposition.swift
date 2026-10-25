@@ -49,6 +49,16 @@ final class AppComposition {
         }
     }
 
+    func prepareForTermination() async -> Bool {
+        stop()
+        return await githubConnection.finishPendingCredentialWrite()
+    }
+
+    func resumeAfterDeferredTermination() async {
+        await githubConnection.resumeAfterDeferredTermination()
+        start()
+    }
+
     func stop() {
         guard started else { return }
         started = false

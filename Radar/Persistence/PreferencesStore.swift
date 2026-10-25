@@ -45,13 +45,28 @@ actor PreferencesStore {
         try write(next)
     }
 
-    func saveGitHub(executable: QualifiedGitHubExecutable, repositories: Set<GitHubRepositoryName>? = nil) throws {
+    func reserveGitHubReference(_ reference: GitHubCredentialReference) throws {
         var next = try snapshot()
-        next.ghPath = executable.url.path
-        if let repositories {
-            next.repositories = repositories.map(\.fullName).sorted()
-            next.categories = next.categories.filter { next.repositories.contains($0.key) }
-        }
+        guard next.githubCredential == nil || next.githubCredential == reference else { throw PreferencesError.conflictingReference }
+        next.githubCredential = reference
+        try write(next)
+    }
+
+    func clearGitHubReference(_ reference: GitHubCredentialReference) throws {
+        var next = try snapshot()
+        guard next.githubCredential == nil || next.githubCredential == reference else { throw PreferencesError.conflictingReference }
+        next.githubCredential = nil; next.githubUserID = nil
+        next.repositories = []; next.categories = [:]; next.ghPath = nil
+        try write(next)
+    }
+
+    func saveGitHubSelection(_ repositories: Set<GitHubRepositoryName>, userID: GitHubUserID) throws {
+        var next = try snapshot()
+        guard next.githubCredential != nil, (1...10).contains(repositories.count) else { throw PreferencesError.invalidValue }
+        next.repositories = repositories.map(\.fullName).sorted()
+        next.githubUserID = userID.rawValue
+        next.categories = next.categories.filter { next.repositories.contains($0.key) }
+        next.ghPath = nil
         try write(next)
     }
 

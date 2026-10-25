@@ -9,7 +9,7 @@ struct SourceEmptyStateView: View {
         if status.connection == .disconnected {
             return source == .jira
                 ? "Conecte o Jira Cloud em Configurações para ver seus cards."
-                : "Qualifique o gh existente em Configurações para ver seus PRs."
+                : "Conecte sua conta do GitHub em Configurações e escolha seus repositórios."
         }
         if let problem = status.problem { return SourceStatusText.message(for: problem) }
         if status.isRefreshing { return "Consultando seu trabalho…" }

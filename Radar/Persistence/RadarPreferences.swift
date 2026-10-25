@@ -27,13 +27,16 @@ struct JiraSavedConfiguration: Codable, Sendable {
 struct RadarPreferences: Codable, Sendable {
     var version = 1
     var jira: JiraSavedConfiguration?
-    var ghPath: String?
+    var ghPath: String? // Legacy metadata; no longer used to execute a CLI.
+    var githubCredential: GitHubCredentialReference?
+    var githubUserID: Int64?
     var repositories: [String] = []
     var preferredDisplayID: UInt32?
     var categories: [String: RepositoryCategory] = [:]
 
     var isValid: Bool {
         guard version == 1, repositories.count <= 10, categories.count <= 10,
+              githubUserID == nil || (githubUserID ?? 0) > 0,
               jira == nil || jira?.configuration(policyAllowed: true) != nil,
               ghPath == nil || (ghPath?.hasPrefix("/") == true && ghPath?.contains("\0") == false
                 && ghPath.map { URL(fileURLWithPath: $0).lastPathComponent == "gh" && $0.utf8.count <= 4_096 } == true),

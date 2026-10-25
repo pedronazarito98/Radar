@@ -27,7 +27,7 @@ final class DataLifecycleController {
         refresh.start()
     }
 
-    func disconnectGitHub() { github.disconnect() }
+    func disconnectGitHub() { github.disconnectAfterUserAction() }
 
     func removeJiraAfterUserAction() async throws {
         prepareJiraChange()
@@ -44,7 +44,7 @@ final class DataLifecycleController {
     func stop() {
         github.onInvalidated = nil
         refresh.stop(); relations.stop(); details.stop(); jiraWork.stop(); githubWork.stop()
-        github.disconnect()
+        github.shutdown()
         store.invalidate(.jira)
         Task { await jira.invalidateActiveSession() }
     }

@@ -31,8 +31,6 @@ enum SourceStatusText {
         case .cancelled: "Consulta interrompida"
         case .invalidResponse: "Resposta não pôde ser validada"
         case .capabilityUnavailable: "Capacidade indisponível"
-        case .executableMissing: "gh não encontrado"
-        case .executableIncompatible: "gh incompatível"
         case .transportUnavailable: "Consulta indisponível"
         case .networkFailure: "Falha de conexão"
         case .resourceLimit: "Limite local da consulta atingido"

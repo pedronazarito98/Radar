@@ -14,4 +14,6 @@
 <key>NSHighResolutionCapable</key><true/>
 <key>NSHumanReadableCopyright</key><string>Radar pessoal</string>
 <key>NSPrincipalClass</key><string>NSApplication</string>
+<key>RadarGitHubClientID</key><string>$(RADAR_GITHUB_CLIENT_ID)</string>
+<key>RadarGitHubAppSlug</key><string>$(RADAR_GITHUB_APP_SLUG)</string>
 </dict></plist>
