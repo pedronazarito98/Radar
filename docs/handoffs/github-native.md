@@ -18,6 +18,6 @@ O verificador confirmou que os 103 arquivos commitados de Radar/Radar.xcodeproj 
 
 ## Próximo gate externo
 
-Seguir [cadastro único](../github-setup.md). Receber somente Client ID e slug públicos para o build, instalar/autorizar pessoalmente os repositórios permitidos e executar os gates G1.1–G1.7 no app. Preferências antigas do gh são históricas; nenhum PASS antigo substitui OAuth, renovação, catálogo ou cofre reais.
+Executar [ativação assistida](../github-setup.md): root prepara cadastro/opções; usuário confirma identidade, criação e permissões no GitHub. Root coleta somente Client ID/endereço públicos na UI, configura o build e acompanha G1.1–G1.7. Não exigir cópia de IDs/guia técnico pelo usuário. Em G04 a aba oficial parou em Confirm access, aguardando autenticação pessoal antes do formulário. Nenhum cadastro ou concessão foi executado. Preferências antigas do gh são históricas; nenhum PASS antigo substitui OAuth, renovação, catálogo ou cofre reais.
 
 Enquanto não houver App cadastrado, o formulário deve indicar indisponibilidade honestamente. Não usar ID de terceiro, criar dados artificiais, inspecionar token nem provocar rate limit para contornar o impedimento.

@@ -6,6 +6,8 @@ O pedido mais recente rejeita o gh e a digitação de repositórios. AD-018/G1 a
 
 G02 está preparado em 5aaf302: builds finais e revisão fresca PASS; G03 observou UI real desconectada e encerramento/reabertura normal. Cadastro/instalação, Client ID/slug públicos e gates autenticados permanecem pendentes. O próximo passo é o guia docs/github-setup.md; nenhum segredo será solicitado no chat.
 
+Em 25/10/2026, o usuário rejeitou a complexidade do cadastro técnico e pediu a forma mais fácil possível. G04 passa a ser assistido: agente prepara formulário/opções e configura o build usando somente metadados públicos; usuário realiza apenas confirmações pessoais de identidade/criação/instalação/autorização. Não exigir envio/cópia de Client ID, reintroduzir gh ou usar App de terceiros. A tela real parou em Confirm access antes do formulário; aguarda usuário.
+
 ## Limite da autorização
 
 O pedido de 22/10/2026 autoriza implementação local do plano no repositório /Users/pedronazarito/Developer/Radar. AD-009 preserva o histórico de AD-001. Sem publicação, instalação de ferramentas ou alterações globais.

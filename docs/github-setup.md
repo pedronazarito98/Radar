@@ -1,8 +1,20 @@
 # Ativar a conexão GitHub do Radar
 
-Esta é uma configuração única de quem mantém o Radar. Depois dela, a conexão cotidiana será: autorizar no navegador → escolher repositórios na lista → acompanhar PRs. O usuário não precisa escolher executável, usar terminal ou digitar owner/repo.
+Esta é uma configuração única de quem mantém o Radar. Depois dela, a conexão cotidiana será: autorizar no navegador → escolher repositórios na lista → acompanhar PRs. O usuário não precisa escolher executável, usar terminal, copiar IDs ou digitar owner/repo.
 
-## Cadastro único no GitHub — pendente
+## Ativação assistida — caminho principal
+
+O Codex prepara o cadastro e as permissões; o usuário fica com as confirmações pessoais no GitHub. Não exigir que leia as opções técnicas abaixo ou configure o build.
+
+1. Quando o GitHub pedir, confirme sua identidade pelo método que já usa, diretamente no navegador.
+2. Confira o cadastro preparado e confirme a criação; depois escolha os repositórios permitidos e confirme a instalação/autorização quando solicitado. Cada etapa é apresentada na tela antes de qualquer confirmação.
+3. O Codex coleta somente Client ID/endereço públicos na UI e configura o build. No Radar, use **Conectar ao GitHub**, autorize no navegador e escolha os repos na lista.
+
+Não há senha, código ou token para enviar no chat. O cadastro próprio ainda é exigido pelo GitHub; o fluxo assistido reduz o trabalho manual, sem prometer removê-lo.
+
+**Estado observado em 25/10/2026:** a aba oficial abriu em **Confirm access**, antes do formulário. Aguarda confirmação pessoal; nenhum App foi criado, nenhuma permissão concedida e nenhum Client ID real foi coletado. Detalhes em [G04](evidence/G04.md).
+
+## Referência de configuração — para quem prepara o cadastro
 
 Para uma conta pessoal, preparei um [atalho com opções de cadastro](https://github.com/settings/apps/new?name=Radar%20Pessoal&description=Consulta%20pessoal%20de%20PRs%20no%20Radar&public=false&webhook_active=false&request_oauth_on_install=false&pull_requests=read&checks=read&statuses=read). Ele abre o formulário; não cria nem instala o App. Confira as opções e complete nome disponível, Homepage e Device Flow. O preenchimento por URL é [documentado pelo GitHub](https://docs.github.com/en/apps/sharing-github-apps/registering-a-github-app-using-url-parameters); a tela real ainda não foi verificada nesta sessão.
 
@@ -11,7 +23,7 @@ Para uma conta pessoal, preparei um [atalho com opções de cadastro](https://gi
 3. Ative **Enable Device Flow**; mantenha a expiração de tokens. Deixe **Request user authorization during installation** desmarcado e Callback vazio.
 4. Desative **Active** em Webhook. Em **Repository permissions**, marque **Read-only** para **Pull requests**, **Checks** e **Commit statuses**. **Metadata** fica em leitura; demais permissões, sem acesso.
 5. Escolha **Only on this account** para uso restrito à proprietária e crie o App. Repositórios de uma organização exigem decidir a conta proprietária e obter aprovação; não tornar público automaticamente.
-6. Compartilhe somente **Client ID** e o endereço `https://github.com/apps/<slug>`. Não gere/envie secret ou chave privada. Em **Install App**, autorize apenas os repositórios desejados.
+6. O Codex pode coletar somente **Client ID** e o endereço `https://github.com/apps/<slug>` na UI, sem exigir cópia pelo usuário. Não gerar/ler secret ou chave privada. Em **Install App**, o usuário autoriza apenas os repositórios desejados.
 
 Fonte: [cadastro oficial de GitHub Apps](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app).
 
@@ -19,7 +31,7 @@ Fonte: [cadastro oficial de GitHub Apps](https://docs.github.com/en/apps/creatin
 
 Os valores públicos alimentam `RADAR_GITHUB_CLIENT_ID` e `RADAR_GITHUB_APP_SLUG` no projeto. O bundle lê `RadarGitHubClientID` e `RadarGitHubAppSlug` de Info.plist. Nenhum desses valores é uma credencial; nenhum segredo deve ser adicionado ao projeto. O build padrão deixa ambos vazios, portanto não consegue autorizar enquanto este gate estiver pendente.
 
-O Codex pode inserir os dois valores públicos e recompilar após recebê-los. Não precisa de credenciais, arquivo de auth ou acesso ao Keychain para isso. A instalação/permissão do App é realizada pelo usuário no GitHub.
+O Codex pode inserir os dois valores públicos e recompilar após coletá-los da interface. Não precisa de credenciais, arquivo de auth ou acesso ao Keychain para isso. A instalação/permissão do App é realizada pelo usuário no GitHub.
 
 ## Uso no Radar — gate real após configuração
 

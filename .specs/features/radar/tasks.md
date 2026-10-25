@@ -907,3 +907,7 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 - G01: contrato publicado em 7dd8c45; DOC/diffcheck PASS. Substitui baseline gh dos consumidores afetados.
 - G02: **Prepared/PARTIAL**, commit 5aaf302; único escritor github_onboarding_review após transferência do root. Auth/cofre/refresh/transport/catalog/UI sob G1, sem testes/mocks. BUILD Debug/Release finais e revisão independente fresca PASS estático. Fonte commitada corresponde ao fingerprint revisado; evidência docs/evidence/G02-implementation.md. Gates funcionais obrigatórios continuam NOT-RUN.
 - G03: **PARTIAL**, metadados/assinatura, UI real desconectada sem configuração, encerramento/reabertura normal e documentação PASS no limite observado. Cadastro, instalação/permissão, OAuth/refresh/cofre/catalog/PRs reais e acessibilidade preenchida NOT-RUN. Evidência docs/evidence/G03.md e handoff docs/handoffs/github-native.md; não reutilizar PASS de gh como evidência OAuth.
+
+## G04 — ativação assistida
+
+**PARTIAL:** preparo do cadastro pelo agente, confirmações pessoais pelo usuário e coleta somente de metadados públicos para o build. Sem novo código/arquitetura. A aba oficial está em Confirm access antes do formulário; auth/cadastro/instalação e G1 LIVE continuam pendentes. Evidência: docs/evidence/G04.md.

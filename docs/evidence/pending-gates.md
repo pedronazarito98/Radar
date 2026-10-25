@@ -38,3 +38,7 @@ T42 deve manter separados BUILD, REVIEW, MANUAL e MEASURE, e indicar NOT-RUN par
 Ver [G03](G03.md): auth/renovação/cofre, instalação/permissões, catálogo/busca/paginação/seleção e fluxo PRs precisam de observação própria. Os resultados de `gh --version` não qualificam o fluxo novo. Registro de App e instalação serão feitos pessoalmente pelo usuário, guiado após implementação; sem publicação automática.
 
 O Release atual foi aberto por caminho completo, mostrou o cadastro ausente e Conectar desabilitado, sem campos de caminho/CLI/token/repo. Encerramento normal e reabertura desconectada foram observados por CUA; isso não qualifica saída durante rotação real, retomada autenticada, teclado ou VoiceOver.
+
+## G04 — confirmação atual
+
+Usuário pediu eliminar a carga técnica do cadastro. O agente prepara formulário/permissões e coleta somente metadados públicos; não exigir cópia de IDs. A aba oficial foi aberta em Confirm access e aguarda confirmação pessoal antes do formulário. Nenhum App criado ou acesso concedido. Ver [G04](G04.md).
