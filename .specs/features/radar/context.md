@@ -8,6 +8,8 @@ G02 está preparado em 5aaf302: builds finais e revisão fresca PASS; G03 observ
 
 Em 25/10/2026, o usuário rejeitou a complexidade do cadastro técnico e pediu a forma mais fácil possível. G04 é assistido: agente prepara formulário/opções e configura o build usando somente metadados públicos; usuário confirma identidade, cadastro específico e instalação. Não exigir envio/cópia de Client ID, reintroduzir gh ou usar App de terceiros. Cadastro e instalação agora confirmados, com build pronto; aguarda autorização pelo usuário no fluxo do Radar e relato de catálogo/impedimento, sem ler o desafio.
 
+Continuação G05: usuário autorizou e confirmou a lista; CUA observou 68 repos carregados, zero selecionados e busca funcional sobre dados existentes. Usuário escolheu o escopo e iniciou o acompanhamento; CUA confirmou consulta recebida/total GitHub 0 e estado vazio válido no painel. Não houve leitura/captura do desafio ou credenciais. Cadastro e fluxo normal já realizados; demais gates G1 e da V1 continuam limitados às evidências próprias.
+
 ## Limite da autorização
 
 O pedido de 22/10/2026 autoriza implementação local do plano no repositório /Users/pedronazarito/Developer/Radar. AD-009 preserva o histórico de AD-001. Sem publicação, instalação de ferramentas ou alterações globais.

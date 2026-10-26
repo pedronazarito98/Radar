@@ -7,7 +7,7 @@ Atualizado em 25/10/2026. O usuário pediu substituir o gh por autenticação Gi
 | Gate | Entrada/interação necessária | Limite da evidência atual |
 |---|---|---|
 | Jira Cloud / T22–T24 | Site, projetos e confirmação de política que permita token pessoal. T34 implementada/revisada; entrada direta no SecureField do app e consentimento do próprio Keychain quando solicitado. | Código/build/revisão não comprovam conexão, persistência ou consulta real. Não enviar token no chat. |
-| GitHub.com / G1 e G04 | Autorizar pelo Radar/navegador e conferir catálogo/seleção/PRs reais. | G04 já confirmou cadastro próprio privado, instalação escolhida pelo usuário, dois valores públicos no build e Conectar habilitado. Nenhum token/secret no chat; não ler/capturar o desafio. |
+| GitHub.com / G1 e G05 | PRs/detalhes preenchidos, paginação disponível, organizações e casos condicionais de auth/cofre. | G05 observou autorização pessoal, catálogo de 68, busca, escolha explícita e consulta recebida com total 0. Nenhum token/secret no chat; desafio e stores não inspecionados. |
 | Relação bidirecional / T30–T31 | Card e PR existentes, com referência real no título/branch, dentro dos escopos autorizados. | Sem dados artificiais. Deve incluir contexto fora da lista pessoal quando existir, preservando contadores. |
 | Refresh/isolamento / T32–T35 e G1 | Consultas reais, troca rápida de seleção, desconexão e reinício pelo usuário. | Falhas condicionais e saída aguardando rotação são revisadas; não provocar rate limit nem revogar credenciais para fabricar cenário. |
 | Fluxo integrado / T36–T37 | Listas reais, seleção card ↔ PR, abrir/copiar destinos e conferir foco no navegador. | Gate preenchido não é substituído pela UI desconectada. |
@@ -41,4 +41,4 @@ O Release atual foi aberto por caminho completo, mostrou o cadastro ausente e Co
 
 ## G04 — confirmação atual
 
-Usuário pediu eliminar a carga técnica do cadastro. O agente preparou formulário/permissões, criou o registro próprio privado após confirmação específica e coletou somente metadados públicos; não exigiu cópia de IDs. Usuário confirmou identidade e instalação nos repos escolhidos. Os builds configurados e UI Conectar habilitado passaram; aguarda autorização pelo Radar e relato de catálogo/impedimento. Ver [G04](G04.md).
+Usuário pediu eliminar a carga técnica do cadastro. O agente preparou formulário/permissões, criou o registro próprio privado após confirmação específica e coletou somente metadados públicos; não exigiu cópia de IDs. Usuário confirmou identidade e instalação. G04 qualificou builds/UI; [G05](G05.md) observou autorização, catálogo/busca, escolha e consulta vazia recebida. Os estados NOT-RUN históricos permanecem vinculados aos artefatos anteriores.

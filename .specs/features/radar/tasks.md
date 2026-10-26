@@ -911,3 +911,7 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 ## G04 — ativação assistida
 
 **PARTIAL:** cadastro próprio privado criado após confirmação específica e instalação escolhida/confirmada pelo usuário; coleta restrita a metadados públicos. Root único escritor configurou os dois build settings em Debug/Release, sem alterar Swift/arquitetura. BUILD Debug/Release, revisão independente estreita, codesign e UI Conectar habilitado PASS. OAuth/cofre/catalog/PRs e demais G1 LIVE pendentes. Evidência: docs/evidence/G04.md.
+
+## G05 — primeiro fluxo real GitHub
+
+**PARTIAL:** fonte G04/859b273 preservada. MANUAL humano/CUA PASS limitado para autorização pessoal, catálogo real de 68, busca local, escolha de escopo e consulta recebida com total 0. PRs preenchidos, comparação independente da contagem, relações, erro/expiração/paginação/organizações e cofre/retomada/renovação/remoção NOT-RUN. Nenhum dado/erro fabricado ou nova fonte/build. Evidência: docs/evidence/G05.md.

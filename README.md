@@ -1,6 +1,6 @@
 # Radar — V1 pessoal local
 
-**25/10/2026 · GitHub nativo configurado localmente · Autorização e aceite real pendentes**
+**26/10/2026 · GitHub conectado e consultado · V1 em qualificação parcial**
 
 A V1 é pessoal: um app nativo para macOS 27 que reúne seus cards do Jira Cloud e PRs do GitHub.com. A revisão atual substitui gh por autorização no navegador e escolha de repositórios em uma lista com busca. O notch fica fechado com indicadores; um clique abre as duas colunas e a faixa inferior conecta tarefa e código.
 
@@ -24,9 +24,9 @@ O target local usa Swift 6, SwiftUI/AppKit, assinatura ad-hoc e Hardened Runtime
 
 A revisão [GitHub nativo G1](.specs/features/radar/github-onboarding.md) conserva identidade no começo/fim dos lotes, contexto, cancelamento e limites. Autenticar não aplica repositórios antigos automaticamente: o usuário confirma as escolhas no catálogo da sessão atual. O cadastro único está descrito no [guia de ativação](docs/github-setup.md).
 
-G02 está em `5aaf302`: autorização por código no navegador, sessão própria, renovação e catálogo com busca/seleção de 1–10 repositórios. Os builds Debug/Release finais e a revisão independente fresca passaram. A [qualificação G03](docs/evidence/G03.md) confirma somente metadados e UI desconectada/quit/reabertura do Release; autorização, cofre e repositórios reais ainda não foram executados.
+G02 está em `5aaf302`: autorização por código no navegador, sessão própria, renovação e catálogo com busca/seleção de 1–10 repositórios. Os builds Debug/Release finais e a revisão independente fresca passaram. A [qualificação G03](docs/evidence/G03.md) preserva o artefato histórico sem cadastro; o fluxo real posterior está em G05.
 
-[G04](docs/evidence/G04.md) ativou o cadastro próprio privado e configurou somente Client ID/slug públicos, sem exigir cópia pelo usuário. Ele confirmou cadastro específico e instalação nos repos escolhidos; Debug/Release, revisão estreita e UI com Conectar habilitado passaram. A próxima interação é autorizar pelo Radar e observar catálogo/PRs; configuração do build não substitui esse gate.
+[G04](docs/evidence/G04.md) ativou o cadastro próprio privado e configurou somente Client ID/slug públicos, sem exigir cópia pelo usuário. Ele confirmou cadastro específico e instalação; Debug/Release, revisão estreita e UI com Conectar habilitado passaram. Em [G05](docs/evidence/G05.md), o usuário autorizou, o Radar carregou 68 repos e a busca local funcionou; a escolha explícita iniciou uma consulta recebida com 0 PRs pessoais no escopo. Renovação, retomada, remoção, PRs preenchidos, Jira e demais gates reais continuam pendentes.
 
 ## Sequência de implementação
 

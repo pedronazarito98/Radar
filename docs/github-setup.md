@@ -12,7 +12,7 @@ O Codex prepara o cadastro e as permissões; o usuário fica com as confirmaçõ
 
 Não há senha, código ou token para enviar no chat. O cadastro próprio ainda é exigido pelo GitHub; o fluxo assistido reduz o trabalho manual, sem prometer removê-lo.
 
-**Estado observado em 25/10/2026:** cadastro próprio privado criado após confirmação específica do usuário, instalação escolhida/confirmada por ele e build configurado pelo Codex com dados públicos coletados da UI. **Conectar ao GitHub** já está habilitado no Radar. Autorização no navegador, cofre, catálogo e PRs ainda precisam de observação própria. Detalhes em [G04](evidence/G04.md).
+**Estado observado:** G04 confirmou cadastro próprio privado, instalação e build configurado sem cópia de IDs pelo usuário. Em [G05](evidence/G05.md), o usuário concluiu a autorização e a escolha de escopo; o Radar carregou 68 repos, filtrou a lista e recebeu consulta com 0 PRs pessoais. Não é necessário repetir o cadastro. Renovação/retomada/remoção do cofre e conteúdo preenchido permanecem em gates próprios.
 
 ## Referência de configuração — para quem prepara o cadastro
 
@@ -41,6 +41,6 @@ O Codex pode inserir os dois valores públicos e recompilar após coletá-los da
 4. Use **Começar a acompanhar**. Só então o Radar consulta seus PRs nesses repositórios. Para alterar o escopo conectado, use **Salvar seleção**.
 5. Se faltar um repo, use **Liberar acesso a outros repositórios no GitHub…**, ajuste a instalação no GitHub e use **Atualizar lista**. Política de organização pode exigir aprovação.
 
-Os nomes vêm da implementação revisada. A [qualificação G03](evidence/G03.md) preserva a tela histórica sem cadastro; [G04](evidence/G04.md) já confirmou o cadastro, instalação e **Conectar ao GitHub** habilitado. Não enviar código de autorização ou token no chat. Autorização, catálogo, refresh, Keychain e PRs reais ainda exigem observação própria; nenhum dado artificial substitui esses gates.
+Os nomes vêm da implementação revisada. A [qualificação G03](evidence/G03.md) preserva a tela histórica sem cadastro; [G04](evidence/G04.md) configurou a integração e G05 qualificou o fluxo normal autorizado até consulta vazia. Não enviar código de autorização ou token no chat. Cenários condicionais, refresh/retomada/remoção e PRs preenchidos ainda exigem observação própria; nenhum dado artificial substitui esses gates.
 
 A renovação local não exige client secret quando a autorização original usou device flow, conforme a [documentação de refresh](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/refreshing-user-access-tokens). O Radar conserva apenas preferências não secretas fora do cofre.
