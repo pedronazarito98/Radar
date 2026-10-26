@@ -2,11 +2,11 @@
 
 **Status**: contexto de execução local autorizado. **Atualização**: 25/10/2026.
 
-O pedido mais recente rejeita o gh e a digitação de repositórios. AD-018/G1 autoriza implementação nativa com GitHub App, autorização no navegador e catálogo selecionável. O usuário ainda não cadastrou o App e pediu orientação após a implementação. As referências ao gh abaixo preservam o histórico superado.
+O pedido mais recente rejeita o gh e a digitação de repositórios. AD-018/G1 autoriza implementação nativa com GitHub App, autorização no navegador e catálogo selecionável. O usuário inicialmente não tinha cadastro; G04 preparou e criou o registro próprio privado após confirmação específica, coletou apenas dados públicos e configurou o build. As referências ao gh abaixo preservam o histórico superado.
 
 G02 está preparado em 5aaf302: builds finais e revisão fresca PASS; G03 observou UI real desconectada e encerramento/reabertura normal. Cadastro/instalação, Client ID/slug públicos e gates autenticados permanecem pendentes. O próximo passo é o guia docs/github-setup.md; nenhum segredo será solicitado no chat.
 
-Em 25/10/2026, o usuário rejeitou a complexidade do cadastro técnico e pediu a forma mais fácil possível. G04 passa a ser assistido: agente prepara formulário/opções e configura o build usando somente metadados públicos; usuário realiza apenas confirmações pessoais de identidade/criação/instalação/autorização. Não exigir envio/cópia de Client ID, reintroduzir gh ou usar App de terceiros. A tela real parou em Confirm access antes do formulário; aguarda usuário.
+Em 25/10/2026, o usuário rejeitou a complexidade do cadastro técnico e pediu a forma mais fácil possível. G04 é assistido: agente prepara formulário/opções e configura o build usando somente metadados públicos; usuário confirma identidade, cadastro específico e instalação. Não exigir envio/cópia de Client ID, reintroduzir gh ou usar App de terceiros. Cadastro e instalação agora confirmados, com build pronto; aguarda autorização pelo usuário no fluxo do Radar e relato de catálogo/impedimento, sem ler o desafio.
 
 ## Limite da autorização
 

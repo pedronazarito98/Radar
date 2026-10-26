@@ -1,6 +1,6 @@
 # Radar — V1 pessoal local
 
-**25/10/2026 · GitHub nativo preparado localmente · Cadastro e aceite real pendentes**
+**25/10/2026 · GitHub nativo configurado localmente · Autorização e aceite real pendentes**
 
 A V1 é pessoal: um app nativo para macOS 27 que reúne seus cards do Jira Cloud e PRs do GitHub.com. A revisão atual substitui gh por autorização no navegador e escolha de repositórios em uma lista com busca. O notch fica fechado com indicadores; um clique abre as duas colunas e a faixa inferior conecta tarefa e código.
 
@@ -14,7 +14,7 @@ A identidade visual canônica é a revisão 3: superfície preta, seleção cinz
 |---|---|
 | App e painel | Swift + SwiftUI; AppKit restrito à janela, recorte, foco e displays. Target Xcode. |
 | Jira Cloud | Token pessoal permitido pela conta, inserido diretamente no app e guardado no Keychain próprio. |
-| GitHub.com | GitHub App, autorização no navegador e seleção de repos acessíveis; tokens no cofre próprio e consultas de trabalho REST GET. Cadastro inicial pendente. |
+| GitHub.com | GitHub App próprio configurado, autorização no navegador e seleção de repos acessíveis; tokens no cofre próprio e consultas de trabalho REST GET. Fluxo autenticado em qualificação. |
 | Dados | Conteúdo de trabalho em memória; preferências não secretas separadas das credenciais. |
 | Relações | Chave Jira explícita em título/branch, com repo, site e proveniência; busca limitada aos repos selecionados. |
 | Estados | Fase do PR, CI e revisão separados; total pessoal independente do número de vínculos. |
@@ -25,6 +25,8 @@ O target local usa Swift 6, SwiftUI/AppKit, assinatura ad-hoc e Hardened Runtime
 A revisão [GitHub nativo G1](.specs/features/radar/github-onboarding.md) conserva identidade no começo/fim dos lotes, contexto, cancelamento e limites. Autenticar não aplica repositórios antigos automaticamente: o usuário confirma as escolhas no catálogo da sessão atual. O cadastro único está descrito no [guia de ativação](docs/github-setup.md).
 
 G02 está em `5aaf302`: autorização por código no navegador, sessão própria, renovação e catálogo com busca/seleção de 1–10 repositórios. Os builds Debug/Release finais e a revisão independente fresca passaram. A [qualificação G03](docs/evidence/G03.md) confirma somente metadados e UI desconectada/quit/reabertura do Release; autorização, cofre e repositórios reais ainda não foram executados.
+
+[G04](docs/evidence/G04.md) ativou o cadastro próprio privado e configurou somente Client ID/slug públicos, sem exigir cópia pelo usuário. Ele confirmou cadastro específico e instalação nos repos escolhidos; Debug/Release, revisão estreita e UI com Conectar habilitado passaram. A próxima interação é autorizar pelo Radar e observar catálogo/PRs; configuração do build não substitui esse gate.
 
 ## Sequência de implementação
 
@@ -76,7 +78,7 @@ A baseline anterior inclui integrações, relações, recuperação, persistênc
 
 Para abrir o Release já gerado: [.build/DerivedData/Build/Products/Release/Radar.app](.build/DerivedData/Build/Products/Release/Radar.app). Metadados vigentes em [G03](docs/evidence/G03.md); o [bundle local](docs/evidence/local-bundle.md) preserva o histórico anterior. `./script/build_and_run.sh` continua gerando/abrindo Debug.
 
-Ao iniciar, as contas ficam desconectadas. O fluxo GitHub nativo exige primeiro configurar o Client ID público e slug do Radar no build, conforme o guia; depois a UI conduz autorização e seleção de repositórios. Jira depende da política da organização e de entrada pessoal no SecureField; nunca envie token no chat. Retomar token salvo também é explícito. O app consulta apenas Jira Cloud/GitHub.com, mas as permissões existentes da credencial podem ser mais amplas.
+Ao iniciar, as contas ficam desconectadas. O GitHub próprio já está configurado no build pessoal: a UI conduz autorização e seleção de repositórios. Jira depende da política da organização e de entrada pessoal no SecureField; nunca envie token no chat. Retomar token salvo também é explícito. O app consulta apenas Jira Cloud/GitHub.com, mas as permissões existentes da credencial podem ser mais amplas.
 
 ## Execução local
 

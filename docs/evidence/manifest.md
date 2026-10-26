@@ -59,5 +59,7 @@ Complemento T34/T35: `c952406`, persistência do caminho gh e encerramento/reabe
 | C09 | 299514b | BUILD Debug/Release/REVIEW independente/codesign/launch sem contas PASS; rótulo LIVE NOT-RUN | C09.md |
 | G01 | 7dd8c45 | DOC/diffcheck PASS; contrato GitHub nativo publicado antes dos consumidores | ../../.specs/features/radar/github-onboarding.md |
 | G02 | 5aaf302 | Prepared/PARTIAL; BUILD Debug/Release finais e REVIEW fresco PASS estático; LIVE NOT-RUN | G02-implementation.md |
+| G03 | 9391b3e | PARTIAL; bundle/UI desconectada/quit-reabertura PASS limitados, cadastro então pendente | G03.md |
+| G04 documental inicial | a9b5401 | DOC/revisão estreita PASS; ativação assistida definida, então em Confirm access | G04.md |
 
-G03 é o fechamento documental parcial desta revisão: metadados/assinatura e UI desconectada/quit/reabertura PASS limitados, cadastro/contas/cofre/repos/PRs NOT-RUN. Evidência em [G03](G03.md), [guia de cadastro](../github-setup.md) e [handoff](../handoffs/github-native.md). Fechamento G03 commitado em 9391b3e. A ativação assistida posterior está em [G04](G04.md), aguardando confirmação de identidade no GitHub; seu próprio hash será registrado somente após existir.
+G03 preserva a qualificação desconectada anterior à configuração pública. A continuação [G04](G04.md) confirmou cadastro próprio privado, instalação escolhida pelo usuário, configuração do build e Conectar habilitado, com BUILD Debug/Release e revisão estreita PASS; OAuth/cofre/catalog/PRs ainda exigem gates próprios. Ver [guia](../github-setup.md) e [handoff](../handoffs/github-native.md). O commit desta própria continuação será referenciado somente após existir, sem autorreferência inventada.

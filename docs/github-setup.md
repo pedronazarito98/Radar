@@ -12,7 +12,7 @@ O Codex prepara o cadastro e as permissões; o usuário fica com as confirmaçõ
 
 Não há senha, código ou token para enviar no chat. O cadastro próprio ainda é exigido pelo GitHub; o fluxo assistido reduz o trabalho manual, sem prometer removê-lo.
 
-**Estado observado em 25/10/2026:** a aba oficial abriu em **Confirm access**, antes do formulário. Aguarda confirmação pessoal; nenhum App foi criado, nenhuma permissão concedida e nenhum Client ID real foi coletado. Detalhes em [G04](evidence/G04.md).
+**Estado observado em 25/10/2026:** cadastro próprio privado criado após confirmação específica do usuário, instalação escolhida/confirmada por ele e build configurado pelo Codex com dados públicos coletados da UI. **Conectar ao GitHub** já está habilitado no Radar. Autorização no navegador, cofre, catálogo e PRs ainda precisam de observação própria. Detalhes em [G04](evidence/G04.md).
 
 ## Referência de configuração — para quem prepara o cadastro
 
@@ -29,7 +29,7 @@ Fonte: [cadastro oficial de GitHub Apps](https://docs.github.com/en/apps/creatin
 
 ## Configuração local do build
 
-Os valores públicos alimentam `RADAR_GITHUB_CLIENT_ID` e `RADAR_GITHUB_APP_SLUG` no projeto. O bundle lê `RadarGitHubClientID` e `RadarGitHubAppSlug` de Info.plist. Nenhum desses valores é uma credencial; nenhum segredo deve ser adicionado ao projeto. O build padrão deixa ambos vazios, portanto não consegue autorizar enquanto este gate estiver pendente.
+Os valores públicos alimentam `RADAR_GITHUB_CLIENT_ID` e `RADAR_GITHUB_APP_SLUG` no projeto. O bundle lê `RadarGitHubClientID` e `RadarGitHubAppSlug` de Info.plist. Nenhum desses valores é uma credencial; nenhum segredo deve ser adicionado ao projeto. G04 configurou o registro próprio `radar-pessoal-pedro` nas duas configurações do build; o app já pode iniciar a autorização.
 
 O Codex pode inserir os dois valores públicos e recompilar após coletá-los da interface. Não precisa de credenciais, arquivo de auth ou acesso ao Keychain para isso. A instalação/permissão do App é realizada pelo usuário no GitHub.
 
@@ -41,6 +41,6 @@ O Codex pode inserir os dois valores públicos e recompilar após coletá-los da
 4. Use **Começar a acompanhar**. Só então o Radar consulta seus PRs nesses repositórios. Para alterar o escopo conectado, use **Salvar seleção**.
 5. Se faltar um repo, use **Liberar acesso a outros repositórios no GitHub…**, ajuste a instalação no GitHub e use **Atualizar lista**. Política de organização pode exigir aprovação.
 
-Os nomes vêm da implementação revisada. A [qualificação G03](evidence/G03.md) observou somente a tela sem cadastro, com **Conectar ao GitHub** indisponível; os demais estados ainda exigem execução real. Não enviar código de autorização ou token no chat. Cadastro, autorização, catálogo, refresh, Keychain e PRs reais permanecem NOT-RUN até observação; nenhum dado artificial substitui esses gates.
+Os nomes vêm da implementação revisada. A [qualificação G03](evidence/G03.md) preserva a tela histórica sem cadastro; [G04](evidence/G04.md) já confirmou o cadastro, instalação e **Conectar ao GitHub** habilitado. Não enviar código de autorização ou token no chat. Autorização, catálogo, refresh, Keychain e PRs reais ainda exigem observação própria; nenhum dado artificial substitui esses gates.
 
 A renovação local não exige client secret quando a autorização original usou device flow, conforme a [documentação de refresh](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/refreshing-user-access-tokens). O Radar conserva apenas preferências não secretas fora do cofre.

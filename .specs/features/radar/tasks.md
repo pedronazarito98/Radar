@@ -910,4 +910,4 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 
 ## G04 — ativação assistida
 
-**PARTIAL:** preparo do cadastro pelo agente, confirmações pessoais pelo usuário e coleta somente de metadados públicos para o build. Sem novo código/arquitetura. A aba oficial está em Confirm access antes do formulário; auth/cadastro/instalação e G1 LIVE continuam pendentes. Evidência: docs/evidence/G04.md.
+**PARTIAL:** cadastro próprio privado criado após confirmação específica e instalação escolhida/confirmada pelo usuário; coleta restrita a metadados públicos. Root único escritor configurou os dois build settings em Debug/Release, sem alterar Swift/arquitetura. BUILD Debug/Release, revisão independente estreita, codesign e UI Conectar habilitado PASS. OAuth/cofre/catalog/PRs e demais G1 LIVE pendentes. Evidência: docs/evidence/G04.md.
