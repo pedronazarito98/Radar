@@ -4,3 +4,19 @@ build/
 dist/
 *.xcuserstate
 xcuserdata/
+
+# Credenciais e estado local; Client ID/slug públicos do app ficam no projeto.
+.env
+.env.*
+auth.json
+credentials.json
+hosts.yml
+preferences.json
+*.pem
+*.key
+*.p12
+*.pfx
+*.log
+*.sqlite
+*.sqlite3
+*.db

@@ -82,7 +82,7 @@ Ao iniciar, as contas ficam desconectadas. O GitHub próprio já está configura
 
 ## Execução local
 
-Execute autorizado em AD-009. Este repositório é a fonte canônica; prontidão e limites estão em docs/readiness.md. Tarefas e evidências permanecem individuais, sem testes/mocks e sem publicação.
+Execute autorizado em AD-009. Este repositório é a fonte canônica; prontidão e limites estão em docs/readiness.md. Tarefas e evidências permanecem individuais, sem testes/mocks e sem publicação do app. AD-019 autoriza o espelho privado da fonte em [pedronazarito98/Radar](https://github.com/pedronazarito98/Radar), após revisão de segurança; entrega em [handoff GitHub](docs/handoffs/github-repository.md).
 
 Os documentos em .specs deste repositório são a fonte canônica da execução. O pacote original permanece preservado como referência histórica. Os assets aprovados foram copiados; estado e handoff são atualizados aqui.
 

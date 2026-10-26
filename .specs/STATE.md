@@ -146,6 +146,14 @@
 - **Date**: 2026-10-24
 - **Status**: active; G02 preparado em 5aaf302, BUILD/REVIEW PASS; G03 parcial, LIVE pendente.
 
+### AD-019
+- **Decision**: Autorizar criação de pedronazarito98/Radar privado, origin local e push da fonte após revisão de segurança; supera a restrição de remotes de AD-009 somente nessa entrega.
+- **Reason**: Pedido explícito do usuário em 26/10/2026, condicionado à revisão prévia.
+- **Trade-off**: Fonte/documentação e histórico Git são enviados ao destino privado; não é release, instalação ou aceite da V1. Sem ferramentas/configuração global, testes/mocks ou leitura de stores reais.
+- **Scope**: Repositório Git e documentação de entrega. Revisão Standard da árvore congelada 859b273 + WIP G05, depois verificação de blobs históricos e revisão estreita das mudanças documentais/ignore.
+- **Date**: 2026-10-26
+- **Status**: active; repositório privado criado, push pendente de fechamento local.
+
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
@@ -158,4 +166,4 @@
 - **Artifact histórico C09 (anterior a G02)**: .build/DerivedData/Build/Products/Release/Radar.app; arm64/macOS 27, ad-hoc/runtime, sem App Sandbox/get-task-allow; SHA256 e479390fcbc42043ec45f29c782f3cc07ed4266c0db2cd884c8d6b9f619bd984. Nenhuma publicação/instalação/global change.
 - **Artifact histórico G02/G03**: mesmo caminho Release, fonte 5aaf302 sem configuração, arm64/ad-hoc/runtime, sem entitlements. Executável SHA256 2df75d3fcabdd6a04b78c61ad40e1dcf367ae44181793260d8aad829de52871c. Substituído pela configuração pública G04.
 - **Artifact vigente G04**: mesmo caminho Release, lógica Swift G02 preservada e somente dois valores públicos no pbxproj. Executável SHA256 a560dfefbbc8d64f893c908acba43f24f0d902b053950dcd1685a487f13e1494; fonte/projeto fingerprint 5610736291c23f827b059936b06ead52ba405cf5078e2a1d82a9910f8c489f45. Arm64/ad-hoc/runtime/codesign strict PASS; Conectar habilitado observado via CUA. App próprio privado radar-pessoal-pedro, sem secret/chave gerados ou lidos.
-- **Branch**: feat/radar-v1-local; sem remote. Testes/mocks/sensores/Swift lint não executados.
+- **Branch**: feat/radar-v1-local; origin privado autorizado em AD-019. Testes/mocks/sensores/Swift lint não executados. A fonte Swift permanece 859b273; G05 foi documentado em fb9a9e0.

@@ -915,3 +915,7 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 ## G05 — primeiro fluxo real GitHub
 
 **PARTIAL:** fonte G04/859b273 preservada. MANUAL humano/CUA PASS limitado para autorização pessoal, catálogo real de 68, busca local, escolha de escopo e consulta recebida com total 0. PRs preenchidos, comparação independente da contagem, relações, erro/expiração/paginação/organizações e cofre/retomada/renovação/remoção NOT-RUN. Nenhum dado/erro fabricado ou nova fonte/build. Evidência: docs/evidence/G05.md.
+
+## P01 — fonte no GitHub privado (AD-019)
+
+Revisão de segurança da árvore congelada concluída sem achados reportáveis; 196 textos/23 imagens e procedência do PDF auditados. Checagem separada de 79 commits/582 blobs textuais sem candidato a segredo. Repositório privado pedronazarito98/Radar criado, origin local configurado. Ajustes limitados a documentação/ignore após o scan; push e comparação dos SHAs ainda pendentes. Handoff: docs/handoffs/github-repository.md. Nenhuma fonte Swift alterada ou novo build/teste necessário.

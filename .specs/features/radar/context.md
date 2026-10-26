@@ -14,6 +14,8 @@ Continuação G05: usuário autorizou e confirmou a lista; CUA observou 68 repos
 
 O pedido de 22/10/2026 autoriza implementação local do plano no repositório /Users/pedronazarito/Developer/Radar. AD-009 preserva o histórico de AD-001. Sem publicação, instalação de ferramentas ou alterações globais.
 
+Em 26/10/2026, o usuário autorizou criar repositório GitHub e fazer push, condicionado à revisão de segurança. AD-019 delimita o destino privado pedronazarito98/Radar e origin local; não autoriza release/distribuição do app, ferramentas ou configuração global.
+
 ## Confirmado pelo usuário
 
 - App para seu macOS 27; primeira entrega de uso pessoal, preparando distribuição depois.
