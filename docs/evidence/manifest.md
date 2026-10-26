@@ -63,5 +63,6 @@ Complemento T34/T35: `c952406`, persistência do caminho gh e encerramento/reabe
 | G04 documental inicial | a9b5401 | DOC/revisão estreita PASS; ativação assistida definida, então em Confirm access | G04.md |
 | G04 configuração pública | 859b273 | BUILD Debug/Release, revisão estreita/fingerprint, codesign e UI Conectar habilitado PASS; OAuth/cofre/catalog pendentes | G04.md |
 | G05 | fb9a9e0 | MANUAL humano/CUA + revisão documental PASS limitado; autorização, catálogo/busca, escopo e consulta vazia real | G05.md |
+| P01 — preparo e primeiro envio | 8a9f3fe | Revisão estática/segredos sem achados reportáveis; privado/main/SHAs remotos conferidos; não é release ou aceite da V1 | ../handoffs/github-repository.md |
 
 G03 preserva a qualificação desconectada anterior à configuração pública. A continuação [G04](G04.md) confirmou cadastro próprio privado, instalação escolhida pelo usuário, configuração do build e Conectar habilitado em 859b273, com BUILD Debug/Release e revisão estreita PASS; OAuth/cofre/catalog/PRs ainda exigem gates próprios. Ver [guia](../github-setup.md) e [handoff](../handoffs/github-native.md).

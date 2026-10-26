@@ -152,7 +152,7 @@
 - **Trade-off**: Fonte/documentação e histórico Git são enviados ao destino privado; não é release, instalação ou aceite da V1. Sem ferramentas/configuração global, testes/mocks ou leitura de stores reais.
 - **Scope**: Repositório Git e documentação de entrega. Revisão Standard da árvore congelada 859b273 + WIP G05, depois verificação de blobs históricos e revisão estreita das mudanças documentais/ignore.
 - **Date**: 2026-10-26
-- **Status**: active; repositório privado criado, push pendente de fechamento local.
+- **Status**: complete no limite desta entrega; repositório privado criado, primeiro push 8a9f3fe verificado em main/feat, default main e upstream próprio. Fechamento em docs/handoffs/github-repository.md; não aceita a V1 nem publica o app.
 
 ## Handoff
 

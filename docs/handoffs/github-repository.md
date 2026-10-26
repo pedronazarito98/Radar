@@ -14,4 +14,6 @@ Pedido de 26/10/2026: criar repositório e fazer push somente depois de revisar 
 
 ## Entrega
 
-Push ainda pendente neste registro inicial. Enviar o mesmo histórico revisado para main e feat/radar-v1-local; preservar a branch de trabalho com upstream próprio e conferir SHA remoto, visibilidade e default branch após o envio. Não usar force-push. Jira e demais gates reais da V1 permanecem pendentes em docs/evidence/pending-gates.md.
+**Concluído em 26/10/2026:** push atômico de `8a9f3fe41466350427cbc41918288409932ecb51` para main e feat/radar-v1-local, sem force. `git ls-remote` confirmou o mesmo SHA nas duas refs; metadados GitHub confirmaram `isPrivate=true`, `isEmpty=false`, default branch main. A branch local feat/radar-v1-local acompanha origin/feat/radar-v1-local e origin/HEAD aponta main. Árvore limpa após o primeiro envio.
+
+Este fechamento documental é commitado e enviado depois do primeiro envio acima; seu hash fica no próprio histórico Git para evitar autorreferência. Repositório: https://github.com/pedronazarito98/Radar. Nenhum release publicado, instalação de ferramenta ou ajuste global. Jira e demais gates reais da V1 permanecem pendentes em docs/evidence/pending-gates.md; push da fonte não é aceite funcional.
