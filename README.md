@@ -2,6 +2,14 @@
 
 **27/10/2026 · DMG pessoal disponível · GitHub conectado e consultado · V1 em qualificação parcial**
 
+## Experimentar a UI com dados fictícios
+
+Execute `./script/build_and_run.sh --demo` para abrir **RadarDemo**, com identidade e build locais separados. O demo oferece 7 cenários no menu **Radar Demo → Cenários de demonstração**, incluindo listas preenchidas, vazio, carregamento, falha de rede, acesso parcial, reconexão e mais de 99 itens. Clique em um indicador do notch para abrir o painel.
+
+No cenário **Dia de trabalho**, selecione RAD-241 e explore os PRs relacionados. O botão **Simular atualização**, dentro do painel, preserva a seleção e prepara uma nova revisão das listas até clicar em **Aplicar atualização**. Os dados são fictícios e vivem em memória; o demo não carrega contas/preferências reais, não usa rede/Keychain e desabilita abrir/copiar destinos externos.
+
+Mocks autorizados explicitamente em AD-022, exclusivamente para UI/UX. Isso não substitui qualificação das integrações. Veja o [guia dos cenários e validação manual](docs/ui-demo.md). O app normal continua com `./script/build_and_run.sh`.
+
 ## Avaliação pelo time de TI
 
 O código e a prévia pessoal estão disponíveis neste repositório para avaliação. Veja o [resumo técnico para TI](docs/ti-review.md): permissões, destinos de rede, armazenamento de dados, assinatura e gates pendentes. A visibilidade da fonte não altera o GitHub App pessoal nem concede acesso a repositórios corporativos; a organização deve definir e aprovar a integração.
@@ -82,7 +90,7 @@ O roteiro visual antecede a autenticação atual: textos de conexão seguem Jira
 
 ## Validação e limites
 
-A regra do usuário impede criar testes, arquivos de teste ou mocks. O plano usa build, revisão de código, interação manual e medição, cada qual identificado. Automação/sensor de mutação ficam NOT-RUN por política; não haverá alegação de cobertura automatizada.
+A regra do usuário impede criar testes, arquivos de teste ou mocks sem pedido explícito. AD-022 autoriza os mocks de demonstração de UI/UX; testes e sensores continuam fora do pedido. O plano usa build, revisão de código, interação manual e medição, cada qual identificado. Automação/sensor de mutação ficam NOT-RUN por política; não haverá alegação de cobertura automatizada.
 
 Os gates de uso real incluem recorte/foco, Jira e GitHub, relação bidirecional, teclado/VoiceOver/Reduzir Movimento, 30 ciclos de interação e lançamento pelo Finder. Condições externas não reproduzidas são registradas separadamente; revisão estática não comprova fluidez ou funcionamento no hardware.
 

@@ -4,6 +4,7 @@ import SwiftUI
 enum RadarFocusTarget: Hashable {
     case row(SelectionKey)
     case applyUpdates
+    case simulateUpdate
     case collapse
     case closeDetails
     case refreshDetails
@@ -18,6 +19,7 @@ enum RadarFocusTarget: Hashable {
 final class RadarFocusCoordinator {
     let store: RadarStore
     private let navigation: NavigationCoordinator
+    private let demo: RadarDemoController?
     var focusedTarget: RadarFocusTarget?
     private(set) var requestedTarget: RadarFocusTarget?
     private(set) var requestGeneration: UInt64 = 0
@@ -25,8 +27,9 @@ final class RadarFocusCoordinator {
     private(set) var detailScrollGeneration: UInt64 = 0
     private(set) var detailScrollDelta: CGFloat = 0
 
-    init(store: RadarStore, navigation: NavigationCoordinator) {
+    init(store: RadarStore, navigation: NavigationCoordinator, demo: RadarDemoController? = nil) {
         self.store = store; self.navigation = navigation
+        self.demo = demo
     }
 
     func request(_ target: RadarFocusTarget?) {
@@ -84,6 +87,7 @@ final class RadarFocusCoordinator {
     func advance(backwards: Bool) {
         var targets: [RadarFocusTarget] = []
         if store.jira.hasPendingUpdate || store.github.hasPendingUpdate { targets.append(.applyUpdates) }
+        else if demo?.scenario == .daily { targets.append(.simulateUpdate) }
         targets.append(.collapse)
         targets += rows.map(RadarFocusTarget.row)
         if store.selection.selectedKey != nil {
@@ -137,6 +141,10 @@ final class RadarFocusCoordinator {
         switch focusedTarget ?? requestedTarget {
         case .row(let key): select(key)
         case .applyUpdates: applyUpdates()
+        case .simulateUpdate:
+            guard demo?.scenario == .daily else { return false }
+            demo?.simulateUpdate()
+            request(.applyUpdates)
         case .collapse: close()
         case .closeDetails: closeDetails()
         case .refreshDetails:

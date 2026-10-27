@@ -6,7 +6,8 @@ actor PreferencesStore {
     private var value = RadarPreferences()
     private var failure: PreferencesError?
 
-    init() {
+    init(persists: Bool = true) {
+        guard persists else { url = nil; return }
         let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?
             .appendingPathComponent("Radar", isDirectory: true)
         url = directory?.appendingPathComponent("preferences.json")

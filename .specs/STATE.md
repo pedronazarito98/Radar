@@ -170,7 +170,17 @@
 - **Date**: 2026-10-27
 - **Status**: complete no limite da publicidade: PUBLIC/isPrivate=false confirmados, fonte/guia/Release/DMG acessíveis sem login e bytes do DMG preservados. Preparo bc1757e/0ac525e, fechamento em docs/evidence/P03.md; TI/App corporativo permanecem externos.
 
+### AD-022
+- **Decision**: Adicionar mocks locais explícitos para validação de UI/UX, conforme pedido de 27/10/2026. Reutilizar a cópia existente e atualizada em /Users/pedronazarito/Developer/Radar; implementação na branch feat/radar-ui-demo.
+- **Reason**: O usuário pediu clonar em Developer e criar dados fictícios para experimentar o Radar.
+- **Trade-off**: Modo de demonstração opt-in, identificado na UI, sem contas, rede, Keychain ou preferências reais. Dados e cenários vivem em memória e reutilizam stores/views existentes. Testes novos continuam fora do pedido. Evidência com mocks não qualifica integrações reais nem aceita a V1.
+- **Scope**: M01 — fixtures tipadas, coordenação local de seleção/relações/CI/revisão, composição isolada, menu de cenários e comando de execução. BUILD Debug/Release, interação do demo e revisão independente; sem push/release.
+- **Date**: 2026-10-27
+- **Status**: complete no escopo demo local: Debug demo/Release normal, revisão independente e sete cenários CUA conferidos; evidência/limites em docs/evidence/M01.md. Sem aceite das integrações reais.
+
 ## Handoff
+
+- **Entrega mais recente M01**: mocks autorizados por AD-022 em feat/radar-ui-demo, sobre a base pública d6fb14e. RadarDemo separado em `.build/DemoDerivedData/Build/Products/Debug/RadarDemo.app`; execução `./script/build_and_run.sh --demo`. BUILD/REVIEW/UI local PASS com limites em docs/evidence/M01.md. Sem push ou publicação; demais entradas abaixo conservam o histórico da V1 real.
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
 - **Phase / Task**: Implementação local T01–T38 preparada; T39–T42 qualificação parcial documentada. V1 NÃO ACEITA enquanto gates obrigatórios externos não passarem.

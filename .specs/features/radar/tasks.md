@@ -927,3 +927,11 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 ## P03 — repositório público para avaliação de TI (AD-021)
 
 **Concluída no limite da publicidade:** revisão estreita da exposição, busca de assinaturas de segredo em 84 commits/625 blobs textuais e revisão independente de documentação/imagens antes da mudança, sem bloqueador. Root único escritor, public_exposure_review e ti_access_review somente leitura/contexto fresco/pares. Preparo bc1757e/0ac525e enviado a main/feat; visibilidade PUBLIC/isPrivate=false confirmada, fonte/guia/Release/DMG HTTP 200 sem login e checksum igual. Fonte/projeto/tag/DMG preservados. Não altera GitHub App/permissões/SSO ou política do Mac, nem envia mensagem ao TI. Evidência: docs/evidence/P03.md; material de avaliação: docs/ti-review.md.
+
+## M01 — mocks locais para validar UI/UX (AD-022)
+
+- **Pedido**: reutilizar o clone existente e atualizado em Developer; criar dados fictícios explícitos para experimentar a interface.
+- **Escopo**: Radar/Demo, composição, interface mínima de coordenação de detalhes, injeção no painel/foco, preferências efêmeras, bloqueio de navegação fictícia e script `--demo`. Sem novas dependências ou testes, push ou publicação.
+- **Critérios**: 7 cenários selecionáveis; relações M:N/contextuais sem mudar totais pessoais; CI/revisão/fase distintos; mudança rápida de seleção; atualização preparada sem perder seleção; modo normal preservado; demo sem rede/cofre/preferências reais.
+- **Gate**: BUILD Debug demo + Release normal, REVIEW independente fresco e UI do demo, cada qual delimitado em docs/evidence/M01.md. Os gates LIVE da V1 permanecem separados.
+- **Status**: concluída no limite demo local. Debug demo/Release normal, revisão independente e UI dos sete cenários PASS; limites e procedimentos observados em docs/evidence/M01.md. Integrações reais e demais gates da V1 não são aceitos por esta simulação.

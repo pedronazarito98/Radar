@@ -15,18 +15,21 @@ final class NotchPanelController {
     private var geometry: ScreenGeometry
     private var hasAvailableDisplay = true
     private let navigation: NavigationCoordinator
-    private let related: RelatedItemsCoordinator
+    private let related: any RelatedItemsCoordinating
+    private let demo: RadarDemoController?
     private let store: RadarStore
     private let focus: RadarFocusCoordinator
     private let hostingView: NSHostingView<NotchPanelRootView>
     private var contentOpacity: CGFloat = 0
 
-    init(geometry: ScreenGeometry, store: RadarStore, related: RelatedItemsCoordinator, navigation: NavigationCoordinator) {
+    init(geometry: ScreenGeometry, store: RadarStore, related: any RelatedItemsCoordinating,
+         navigation: NavigationCoordinator, demo: RadarDemoController? = nil) {
         self.geometry = geometry
         self.store = store
         self.related = related
         self.navigation = navigation
-        focus = RadarFocusCoordinator(store: store, navigation: navigation)
+        self.demo = demo
+        focus = RadarFocusCoordinator(store: store, navigation: navigation, demo: demo)
         panel = RadarPanel(
             contentRect: .zero,
             styleMask: [.borderless, .nonactivatingPanel],
@@ -35,11 +38,11 @@ final class NotchPanelController {
         )
         interaction = PanelInteractionController(panel: panel)
         hostingView = NSHostingView(rootView: NotchPanelRootView(
-            store: store, focus: focus, related: related, navigation: navigation,
+            store: store, focus: focus, related: related, navigation: navigation, demo: demo,
             isExpanded: false, showsContent: false, contentOpacity: 0,
             cameraRect: .zero, toggle: {}, escape: {}
         ))
-        panel.title = "Radar — Meu trabalho"
+        panel.title = store.isDemo ? "Radar Demo — dados fictícios" : "Radar — Meu trabalho"
         panel.isReleasedWhenClosed = false
         panel.isOpaque = false
         panel.backgroundColor = .clear
@@ -192,7 +195,7 @@ final class NotchPanelController {
             NSRect(x: $0.minX - frame.minX, y: frame.maxY - $0.maxY, width: $0.width, height: $0.height)
         } ?? NSRect(x: frame.width / 2, y: 0, width: 0, height: 32)
         hostingView.rootView = NotchPanelRootView(
-            store: store, focus: focus, related: related, navigation: navigation,
+            store: store, focus: focus, related: related, navigation: navigation, demo: demo,
             isExpanded: isExpanded,
             showsContent: phase != .compact,
             contentOpacity: contentOpacity,

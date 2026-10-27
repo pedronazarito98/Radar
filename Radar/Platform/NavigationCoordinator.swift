@@ -6,8 +6,8 @@ import Observation
 @Observable
 final class NavigationCoordinator {
     private let store: RadarStore
-    private let jira: JiraCloudConnection
-    private let github: GitHubConnectionController
+    private let jira: JiraCloudConnection?
+    private let github: GitHubConnectionController?
     private var operation: Task<Void, Never>?
     private var generation = UUID()
     private(set) var message: String?
@@ -17,8 +17,14 @@ final class NavigationCoordinator {
         self.store = store; self.jira = jira; self.github = github
     }
 
+    /// Demonstration destinations are fictional and must never open or reach the clipboard.
+    init(demoStore: RadarStore) {
+        store = demoStore; jira = nil; github = nil
+    }
+
     func canNavigate(_ key: SelectionKey) -> Bool {
-        guard store.isPanelOpen, key.contextID == store.contextID, isPresented(key) else { return false }
+        guard !store.isDemo, let github, jira != nil,
+              store.isPanelOpen, key.contextID == store.contextID, isPresented(key) else { return false }
         switch key.itemID {
         case let .jira(id):
             guard store.jira.status.connection == .connected, let scope = store.jira.scope,
@@ -65,7 +71,7 @@ final class NavigationCoordinator {
     private func destination(for key: SelectionKey) async -> URL? {
         switch key.itemID {
         case let .jira(id):
-            guard let item = store.jiraItem(id), let connection = try? await jira.currentConnection(),
+            guard let jira, let item = store.jiraItem(id), let connection = try? await jira.currentConnection(),
                   connection.scope == store.jira.scope, item.belongs(to: connection.scope),
                   item.sourceConnections.contains(connection.connectionID),
                   let host = connection.configuration.siteURL.host,

@@ -1,10 +1,11 @@
 import AppKit
 
-/// Owns the production graph; account actions remain inside their explicit UI flows.
+/// Selects the live or offline demonstration graph once, before loading any state.
 @MainActor
 final class AppComposition {
-    let store = RadarStore()
-    let preferencesStore = PreferencesStore()
+    let store: RadarStore
+    let preferencesStore: PreferencesStore
+    let demo: RadarDemoController?
     lazy var preferences = PreferencesController(storage: preferencesStore, store: store)
     lazy var jiraConnection = JiraCloudConnection(preferences: preferencesStore)
     let refreshScheduler = RefreshScheduler()
@@ -19,17 +20,31 @@ final class AppComposition {
     lazy var lifecycle = DataLifecycleController(store: store, jira: jiraConnection, github: githubConnection,
         jiraWork: jiraWork, githubWork: githubWork, details: githubDetails, relations: relatedItems, refresh: sourceRefresh)
     lazy var displays = DisplayPolicyController(preferences: preferences)
-    lazy var navigation = NavigationCoordinator(store: store, jira: jiraConnection, github: githubConnection)
+    lazy var navigation = store.isDemo
+        ? NavigationCoordinator(demoStore: store)
+        : NavigationCoordinator(store: store, jira: jiraConnection, github: githubConnection)
     private(set) var panelController: NotchPanelController?
 
     private var started = false
     private var preferencesLoad: Task<Void, Never>?
 
+    init() {
+        let isDemo = ProcessInfo.processInfo.arguments.contains("--demo")
+            || Bundle.main.bundleIdentifier == "dev.pedronazarito.Radar.demo"
+        store = RadarStore(isDemo: isDemo)
+        preferencesStore = PreferencesStore(persists: !isDemo)
+        demo = isDemo ? RadarDemoController(store: store) : nil
+    }
+
     func start() {
         guard !started else { return }
         started = true
-        preferencesLoad = Task { await preferences.load() }
-        lifecycle.start()
+        if let demo {
+            demo.load(.daily)
+        } else {
+            preferencesLoad = Task { await preferences.load() }
+            lifecycle.start()
+        }
         displays.geometryChanged = { [weak self] geometry in self?.applyGeometry(geometry) }
         displays.start()
     }
@@ -39,11 +54,33 @@ final class AppComposition {
         panelController?.toggle()
     }
 
+    func showDemoScenario(_ scenario: RadarDemoScenario) {
+        guard let demo else { return }
+        panelController?.showCompact()
+        demo.load(scenario)
+        displays.refresh()
+        panelController?.showExpanded()
+    }
+
+    func simulateDemoUpdate() {
+        guard let demo else { return }
+        if demo.scenario != .daily {
+            showDemoScenario(.daily)
+        } else {
+            displays.refresh()
+            panelController?.showExpanded()
+        }
+        demo.simulateUpdate()
+    }
+
     private func applyGeometry(_ geometry: ScreenGeometry?) {
         if let panelController {
             panelController.updateGeometry(geometry)
         } else if let geometry {
-            let controller = NotchPanelController(geometry: geometry, store: store, related: relatedItems, navigation: navigation)
+            let coordinator: any RelatedItemsCoordinating
+            if let demo { coordinator = demo } else { coordinator = relatedItems }
+            let controller = NotchPanelController(geometry: geometry, store: store, related: coordinator,
+                                                 navigation: navigation, demo: demo)
             panelController = controller
             controller.showCompact()
         }
@@ -51,6 +88,7 @@ final class AppComposition {
 
     func prepareForTermination() async -> Bool {
         stop()
+        if demo != nil { return true }
         return await githubConnection.finishPendingCredentialWrite()
     }
 
@@ -65,7 +103,7 @@ final class AppComposition {
         preferencesLoad?.cancel()
         preferencesLoad = nil
         displays.stop()
-        lifecycle.stop()
+        if let demo { demo.stop() } else { lifecycle.stop() }
         panelController?.invalidate()
         panelController = nil
     }
