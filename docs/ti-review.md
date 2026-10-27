@@ -19,11 +19,11 @@ O Radar é um app local SwiftUI/AppKit para **Apple Silicon e macOS 27+**. Reún
 | tenant.atlassian.net, para o tenant autorizado | Descoberta /_edge/tenant_info e GET REST v3 de identidade, busca e issues; navegação ao Jira. |
 | api.atlassian.com | Gateway /ex/jira/{cloudId}/rest/api/3 para token Jira com escopos. |
 
-As sessões HTTP do app são efêmeras, recusam redirecionamentos e não usam cache/cookies/cofre de credenciais compartilhados. Há timeout de até 15 s, limite de saída/páginas, cancelamento e backoff. O download do instalador usa a infraestrutura de Releases/assets do GitHub pelo navegador; isso é separado das chamadas autenticadas do app. Não há backend de autenticação próprio.
+As sessões HTTP do app são efêmeras, recusam redirecionamentos e não usam cache/cookies/cofre de credenciais compartilhados. Há timeout de até 15 s, limite de resposta e páginas, cancelamento e backoff. O download do instalador usa a infraestrutura de Releases/assets do GitHub pelo navegador; isso é separado das chamadas autenticadas do app. Não há backend de autenticação próprio.
 
 ## Dados locais
 
-Conteúdo de cards/PRs é mantido em memória, sem cache de trabalho implementado em disco. Preferências não secretas em Application Support/Radar incluem site/email/projetos Jira, IDs e nomes dos repos escolhidos, categorias/tela e referências UUID. Tokens ficam em itens próprios do Keychain, sem sincronização configurada; retomada após iniciar é explícita, e sessão GitHub ativa pode renovar/gravar o par rotacionado. O pacote não inclui contas, preferências ou credenciais do desenvolvedor. Não enviar tokens/códigos em chat ou ticket de avaliação.
+Conteúdo de cards/PRs é mantido em memória, sem cache de trabalho implementado em disco. Preferências não secretas em Application Support/Radar incluem site/email/projetos Jira, ID do usuário GitHub, nomes completos dos repos escolhidos, categorias/tela e referências UUID. Tokens ficam em itens próprios do Keychain, sem sincronização configurada; retomada após iniciar é explícita, e sessão GitHub ativa pode renovar/gravar o par rotacionado. O pacote não inclui contas, preferências ou credenciais do desenvolvedor. Não enviar tokens/códigos em chat ou ticket de avaliação.
 
 ## Pacote e limites da evidência
 
