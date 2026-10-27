@@ -1,0 +1,38 @@
+RADAR — INSTALAÇÃO PESSOAL
+
+Requisitos: Mac com chip Apple (M1 ou posterior), macOS 27 ou superior.
+Não é necessário instalar Xcode, Homebrew ou GitHub CLI no Mac de destino.
+Esta é uma prévia pessoal; a qualificação funcional da V1 continua parcial.
+
+1. Abra o arquivo Radar-0.1.0-apple-silicon.dmg.
+2. Arraste Radar.app para o atalho Aplicativos ao lado.
+3. Ejete o volume Radar e abra Radar na pasta Aplicativos do Finder.
+4. Procure o ícone de ondas do Radar na barra de menus. Ele não aparece no Dock.
+5. No menu do Radar, abra Configurações… → GitHub.com → Conectar ao GitHub.
+   Autorize no navegador, volte ao Radar, escolha de 1 a 10 repositórios e use
+   Começar a acompanhar. Na mesma conta pessoal, o GitHub App já está configurado;
+   não é necessário criar outro cadastro. Contas não são transferidas pelo DMG.
+
+PRIMEIRA ABERTURA
+
+Esta prévia tem assinatura ad-hoc e não foi notarizada pela Apple. O macOS pode
+bloquear a primeira abertura por não conseguir verificar o desenvolvedor.
+Se essa for a mensagem e você baixou o pacote do seu repositório Radar:
+após tentar abrir, vá a Ajustes do Sistema → Privacidade e Segurança →
+Abrir Mesmo Assim e confirme a abertura específica do Radar quando solicitado.
+Essa opção depende da política do Mac; se não aparecer, informe a mensagem.
+Não desative o Gatekeeper nem remova proteções do sistema. Avisos de malware ou
+arquivo danificado exigem investigação; não os trate como o aviso acima.
+
+Orientação oficial da Apple: https://support.apple.com/pt-br/102445
+
+CONTAS E ATUALIZAÇÕES
+
+Reconecte suas contas diretamente no app. Não copie cofres ou arquivos de auth.
+Jira depende da política da conta; informe qualquer token somente no app.
+Para atualizar, encerre Radar pelo menu antes de substituir o app em Aplicativos.
+Não há atualizador automático. Um novo build ad-hoc pode pedir novo consentimento
+do Keychain durante uma ação sua no Radar; esse gate ainda está em qualificação.
+
+Download privado: https://github.com/pedronazarito98/Radar/releases
+É necessário estar conectado ao GitHub com acesso ao repositório privado.

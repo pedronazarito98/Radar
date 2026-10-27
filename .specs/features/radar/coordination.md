@@ -140,3 +140,7 @@ Após confirmação pessoal, root preparou o formulário e github_native_verifie
 ## G05 — observação do fluxo real
 
 Root aguardou relato humano de autorização concluída antes de observar o app. Conferiu catálogo e busca, sem selecionar repositórios pelo usuário; depois da escolha/início pessoais, observou consulta GitHub recebida com total 0. Nenhum desafio ou segredo capturado, nenhum código alterado. Evidência sanitizada em docs/evidence/G05.md; o usuário definiu acesso/escopo e root permaneceu único escritor documental.
+
+## P02 — DMG pessoal, 27/10/2026
+
+Pedido direto autoriza DMG/Release privada (AD-020). Root único escritor; dmg_packaging_review e dmg_install_review iniciados com contexto fresco, caminhos canônicos e limites explícitos, somente leitura e diálogo entre pares. O primeiro revisa empacotamento/artefato e o segundo instruções/privacidade/limites de Gatekeeper. Nenhum acesso a stores reais, chave privada ou identidade de assinatura. Evidência final referencia o commit e o asset efetivamente publicados; segundo Mac permanece gate humano.

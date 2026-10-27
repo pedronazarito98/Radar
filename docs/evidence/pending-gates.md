@@ -1,5 +1,7 @@
 # Gates que dependem de interação ou ambiente real
 
+**Entrega pessoal P02/27-10-2026:** usuário confirmou outro Mac Apple Silicon/macOS 27+. AD-020 autoriza DMG em Release privada, com build/integridade/montagem/cópia locais conferidos. Primeira instalação/abertura no destino e reconexão de contas continuam NOT-RUN; avaliação local Gatekeeper retornou rejected para a assinatura ad-hoc, sem notarização. O guia installation.txt orienta a exceção específica permitida pelo sistema, sem desativar proteções. Ver P02.md.
+
 Atualizado em 25/10/2026. O usuário pediu substituir o gh por autenticação GitHub nativa e seletor de repos. G02/5aaf302 está preparado com builds finais e revisão fresca PASS; G03 confirmou metadados e UI desconectada/quit/reabertura normal. As evidências anteriores do gh ficam históricas. Este registro não substitui o manifesto por tarefa nem o aceite por critério; os gates abaixo continuam pendentes.
 
 ## Contas e recursos autorizados — NOT-RUN

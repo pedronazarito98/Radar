@@ -5,6 +5,8 @@
 **Status**: execução local autorizada por AD-009. **Complexidade**: Complex. **Execute**: implementação local T01–T38 preparada; qualificação parcial T39–T42 conforme tasks.md e acceptance.md.
 **Data**: 22/10/2026. **Contexto**: [context.md](context.md). **Decisões ativas**: [STATE](../../STATE.md).
 
+**Entrega pessoal de 27/10/2026:** AD-020 autoriza DMG em Release do repositório privado para outro Mac sem Xcode. Esse limite prevalece sobre as proibições históricas de publicação abaixo; não inclui distribuição pública, notarização ou aceite automático da V1.
+
 ## Problema e objetivo
 
 Engenheiros alternam entre Jira e GitHub para saber o que está atribuído a eles, o que exige revisão e como tarefa e código se relacionam. A V1 oferece consulta discreta no notch, com contexto bidirecional e navegação aos serviços.

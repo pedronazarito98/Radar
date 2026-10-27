@@ -16,6 +16,8 @@ O pedido de 22/10/2026 autoriza implementação local do plano no repositório /
 
 Em 26/10/2026, o usuário autorizou criar repositório GitHub e fazer push, condicionado à revisão de segurança. AD-019 delimita o destino privado pedronazarito98/Radar e origin local; não autoriza release/distribuição do app, ferramentas ou configuração global.
 
+Em 27/10/2026, o usuário pediu explicitamente gerar DMG e subir no repositório para usar no outro Mac sem instalar Xcode. AD-020 autoriza essa entrega pessoal por Release privada, preservando macOS 27+/Apple Silicon, assinatura ad-hoc e os gates pendentes de notarização/segundo Mac. Não autoriza ferramentas novas, tornar o repo público, consultar Keychain/segredos ou alterar proteções globais.
+
 ## Confirmado pelo usuário
 
 - App para seu macOS 27; primeira entrega de uso pessoal, preparando distribuição depois.

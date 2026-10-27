@@ -2,6 +2,14 @@
 
 **26/10/2026 · GitHub conectado e consultado · V1 em qualificação parcial**
 
+## Instalar no outro Mac — sem Xcode
+
+Baixe o **DMG Apple Silicon** em [Downloads do Radar](https://github.com/pedronazarito98/Radar/releases/tag/v0.1.0-personal.1), abra e arraste Radar para **Aplicativos**. Ejete o volume e abra Radar pelo Finder; o ícone fica na barra de menus. Requer **macOS 27 ou superior e chip Apple M1 ou posterior**. O repositório é privado: entre na conta GitHub com acesso para baixar.
+
+Esta é uma prévia pessoal com assinatura **ad-hoc, sem notarização**. Se o macOS não puder verificar o desenvolvedor, siga o [guia de instalação](docs/installation.txt), que inclui a autorização específica em Privacidade e Segurança. Não é necessário instalar Xcode, Homebrew ou gh no destino. Conecte as contas novamente dentro do app; a instalação existente do GitHub App pode ser reutilizada pela mesma conta.
+
+Para quem prepara o pacote: `./script/package_dmg.sh` gera Release/DMG/checksum em `dist/` usando o Xcode local e DerivedData separado. O binário é anexado à Release privada, não ao histórico Git. AD-020 autoriza essa entrega; os gates funcionais da V1 e a primeira abertura no outro Mac permanecem separados.
+
 A V1 é pessoal: um app nativo para macOS 27 que reúne seus cards do Jira Cloud e PRs do GitHub.com. A revisão atual substitui gh por autorização no navegador e escolha de repositórios em uma lista com busca. O notch fica fechado com indicadores; um clique abre as duas colunas e a faixa inferior conecta tarefa e código.
 
 A identidade visual canônica é a revisão 3: superfície preta, seleção cinza, símbolos/rótulos claros e nenhuma borda lateral colorida. As imagens estão incluídas neste pacote.

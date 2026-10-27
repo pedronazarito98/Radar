@@ -919,3 +919,7 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 ## P01 — fonte no GitHub privado (AD-019)
 
 **Concluída no limite de fonte privada:** revisão da árvore congelada sem achados reportáveis; 196 textos/23 imagens e procedência do PDF auditados. Checagem separada de 79 commits/582 blobs textuais sem candidato a segredo; delta posterior de documentação/ignore recebeu revisão estreita. Repositório privado pedronazarito98/Radar, origin local e push atômico 8a9f3fe em main/feat confirmados por SHA remoto e metadados; default main/upstream próprio, sem force. Handoff: docs/handoffs/github-repository.md. Nenhuma fonte Swift alterada ou novo build/teste necessário; aceite da V1 permanece parcial.
+
+## P02 — DMG pessoal em Release privada (AD-020)
+
+**Em execução:** root único escritor de script/guia/documentação; dois revisores frescos somente leitura com contexto canônico e comunicação entre pares. Build Release arm64 em DerivedData separado do app em uso; staging só do bundle gerado, atalho Aplicativos e guia. Gates: sintaxe/diff, build real, assinatura estrita/dependências/metadados, integridade/montagem/cópia do DMG, revisão independente e publicação privada com checksum/SHA do asset conferido. Não ler stores reais ou incluir estado local. Gatekeeper/notarização/primeiro uso no segundo Mac e aceite funcional da V1 permanecem próprios. Evidência: docs/evidence/P02.md.

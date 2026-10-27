@@ -154,6 +154,14 @@
 - **Date**: 2026-10-26
 - **Status**: complete no limite desta entrega; repositório privado criado, primeiro push 8a9f3fe verificado em main/feat, default main e upstream próprio. Fechamento em docs/handoffs/github-repository.md; não aceita a V1 nem publica o app.
 
+### AD-020
+- **Decision**: Gerar DMG pessoal e publicá-lo como prévia em Release de pedronazarito98/Radar privado, para instalação no outro Mac sem Xcode; supera o limite anterior de release somente nessa entrega.
+- **Reason**: Pedido explícito do usuário em 27/10/2026, após rejeitar instalar Xcode no destino.
+- **Trade-off**: Apple Silicon/macOS 27+, assinatura ad-hoc sem notarização; integridade local e publicação não comprovam Gatekeeper/máquina limpa ou aceite da V1. Sem ler Keychain/credenciais ou mudar proteções/globais.
+- **Scope**: Script de empacotamento, bundle Release, DMG, checksum, guia e publicação privada. Código/identidade do app preservados.
+- **Date**: 2026-10-27
+- **Status**: in progress; P02 e evidência docs/evidence/P02.md.
+
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.
