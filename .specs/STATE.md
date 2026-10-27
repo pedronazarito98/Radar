@@ -162,6 +162,14 @@
 - **Date**: 2026-10-27
 - **Status**: complete no limite da entrega privada: tag v0.1.0-personal.1/1d5f46c, DMG/checksum publicados e bytes remotos conferidos; Gatekeeper local rejected (ad-hoc), primeiro uso no segundo Mac NOT-RUN. Evidência/handoff docs/evidence/P02.md.
 
+### AD-021
+- **Decision**: Tornar pedronazarito98/Radar público para compartilhar o projeto com o TI, incluindo fonte/histórico Git e Release pessoal existente; supera o limite privado de AD-019/020.
+- **Reason**: Pedido explícito posterior do usuário em 27/10/2026 para avaliação/liberação pelo time de TI.
+- **Trade-off**: Qualquer pessoa poderá consultar/copiar a fonte e baixar o DMG. Publicidade do repositório não modifica o GitHub App pessoal privado nem concede acesso a repos corporativos; TI decide cadastro/instalação, permissões/SSO e confiança do pacote ad-hoc.
+- **Scope**: Visibilidade do mesmo repositório, documentação pública de avaliação e conferência anônima do código/asset. Sem ampliar permissões, mudar app/binário/tag, instalar ferramentas ou enviar mensagens.
+- **Date**: 2026-10-27
+- **Status**: in progress; P03 em docs/evidence/P03.md.
+
 ## Handoff
 
 - **Feature**: Radar / .specs/features/radar/; fonte canônica neste repositório.

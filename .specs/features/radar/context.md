@@ -18,6 +18,8 @@ Em 26/10/2026, o usuário autorizou criar repositório GitHub e fazer push, cond
 
 Em 27/10/2026, o usuário pediu explicitamente gerar DMG e subir no repositório para usar no outro Mac sem instalar Xcode. AD-020 autoriza essa entrega pessoal por Release privada, preservando macOS 27+/Apple Silicon, assinatura ad-hoc e os gates pendentes de notarização/segundo Mac. Não autoriza ferramentas novas, tornar o repo público, consultar Keychain/segredos ou alterar proteções globais.
 
+No pedido posterior do mesmo dia, autorizou tornar o repositório público para compartilhar com o TI e avaliar a liberação de acesso. AD-021 supera apenas o limite privado de AD-019/020, incluindo histórico e Release existente; não muda o GitHub App ou permissões corporativas. A avaliação é facilitada por docs/ti-review.md; não há aprovação de TI presumida nem envio de mensagem pela ferramenta.
+
 ## Confirmado pelo usuário
 
 - App para seu macOS 27; primeira entrega de uso pessoal, preparando distribuição depois.

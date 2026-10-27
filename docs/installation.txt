@@ -34,5 +34,7 @@ Para atualizar, encerre Radar pelo menu antes de substituir o app em Aplicativos
 Não há atualizador automático. Um novo build ad-hoc pode pedir novo consentimento
 do Keychain durante uma ação sua no Radar; esse gate ainda está em qualificação.
 
-Download privado: https://github.com/pedronazarito98/Radar/releases
-É necessário estar conectado ao GitHub com acesso ao repositório privado.
+Download público: https://github.com/pedronazarito98/Radar/releases
+O download do pacote não exige conta. A conexão aos serviços exige autorização.
+O LEIA-ME dentro do DMG 0.1.0 preserva a entrega privada original; o mesmo pacote
+ficou público sob AD-021, sem mudança nos bytes ou no checksum.

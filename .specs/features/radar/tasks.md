@@ -923,3 +923,7 @@ Depois do commit T42, o orquestrador inicia automaticamente um verificador fresc
 ## P02 — DMG pessoal em Release privada (AD-020)
 
 **Concluída no limite da entrega privada:** preparo em 1d5f46c/tag v0.1.0-personal.1, root único escritor de script/guia/documentação; dois revisores frescos somente leitura com contexto canônico e comunicação entre pares. Build Release arm64 separado do app em uso; staging só do bundle gerado, atalho Aplicativos e guia. Sintaxe/diff, build real, assinatura estrita/dependências/metadados, integridade/montagem/cópia do DMG, revisão independente e publicação privada com checksum/bytes remotos conferidos PASS. Nenhum store real ou estado local copiado. Gatekeeper local ASSESS rejected (ad-hoc); notarização, primeiro uso no segundo Mac e aceite funcional da V1 permanecem próprios/NOT-RUN. Evidência e handoff: docs/evidence/P02.md.
+
+## P03 — repositório público para avaliação de TI (AD-021)
+
+**Em execução:** revisão estreita da exposição, busca de assinaturas de segredo no histórico de fonte e revisão independente de documentação/imagens antes de mudar visibilidade; fonte/projeto e DMG preservados. Root único escritor, public_exposure_review e ti_access_review somente leitura com contexto fresco e comunicação entre pares. Gates: revisão, diff, push, visibilidade PUBLIC confirmada e acesso anônimo a fonte/Release/DMG com checksum igual. Não altera GitHub App/permissões/SSO ou política do Mac, nem envia mensagem ao TI. Evidência: docs/evidence/P03.md; material de avaliação: docs/ti-review.md.

@@ -7,6 +7,8 @@
 
 **Entrega pessoal de 27/10/2026:** AD-020 autoriza DMG em Release do repositório privado para outro Mac sem Xcode. Esse limite prevalece sobre as proibições históricas de publicação abaixo; não inclui distribuição pública, notarização ou aceite automático da V1.
 
+**Publicidade posterior de 27/10/2026:** AD-021 autoriza tornar fonte/histórico e a Release existente públicos para avaliação do TI. As referências históricas de entrega privada/proibição de publicação abaixo são superadas somente nesse limite; GitHub App, permissões/SSO, notarização e aceite funcional permanecem separados.
+
 ## Problema e objetivo
 
 Engenheiros alternam entre Jira e GitHub para saber o que está atribuído a eles, o que exige revisão e como tarefa e código se relacionam. A V1 oferece consulta discreta no notch, com contexto bidirecional e navegação aos serviços.

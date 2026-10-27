@@ -144,3 +144,7 @@ Root aguardou relato humano de autorização concluída antes de observar o app.
 ## P02 — DMG pessoal, 27/10/2026
 
 Pedido direto autoriza DMG/Release privada (AD-020). Root único escritor; dmg_packaging_review e dmg_install_review iniciados com contexto fresco, caminhos canônicos e limites explícitos, somente leitura e diálogo entre pares. O primeiro revisou script/artefato montado e o segundo instruções/privacidade/limites de Gatekeeper; ambos PASS sem bloqueadores. A revisão estreita da evidência de 1d5f46c também PASS. Nenhum acesso a stores reais, chave privada ou identidade de assinatura. Root publicou tag/draft com assets, baixou e comparou bytes/checksum e só então publicou a prévia privada. API confirmou draft=false/digests preservados; fechamento em P02.md. Segundo Mac permanece gate humano.
+
+## P03 — publicidade para avaliação de TI
+
+Pedido posterior de 27/10/2026 autoriza visibilidade pública (AD-021). Root mantém escrita documental exclusiva; public_exposure_review e ti_access_review começaram com contexto fresco, caminhos canônicos e limites explícitos. O primeiro revisou o delta desde a auditoria, higiene documental e imagens versionadas; o segundo conferiu permissões/endpoints do código e a distinção entre repo público e App pessoal privado. Comunicação direta entre pares, sem escrita/build/contas. Nenhuma mensagem ao TI é autorizada; o usuário compartilha os links. Resultado final em P03.md.

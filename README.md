@@ -2,13 +2,17 @@
 
 **27/10/2026 · DMG pessoal disponível · GitHub conectado e consultado · V1 em qualificação parcial**
 
+## Avaliação pelo time de TI
+
+O código e a prévia pessoal estão disponíveis neste repositório para avaliação. Veja o [resumo técnico para TI](docs/ti-review.md): permissões, destinos de rede, armazenamento de dados, assinatura e gates pendentes. A visibilidade da fonte não altera o GitHub App pessoal nem concede acesso a repositórios corporativos; a organização deve definir e aprovar a integração.
+
 ## Instalar no outro Mac — sem Xcode
 
-Baixe o **DMG Apple Silicon** em [Downloads do Radar](https://github.com/pedronazarito98/Radar/releases/tag/v0.1.0-personal.1), abra e arraste Radar para **Aplicativos**. Ejete o volume e abra Radar pelo Finder; o ícone fica na barra de menus. Requer **macOS 27 ou superior e chip Apple M1 ou posterior**. O repositório é privado: entre na conta GitHub com acesso para baixar.
+Baixe o **DMG Apple Silicon** em [Downloads do Radar](https://github.com/pedronazarito98/Radar/releases/tag/v0.1.0-personal.1), abra e arraste Radar para **Aplicativos**. Ejete o volume e abra Radar pelo Finder; o ícone fica na barra de menus. Requer **macOS 27 ou superior e chip Apple M1 ou posterior**. O download do pacote é público; conectar serviços de trabalho continua exigindo sua autorização e a política da conta.
 
 Esta é uma prévia pessoal com assinatura **ad-hoc, sem notarização**. Se o macOS não puder verificar o desenvolvedor, siga o [guia de instalação](docs/installation.txt), que inclui a autorização específica em Privacidade e Segurança. Não é necessário instalar Xcode, Homebrew ou gh no destino. Conecte as contas novamente dentro do app; a instalação existente do GitHub App pode ser reutilizada pela mesma conta.
 
-Para quem prepara o pacote: `./script/package_dmg.sh` gera Release/DMG/checksum em `dist/` usando o Xcode local e DerivedData separado. O binário é anexado à Release privada, não ao histórico Git. AD-020 autoriza essa entrega; os gates funcionais da V1 e a primeira abertura no outro Mac permanecem separados.
+Para quem prepara o pacote: `./script/package_dmg.sh` gera Release/DMG/checksum em `dist/` usando o Xcode local e DerivedData separado. O binário é anexado à Release, fora do histórico Git. AD-020 autorizou a entrega inicial privada e AD-021 autoriza a publicidade para avaliação; os gates funcionais da V1 e a primeira abertura no outro Mac permanecem separados. O LEIA-ME dentro do DMG registra o estado privado original; o pacote e seu checksum foram preservados.
 
 A V1 é pessoal: um app nativo para macOS 27 que reúne seus cards do Jira Cloud e PRs do GitHub.com. A revisão atual substitui gh por autorização no navegador e escolha de repositórios em uma lista com busca. O notch fica fechado com indicadores; um clique abre as duas colunas e a faixa inferior conecta tarefa e código.
 
@@ -26,9 +30,9 @@ A identidade visual canônica é a revisão 3: superfície preta, seleção cinz
 | Dados | Conteúdo de trabalho em memória; preferências não secretas separadas das credenciais. |
 | Relações | Chave Jira explícita em título/branch, com repo, site e proveniência; busca limitada aos repos selecionados. |
 | Estados | Fase do PR, CI e revisão separados; total pessoal independente do número de vínculos. |
-| Entrega | Bundle local pessoal, qualificado pelo Finder. Distribuição pública permanece fora do escopo. |
+| Entrega | Prévia pessoal em DMG público para avaliação. Aprovação corporativa, notarização e aceite integral permanecem pendentes. |
 
-O target local usa Swift 6, SwiftUI/AppKit, assinatura ad-hoc e Hardened Runtime sem App Sandbox, conforme AD-010. O método Jira depende da política da conta e da entrada segura pelo usuário. Não foram instaladas ferramentas, publicadas versões ou alteradas configurações globais.
+O target local usa Swift 6, SwiftUI/AppKit, assinatura ad-hoc e Hardened Runtime sem App Sandbox, conforme AD-010. O método Jira depende da política da conta e da entrada segura pelo usuário. O pacote pessoal foi publicado sob AD-020/021; nenhuma ferramenta foi instalada ou configuração global alterada.
 
 A revisão [GitHub nativo G1](.specs/features/radar/github-onboarding.md) conserva identidade no começo/fim dos lotes, contexto, cancelamento e limites. Autenticar não aplica repositórios antigos automaticamente: o usuário confirma as escolhas no catálogo da sessão atual. O cadastro único está descrito no [guia de ativação](docs/github-setup.md).
 
@@ -82,7 +86,7 @@ A regra do usuário impede criar testes, arquivos de teste ou mocks. O plano usa
 
 Os gates de uso real incluem recorte/foco, Jira e GitHub, relação bidirecional, teclado/VoiceOver/Reduzir Movimento, 30 ciclos de interação e lançamento pelo Finder. Condições externas não reproduzidas são registradas separadamente; revisão estática não comprova fluidez ou funcionamento no hardware.
 
-A baseline anterior inclui integrações, relações, recuperação, persistência, ciclo de dados, navegação e display. Seus builds Debug/Release e revisões independentes passaram, incluindo correção C09 após a verificação final fresca. O Release foi aberto pelo caminho completo; gh 2.96.0 e persistência de preferências foram verificados pela UI sem consultar contas. Três ciclos CUA, duas leituras de repouso e comparação visual desconectada estão documentados. Isso não aceita a V1: fluxo central real, Keychain, VoiceOver/Reduzir Movimento e protocolo físico continuam pendentes. Os 56 critérios estão em [aceite](docs/evidence/acceptance.md) e o resultado em [revisão final](docs/evidence/final-verification.md); ver [gates pendentes](docs/evidence/pending-gates.md). Testes/mocks/sensores/Swift lint não rodaram; nenhum remote/publicação foi criado.
+A baseline anterior inclui integrações, relações, recuperação, persistência, ciclo de dados, navegação e display. Seus builds Debug/Release e revisões independentes passaram, incluindo correção C09 após a verificação final fresca. O Release foi aberto pelo caminho completo; gh 2.96.0 e persistência de preferências foram verificados pela UI sem consultar contas. Três ciclos CUA, duas leituras de repouso e comparação visual desconectada estão documentados. Isso não aceita a V1: fluxo central real, Keychain, VoiceOver/Reduzir Movimento e protocolo físico continuam pendentes. Os 56 critérios estão em [aceite](docs/evidence/acceptance.md) e o resultado em [revisão final](docs/evidence/final-verification.md); ver [gates pendentes](docs/evidence/pending-gates.md). Testes/mocks/sensores/Swift lint não rodaram. Essa baseline antecede o remote e a publicação posteriores P01–P03.
 
 Para abrir o Release já gerado: [.build/DerivedData/Build/Products/Release/Radar.app](.build/DerivedData/Build/Products/Release/Radar.app). Metadados vigentes em [G03](docs/evidence/G03.md); o [bundle local](docs/evidence/local-bundle.md) preserva o histórico anterior. `./script/build_and_run.sh` continua gerando/abrindo Debug.
 
@@ -90,7 +94,7 @@ Ao iniciar, as contas ficam desconectadas. O GitHub próprio já está configura
 
 ## Execução local
 
-Execute autorizado em AD-009. Este repositório é a fonte canônica; prontidão e limites estão em docs/readiness.md. Tarefas e evidências permanecem individuais, sem testes/mocks e sem publicação do app. AD-019 autoriza o espelho privado da fonte em [pedronazarito98/Radar](https://github.com/pedronazarito98/Radar), após revisão de segurança; entrega em [handoff GitHub](docs/handoffs/github-repository.md).
+Execute autorizado em AD-009. Este repositório é a fonte canônica; prontidão e limites estão em docs/readiness.md. AD-019 autorizou o envio privado após revisão de segurança; AD-020 autorizou o DMG pessoal e AD-021 a publicidade da fonte/Release em [pedronazarito98/Radar](https://github.com/pedronazarito98/Radar). O [handoff GitHub](docs/handoffs/github-repository.md) preserva a entrega privada original; o estado público está em [P03](docs/evidence/P03.md). Sem testes/mocks ou aceite funcional presumido.
 
 Os documentos em .specs deste repositório são a fonte canônica da execução. O pacote original permanece preservado como referência histórica. Os assets aprovados foram copiados; estado e handoff são atualizados aqui.
 
