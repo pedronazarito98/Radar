@@ -1,6 +1,6 @@
 # Radar — V1 pessoal local
 
-**26/10/2026 · GitHub conectado e consultado · V1 em qualificação parcial**
+**27/10/2026 · DMG pessoal disponível · GitHub conectado e consultado · V1 em qualificação parcial**
 
 ## Instalar no outro Mac — sem Xcode
 
