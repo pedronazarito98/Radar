@@ -168,7 +168,7 @@
 - **Trade-off**: Qualquer pessoa poderá consultar/copiar a fonte e baixar o DMG. Publicidade do repositório não modifica o GitHub App pessoal privado nem concede acesso a repos corporativos; TI decide cadastro/instalação, permissões/SSO e confiança do pacote ad-hoc.
 - **Scope**: Visibilidade do mesmo repositório, documentação pública de avaliação e conferência anônima do código/asset. Sem ampliar permissões, mudar app/binário/tag, instalar ferramentas ou enviar mensagens.
 - **Date**: 2026-10-27
-- **Status**: in progress; P03 em docs/evidence/P03.md.
+- **Status**: complete no limite da publicidade: PUBLIC/isPrivate=false confirmados, fonte/guia/Release/DMG acessíveis sem login e bytes do DMG preservados. Preparo bc1757e/0ac525e, fechamento em docs/evidence/P03.md; TI/App corporativo permanecem externos.
 
 ## Handoff
 
@@ -183,4 +183,5 @@
 - **Artifact histórico G02/G03**: mesmo caminho Release, fonte 5aaf302 sem configuração, arm64/ad-hoc/runtime, sem entitlements. Executável SHA256 2df75d3fcabdd6a04b78c61ad40e1dcf367ae44181793260d8aad829de52871c. Substituído pela configuração pública G04.
 - **Artifact vigente G04**: mesmo caminho Release, lógica Swift G02 preservada e somente dois valores públicos no pbxproj. Executável SHA256 a560dfefbbc8d64f893c908acba43f24f0d902b053950dcd1685a487f13e1494; fonte/projeto fingerprint 5610736291c23f827b059936b06ead52ba405cf5078e2a1d82a9910f8c489f45. Arm64/ad-hoc/runtime/codesign strict PASS; Conectar habilitado observado via CUA. App próprio privado radar-pessoal-pedro, sem secret/chave gerados ou lidos.
 - **Entrega P02**: DMG pessoal 0.1.0 arm64/macOS 27+ publicado em Release prévia privada sob AD-020. Build Release separado, assinatura estrita/integridade/cópia/revisão PASS; hash do download coincide. Gatekeeper local rejected por assinatura ad-hoc; notarização e segundo Mac NOT-RUN. docs/evidence/P02.md conserva hash e próximo passo humano.
-- **Branch**: feat/radar-v1-local; origin privado autorizado em AD-019 e DMG pessoal em AD-020. Testes/mocks/sensores/Swift lint não executados. A fonte Swift permanece 859b273; G05 foi documentado em fb9a9e0.
+- **Publicidade P03**: fonte/histórico e prévia pessoal agora públicos sob AD-021, com acesso anônimo e hash do DMG conferidos. Guia docs/ti-review.md explica rede/permissões/dados/assinatura e App pessoal privado. Liberação de TI e integração em organização não foram concedidas ou alteradas.
+- **Branch**: feat/radar-v1-local; origin criado privado em AD-019, DMG pessoal em AD-020 e visibilidade pública atual em AD-021. Testes/mocks/sensores/Swift lint não executados. A fonte Swift permanece 859b273; G05 foi documentado em fb9a9e0.

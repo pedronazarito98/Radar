@@ -65,6 +65,6 @@ Complemento T34/T35: `c952406`, persistência do caminho gh e encerramento/reabe
 | G05 | fb9a9e0 | MANUAL humano/CUA + revisão documental PASS limitado; autorização, catálogo/busca, escopo e consulta vazia real | G05.md |
 | P01 — preparo e primeiro envio | 8a9f3fe | Revisão estática/segredos sem achados reportáveis; privado/main/SHAs remotos conferidos; não é release ou aceite da V1 | ../handoffs/github-repository.md |
 | P02 — DMG pessoal | 1d5f46c / tag v0.1.0-personal.1 | BUILD/REVIEW/assinatura/integridade/montagem/cópia e publicação privada/bytes remotos PASS; Gatekeeper ASSESS rejected (ad-hoc); segundo Mac NOT-RUN | P02.md |
-| P03 — publicidade para TI | Em preparação | Revisão estreita/histórico de fonte/imagens sem bloqueador; visibilidade/acesso anônimo em preparação; aprovação corporativa permanece externa | P03.md |
+| P03 — publicidade para TI | Preparo bc1757e/0ac525e; fechamento no histórico Git | Revisão estreita/histórico/imagens sem bloqueador; PUBLIC e fonte/guia/Release/DMG anônimos HTTP 200/hash preservado PASS; aprovação corporativa externa | P03.md |
 
 G03 preserva a qualificação desconectada anterior à configuração pública. A continuação [G04](G04.md) confirmou cadastro próprio privado, instalação escolhida pelo usuário, configuração do build e Conectar habilitado em 859b273, com BUILD Debug/Release e revisão estreita PASS; OAuth/cofre/catalog/PRs ainda exigem gates próprios. Ver [guia](../github-setup.md) e [handoff](../handoffs/github-native.md).
