@@ -15,18 +15,21 @@ final class NotchPanelController {
     private var geometry: ScreenGeometry
     private var hasAvailableDisplay = true
     private let navigation: NavigationCoordinator
-    private let related: RelatedItemsCoordinator
+    private let related: any RelatedItemsCoordinating
+    private let demo: RadarDemoController?
     private let store: RadarStore
     private let focus: RadarFocusCoordinator
-    private let hostingView: NSHostingView<NotchPanelRootView>
+    private let hostingView: RadarHostingView
     private var contentOpacity: CGFloat = 0
 
-    init(geometry: ScreenGeometry, store: RadarStore, related: RelatedItemsCoordinator, navigation: NavigationCoordinator) {
+    init(geometry: ScreenGeometry, store: RadarStore, related: any RelatedItemsCoordinating,
+         navigation: NavigationCoordinator, demo: RadarDemoController? = nil) {
         self.geometry = geometry
         self.store = store
         self.related = related
         self.navigation = navigation
-        focus = RadarFocusCoordinator(store: store, navigation: navigation)
+        self.demo = demo
+        focus = RadarFocusCoordinator(store: store, navigation: navigation, demo: demo)
         panel = RadarPanel(
             contentRect: .zero,
             styleMask: [.borderless, .nonactivatingPanel],
@@ -34,23 +37,25 @@ final class NotchPanelController {
             defer: false
         )
         interaction = PanelInteractionController(panel: panel)
-        hostingView = NSHostingView(rootView: NotchPanelRootView(
-            store: store, focus: focus, related: related, navigation: navigation,
+        hostingView = RadarHostingView(rootView: NotchPanelRootView(
+            store: store, focus: focus, related: related, navigation: navigation, demo: demo,
             isExpanded: false, showsContent: false, contentOpacity: 0,
-            cameraRect: .zero, toggle: {}, escape: {}
+            cameraRect: .zero, open: {}, toggle: {}, escape: {}
         ))
-        panel.title = "Radar — Meu trabalho"
+        panel.title = store.isDemo ? "Radar Demo — dados fictícios" : "Radar — Meu trabalho"
         panel.isReleasedWhenClosed = false
         panel.isOpaque = false
         panel.backgroundColor = .clear
         panel.hasShadow = false
         panel.hidesOnDeactivate = false
         panel.isMovable = false
+        panel.ignoresMouseEvents = false
         panel.level = .statusBar
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
         hostingView.sizingOptions = []
         hostingView.autoresizingMask = [.width, .height]
         panel.contentView = hostingView
+        panel.containsSurfacePoint = { [weak hostingView] point in hostingView?.contains(screenPoint: point) == true }
         panel.onEscape = { [weak self] in self?.handleEscape() }
         interaction.onDismiss = { [weak self] reason in self?.dismiss(reason: reason) }
         navigation.didOpenDestination = { [weak self] in self?.dismiss(reason: .externalDestination) }
@@ -129,6 +134,7 @@ final class NotchPanelController {
         animator.cancel()
         interaction.endInteraction(reason: .termination)
         panel.onEscape = nil
+        panel.containsSurfacePoint = nil
         interaction.onDismiss = nil
         panel.orderOut(nil)
         panel.contentView = nil
@@ -191,12 +197,17 @@ final class NotchPanelController {
         let camera = geometry.cameraFrame.map {
             NSRect(x: $0.minX - frame.minX, y: frame.maxY - $0.maxY, width: $0.width, height: $0.height)
         } ?? NSRect(x: frame.width / 2, y: 0, width: 0, height: 32)
+        hostingView.surface = NotchSurfaceShape(
+            cornerRadius: RadarTheme.Layout.compactRadius
+                + (RadarTheme.Layout.expandedRadius - RadarTheme.Layout.compactRadius) * contentOpacity
+        )
         hostingView.rootView = NotchPanelRootView(
-            store: store, focus: focus, related: related, navigation: navigation,
+            store: store, focus: focus, related: related, navigation: navigation, demo: demo,
             isExpanded: isExpanded,
             showsContent: phase != .compact,
             contentOpacity: contentOpacity,
             cameraRect: camera,
+            open: { [weak self] in self?.showExpanded() },
             toggle: { [weak self] in self?.toggle() },
             escape: { [weak self] in self?.handleEscape() }
         )

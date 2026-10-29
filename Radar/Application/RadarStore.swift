@@ -4,6 +4,7 @@ import Observation
 @MainActor
 @Observable
 final class RadarStore {
+    let isDemo: Bool
     private(set) var contextID: WorkContextID
     private(set) var jira = SourcePresentationState<JiraWorkItem>()
     private(set) var github = SourcePresentationState<PullRequestItem>()
@@ -15,7 +16,8 @@ final class RadarStore {
     private var pendingRepositoryAliases: RepositoryIdentityAliases?
     private var requestGeneration: UInt64 = 0
 
-    init(contextID: WorkContextID = WorkContextID()) {
+    init(contextID: WorkContextID = WorkContextID(), isDemo: Bool = false) {
+        self.isDemo = isDemo
         self.contextID = contextID
         selection = SelectionStore(contextID: contextID)
         repositoryAliases = RepositoryIdentityAliases(contextID: contextID)

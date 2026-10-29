@@ -8,7 +8,7 @@ struct RelatedItemsTrigger: Hashable {
 }
 
 @MainActor
-final class RelatedItemsCoordinator {
+final class RelatedItemsCoordinator: RelatedItemsCoordinating {
     private let store: RadarStore
     private let jira: JiraCloudConnection
     private let github: GitHubConnectionController
@@ -28,7 +28,9 @@ final class RelatedItemsCoordinator {
         selectionChanged(force: true)
     }
 
-    func selectionChanged(force: Bool = false) {
+    func selectionChanged() { selectionChanged(force: false) }
+
+    private func selectionChanged(force: Bool) {
         stop()
         guard store.isPanelOpen, let selection = store.selection.token else { return }
         let subject: RelationSubject

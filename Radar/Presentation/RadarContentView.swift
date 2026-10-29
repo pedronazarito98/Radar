@@ -3,8 +3,9 @@ import SwiftUI
 struct RadarContentView: View {
     let store: RadarStore
     let focus: RadarFocusCoordinator
-    let related: RelatedItemsCoordinator
+    let related: any RelatedItemsCoordinating
     let navigation: NavigationCoordinator
+    let demo: RadarDemoController?
     let close: () -> Void
     @FocusState private var focused: RadarFocusTarget?
 
@@ -12,7 +13,20 @@ struct RadarContentView: View {
         VStack(alignment: .leading, spacing: RadarTheme.Layout.sectionSpacing) {
             HStack {
                 Text("Meu trabalho").font(RadarTheme.Typography.title)
+                if store.isDemo {
+                    Text("DEMO · dados fictícios")
+                        .font(RadarTheme.Typography.caption)
+                        .foregroundStyle(RadarTheme.attention)
+                        .help("Cenários no menu Radar Demo. Links externos desativados.")
+                }
                 Spacer()
+                if demo?.scenario == .daily, !store.jira.hasPendingUpdate, !store.github.hasPendingUpdate {
+                    Button("Simular atualização") { demo?.simulateUpdate() }
+                        .font(RadarTheme.Typography.caption)
+                        .help("Preparar novos dados mantendo a seleção e a ordem atuais")
+                        .focusable().focused($focused, equals: .simulateUpdate).focusEffectDisabled()
+                        .modifier(RadarFocusOutline(isFocused: focused == .simulateUpdate))
+                }
                 if store.jira.hasPendingUpdate || store.github.hasPendingUpdate {
                     Button("Aplicar atualização", action: focus.applyUpdates)
                         .font(RadarTheme.Typography.caption)

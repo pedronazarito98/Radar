@@ -1,7 +1,7 @@
 import AppKit
 
 @MainActor
-final class PanelInteractionController: NSObject, NSWindowDelegate {
+final class PanelInteractionController {
     private weak var panel: RadarPanel?
     private var previousApplication: NSRunningApplication?
     private var localMouseMonitor: Any?
@@ -10,8 +10,6 @@ final class PanelInteractionController: NSObject, NSWindowDelegate {
 
     init(panel: RadarPanel) {
         self.panel = panel
-        super.init()
-        panel.delegate = self
     }
 
     func beginExplicitInteraction() {
@@ -25,21 +23,27 @@ final class PanelInteractionController: NSObject, NSWindowDelegate {
 
         localMouseMonitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]) { [weak self] event in
             MainActor.assumeIsolated {
-                guard let self, event.window !== self.panel else { return }
-                self.onDismiss?(.outsideClick)
+                self?.dismissIfOutside(event)
             }
             return event
         }
-        globalMouseMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]) { [weak self] _ in
+        globalMouseMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]) { [weak self] event in
             MainActor.assumeIsolated {
                 guard self?.globalMouseMonitor != nil else { return }
-                self?.onDismiss?(.outsideClick)
+                self?.dismissIfOutside(event)
             }
         }
     }
 
-    func windowDidResignKey(_ notification: Notification) {
-        guard localMouseMonitor != nil else { return }
+    private func dismissIfOutside(_ event: NSEvent) {
+        guard let panel, localMouseMonitor != nil else { return }
+        var eventWindow = event.window
+        while let window = eventWindow {
+            if window === panel { return }
+            eventWindow = window.parent ?? window.sheetParent
+        }
+        let screenPoint = event.window?.convertPoint(toScreen: event.locationInWindow) ?? event.locationInWindow
+        guard panel.containsSurfacePoint?(screenPoint) != true else { return }
         onDismiss?(.outsideClick)
     }
 

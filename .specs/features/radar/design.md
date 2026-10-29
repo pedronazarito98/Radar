@@ -98,8 +98,10 @@ Com painel aberto, lista apresentada e seu total pertencem à mesma revisão de 
 
 SwiftUI controla composição e estado visual; AppKit controla a superfície e eventos de janela. Uma ponte pequena por NSHostingView evita duas fontes de seleção. A Apple documenta [NSHostingView](https://developer.apple.com/documentation/swiftui/nshostingview) e [nonactivatingPanel](https://developer.apple.com/documentation/appkit/nswindow/stylemask-swift.struct/nonactivatingpanel).
 
-- Fechado: não recebe teclado nem ativa o app; cliques só na área real visível.
-- Clique explícito: abre, permite key focus e navegação local.
+- Fechado: não recebe teclado nem ativa o app; toda a silhueta compacta recebe o primeiro clique, incluindo o centro físico preto do notch, sem controles sob a câmera (AD-023).
+- Clique explícito: abre, permite key focus e navegação local. Indicadores/fundo abrem de forma idempotente; o botão Recolher fecha. Esc, clique externo e destino externo seguem suas regras abaixo.
+- NSHostingView aceita primeiro clique e compartilha o contorno arredondado com SwiftUI, atualizado durante animações. Eventos não tratados pelos controles terminam no NSPanel; scroll segue a cadeia nativa, sem interceptação global.
+- Clique externo é qualificado pela geometria de tela e relação parent/sheet das janelas. Perda transitória de key focus não é, sozinha, uma causa de fechamento.
 - Refresh: não ativa nem muda foco.
 - Esc em detalhes: mantém painel e devolve foco à linha.
 - Esc na visão geral: fecha e pode devolver interação ao app anterior.
