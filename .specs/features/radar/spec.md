@@ -62,7 +62,7 @@ App macOS 27 de uso pessoal, com acesso a configurações e encerramento.
 Conteúdo e cliques respeitam a tela e o recorte físico.
 
 - **R02.1** — **QUANDO** painel abrir numa tela com notch, **ENTÃO DEVERÁ ser atendido este resultado**: Ao abrir em uma tela com notch, nenhum controle ocupa a área da câmera e toda a superfície permanece nos limites da tela escolhida.
-- **R02.2** — **QUANDO** painel fechar ou uma animação ser interrompida, **ENTÃO DEVERÁ ser atendido este resultado**: Ao fechar ou interromper uma animação, não permanece área invisível interceptando cliques fora dos indicadores.
+- **R02.2** — **QUANDO** painel fechar ou uma animação ser interrompida, **ENTÃO DEVERÁ ser atendido este resultado**: Ao fechar ou interromper uma animação, não permanece área invisível interceptando cliques fora da silhueta compacta do notch (asas e centro físico, AD-023).
 
 **Tarefas mapeadas**: T03, T04, T07, T38.
 
@@ -79,7 +79,7 @@ Totais têm escopo, completude e significado independentes da seleção.
 
 Clique abre; fechamento tem causa explícita e respeita o destino.
 
-- **R04.1** — **QUANDO** usuário clicar no alvo, sair com o ponteiro ou usar Esc, **ENTÃO DEVERÁ ser atendido este resultado**: Ao clicar no alvo visível, abrir a visão agrupada; sair com o ponteiro não fecha; Esc em detalhes retorna à visão geral e outro Esc fecha.
+- **R04.1** — **QUANDO** usuário clicar no alvo, sair com o ponteiro ou usar Esc, **ENTÃO DEVERÁ ser atendido este resultado**: O primeiro clique em qualquer ponto da silhueta compacta abre a visão agrupada; cliques no fundo e nos indicadores abertos não recolhem; ações explícitas preservam o fechamento previsto; sair com o ponteiro não fecha; Esc em detalhes retorna à visão geral e outro Esc fecha (AD-023).
 - **R04.2** — **QUANDO** fechamento for causado por clique fora, link externo ou atualização, **ENTÃO DEVERÁ ser atendido este resultado**: Ao clicar fora, preservar o aplicativo clicado; ao abrir link, preservar o navegador; atualização de contadores nunca toma foco.
 
 **Tarefas mapeadas**: T05, T07, T13, T20, T21, T37.

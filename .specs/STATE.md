@@ -178,7 +178,17 @@
 - **Date**: 2026-10-27
 - **Status**: complete no escopo demo local: Debug demo/Release normal, revisão independente e sete cenários CUA conferidos; evidência/limites em docs/evidence/M01.md. Sem aceite das integrações reais.
 
+### AD-023
+- **Decision**: Corrigir a fronteira nativa de eventos e usar toda a silhueta compacta como alvo de abertura, incluindo o centro físico do notch, seguindo a referência Boring Notch escolhida pelo usuário. Indicadores/fundo abrem de forma idempotente; recolhimento ocorre por controle explícito, Esc ou clique realmente externo.
+- **Reason**: Pedido de 29/10/2026 sobre scroll vazando, cliques internos fechando e alvo limitado aos ícones.
+- **Trade-off**: O centro passa a receber eventos, preenchido em preto sob a câmera, sem controles nessa região. Substitui o recorte anterior de hit testing e a alternância pelos indicadores; preserva abertura por clique, ausência de fechamento por hover, V3 e rolagem nativa. Não adiciona captura global de scroll/teclado nem permissões.
+- **Scope**: C10 — NSHostingView, NSPanel, monitores transitórios e superfície SwiftUI; validação no demo existente, sem novos mocks/testes/dependências, push ou release.
+- **Date**: 2026-10-29
+- **Status**: correção entregue localmente; BUILD/REVIEW/UI e limites em docs/evidence/C10.md. Trackpad confirmado pelo usuário no cenário exercitado; roda de mouse e outros displays permanecem pendentes.
+
 ## Handoff
+
+- **Correção mais recente C10**: interação do notch sob AD-023 na branch feat/radar-ui-demo. Fonte e demo local atualizados; decisões, gates e roteiro físico em docs/evidence/C10.md. Não equivale a paridade integral com Boring Notch ou aceite de todos os dispositivos.
 
 - **Entrega mais recente M01**: mocks autorizados por AD-022 em feat/radar-ui-demo, sobre a base pública d6fb14e. RadarDemo separado em `.build/DemoDerivedData/Build/Products/Debug/RadarDemo.app`; execução `./script/build_and_run.sh --demo`. BUILD/REVIEW/UI local PASS com limites em docs/evidence/M01.md. Sem push ou publicação; demais entradas abaixo conservam o histórico da V1 real.
 

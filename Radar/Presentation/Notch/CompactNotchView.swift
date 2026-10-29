@@ -5,13 +5,12 @@ struct CompactNotchView: View {
     let count: Count
     let status: SourceStatus
     let height: CGFloat
-    let isExpanded: Bool
-    let toggle: () -> Void
+    let open: () -> Void
 
     private var sourceName: String { brand == .jira ? "Jira" : "GitHub" }
 
     var body: some View {
-        Button(action: toggle) {
+        Button(action: open) {
             HStack(spacing: 8) {
                 SourceBrandMark(brand: brand)
                     .frame(width: RadarTheme.Layout.compactSymbolSize, height: RadarTheme.Layout.compactSymbolSize)
@@ -26,6 +25,6 @@ struct CompactNotchView: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel("\(sourceName). \(count.accessibilityDescription). \(SourceStatusText.summary(status))")
-        .accessibilityHint(isExpanded ? "Recolher Radar" : "Abrir Radar")
+        .accessibilityHint("Abrir Radar")
     }
 }

@@ -38,6 +38,18 @@ Escolha pelo menu **Cenários de demonstração** ou pela janela **Configuraçõ
 
 A ação de atualização no menu abre o painel e prepara dados, mas abrir o menu externo recolhe o painel conforme o comportamento normal. Use o botão **dentro do painel** para validar a preservação da seleção durante uma atualização.
 
+## Interação do notch (C10)
+
+1. Com uma janela rolável atrás, abra pelo centro do notch e pelas margens das asas, longe dos ícones. O primeiro clique deve abrir; repetir o clique mantém aberto.
+2. Em **Muitos itens · 99+**, inicie gestos novos sobre cada lista e chegue ao fim. Só a lista apontada deve rolar; a janela atrás deve ficar imóvel. Repita com trackpad e roda de mouse.
+3. Role e clique no cabeçalho, divisor e espaços vazios. O Radar deve continuar aberto. Confira também clique secundário.
+4. Selecione um item; Esc fecha os detalhes e outro Esc recolhe. O botão Recolher também deve recolher sem reabrir.
+5. Clique fora: o Radar recolhe e o destino clicado mantém o foco. No modo compacto, a antiga região expandida deve estar livre para a janela atrás.
+
+O recorte físico permanece sem controles; o centro preto agora faz parte do alvo de abertura. Cantos transparentes ficam fora do alvo. Gestos com momentum iniciados em outro app antes de mover o ponteiro podem continuar vinculados ao destinatário original pelo macOS; avalie a contenção iniciando o gesto sobre o Radar.
+
+Resultados e limites: [C10](evidence/C10.md).
+
 ## Isolamento e limites
 
 - Dados de demonstração são construídos com os tipos reais de domínio e publicados pelos stores existentes. Vínculos usam o extrator real de chaves; CI/revisão usam os agregadores existentes.
